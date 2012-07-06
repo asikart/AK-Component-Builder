@@ -14,7 +14,7 @@ class AKView extends JView
 		$this->innerLayout = JRequest::getVar('layout','default');
 		$this->setLayout('panel');
 		
-		$this->addTemplatePath(PAYANY_SITE.DS.'tmpl');
+		$this->addTemplatePath({COMPONENT_NAME_UC}_SITE.DS.'tmpl');
 		$result = $this->loadTemplate($tpl);
 		
 		if (JError::isError($result)) {

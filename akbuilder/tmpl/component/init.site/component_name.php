@@ -17,10 +17,7 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_{COMPONENT_NAME}')) {
 }
 
 // include helper
-$helper = JPATH_COMPONENT.DS.'helpers'.DS.'{COMPONENT_NAME}.php' ;
-if( file_exists($helper) ){
-	include_once $helper ;
-}
+include_once JPATH_COMPONENT_ADMINISTRATOR.DS.'includes'.DS.'import.php' ;
 
 // Include dependancies
 jimport('joomla.application.component.controller');

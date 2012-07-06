@@ -29,9 +29,11 @@ jimport('joomla.html.toolbar');
 // include Component Custom class
 include_once JPath::clean( {COMPONENT_NAME_UC}_ADMIN."/class/viewpanel.class.php" ) ;
 include_once JPath::clean( {COMPONENT_NAME_UC}_ADMIN."/helpers/aktext.php" ) ;
+include_once JPath::clean( {COMPONENT_NAME_UC}_ADMIN."/helpers/toolbar.php" ) ;
+include_once JPath::clean( JPATH_ADMINISTRATOR."/includes/toolbar.php" ) ;
 
 if( $app->isSite() ){
-	include_once JPath::clean( PAYANY_ADMIN."/helpers/{COMPONENT_NAME}.php" ) ;
+	include_once JPath::clean( {COMPONENT_NAME_UC}_ADMIN."/helpers/{COMPONENT_NAME}.php" ) ;
 	$lang->load('', JPATH_ADMINISTRATOR);
 	$lang->load('com_{COMPONENT_NAME}', {COMPONENT_NAME_UC}_ADMIN );
 }else{
