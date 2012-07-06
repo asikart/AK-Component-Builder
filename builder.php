@@ -161,7 +161,7 @@ class AKBuilderCli extends JApplicationCli
 		$builder = $this->getAKBuilder();
 		$builder->addSubsystem( $input->get('n') );
 		
-		$this->success($builder->addfiles);
+		$this->success($builder);
 	}
 	
 	public function initProject()

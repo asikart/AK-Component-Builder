@@ -14,7 +14,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of {COMPONENT_NAME_UCFIRST} records.
  */
-class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME}s extends JModelList
+class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST}s extends JModelList
 {
 
     /**
@@ -28,12 +28,18 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME}s extends JModelList
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'id', 'a.id',
                 'filter_order_Dir', 'filter_order', 
-                'ordering', 'a.ordering',
-                'published', 'a.published',
+				'search' , 'filter'
             );
+            
+        $config['tables'] = array(
+				'#__{COMPONENT_NAME}_{CONTROLLER_NAME}'
+			);
+            
+            $config['filter_fields'] = {COMPONENT_NAME_UCFIRST}Helper::_('db.mergeFilterFields', $config['filter_fields'] , $config['tables'] );
         }
+		
+		$this->config = $config ;
 
         parent::__construct($config);
     }
@@ -83,11 +89,30 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME}s extends JModelList
 	protected function getStoreId($id = '')
 	{
 		// Compile the store id.
-		$id.= ':' . $this->getState('filter.search');
-		$id.= ':' . $this->getState('filter.state');
+		$id.= ':' . $this->getState('search');
+		$id.= ':' . $this->getState('filter');
 
 		return parent::getStoreId($id);
 	}
+	
+	
+	public function getFilter()
+	{
+		// Get filter inputs from from xml files in /models/form.
+		JForm::addFormPath({COMPONENT_NAME_UC}_ADMIN.'/models/forms');
+        JForm::addFieldPath({COMPONENT_NAME_UC}_ADMIN.'/models/fields');
+		
+		// load forms
+		$form['search'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAME}s.search', '{CONTROLLER_NAME}s_search', array( 'control' => 'search' ,'load_data'=>'true'));
+		$form['filter'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAME}s.filter', '{CONTROLLER_NAME}s_filter', array( 'control' => 'filter' ,'load_data'=>'true'));
+		
+		// Get default data of this form. Any State key same as form key will auto match.
+		$form['search']->bind( $this->getState('search') );
+		$form['filter']->bind( $this->getState('filter') );
+		
+		return $form;
+	}
+	
 
 	/**
 	 * Build an SQL query to load the list data.
@@ -103,10 +128,25 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME}s extends JModelList
 		$order 	= $this->getState('list.ordering' , 'a.id');
 		$dir	= $this->getState('list.direction', 'asc');
 
-		$where 	= '' ;
+		// Filter and Search
+		$filter = $this->getState('filter',array()) ;
+		$search = $this->getState('search') ;
+		
+		if($search['index']){
+			$q->where("{$search['field']} LIKE '%{$search['index']}%'");
+		}
+		
+		foreach($filter as $k => $v ){
+			if($v)
+				$q->where("{$k}='{$v}'") ;
+		}
+		// Filter and search
+		
+		// get select columns
+		$select = {COMPONENT_NAME_UCFIRST}Helper::_( 'db.getSelectList', $this->config['tables'] );
 		
 		//build query
-		$q->select('a.*')
+		$q->select($select)
 			->from('#__{COMPONENT_NAME}_{CONTROLLER_NAME} AS a')
 			//->where("")
 			->order( " {$order} {$dir}" ) ;

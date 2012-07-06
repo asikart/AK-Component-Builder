@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View to edit
  */
-class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends JView
+class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKView
 {
 	protected $state;
 	protected $item;
@@ -37,7 +37,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends JView
 		}
 
 		$this->addToolbar();
-		parent::display($tpl);
+		parent::displayWithPanel($tpl);
 	}
 
 	/**

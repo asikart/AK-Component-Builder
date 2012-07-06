@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="filter">
+		<field
+			name=""
+			type="list"
+			default=""
+			onchange="this.form.submit();"
+		>
+			<option value="0">----</option>
+		</field>
+	</fieldset>
+</form>

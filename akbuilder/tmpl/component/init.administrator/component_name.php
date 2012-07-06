@@ -16,11 +16,8 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_{COMPONENT_NAME}')) {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
-// include helper
-$helper = JPATH_COMPONENT.DS.'helpers'.DS.'{COMPONENT_NAME}.php' ;
-if( file_exists($helper) ){
-	include_once $helper ;
-}
+// init
+include_once 'includes'.DS.'import.php';
 
 // Include dependancies
 jimport('joomla.application.component.controller');

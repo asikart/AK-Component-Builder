@@ -31,7 +31,7 @@ JHtml::_('behavior.formvalidation');
 			<legend><?php echo JText::_('COM_{COMPONENT_NAME_UC}_LEGEND_{CONTROLLER_NAME_UC}'); ?></legend>
 			<ul class="adminformlist">
 
-            <?php foreach( $this->form->getFields('information') as $form ): ?>
+            <?php foreach( $this->form->getFieldset('information') as $form ): ?>
             <li><?php echo $form->label.' '.$form->input; ?></li>
             <?php endforeach;?>
 

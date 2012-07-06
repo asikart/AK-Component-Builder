@@ -29,6 +29,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST}s extends JView
 		$this->state		= $this->get('State');
 		$this->items		= $this->get('Items');
 		$this->pagination	= $this->get('Pagination');
+		$this->filter		= $this->get('Filter');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
