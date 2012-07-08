@@ -39,6 +39,19 @@ JHtml::_('behavior.formvalidation');
 		</fieldset>
 	</div>
 	
+	<div class="width-40 fltrt">
+		<fieldset class="adminform">
+			<legend><?php echo JText::_('COM_{COMPONENT_NAME_UC}_LEGEND_{CONTROLLER_NAME_UC}'); ?></legend>
+			<ul class="adminformlist">
+
+            <?php foreach( $this->form->getFieldset('created') as $form ): ?>
+            <li><?php echo $form->label.' '.$form->input; ?></li>
+            <?php endforeach;?>
+
+            </ul>
+		</fieldset>
+	</div>
+	
 	<input type="hidden" name="option" value="com_{COMPONENT_NAME}" />
 	<input type="hidden" name="task" value="" />
 	<?php echo JHtml::_('form.token'); ?>

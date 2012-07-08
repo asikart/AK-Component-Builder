@@ -108,17 +108,38 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME} extends JModelAdmin
 	protected function prepareTable(&$table)
 	{
 		jimport('joomla.filter.output');
-
-		if (empty($table->id)) {
-
+		
+		$date 	= JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
+		$user 	= JFactory::getUser() ;
+		$db 	= JFactory::getDbo();
+		
+		// alias
+        if(!$table->alias) {
+			$table->alias = JFilterOutput::stringURLSafe( trim($table->title) ) ;
+			
+			if(!$table->alias){
+				$table->alias = JFilterOutput::stringURLSafe( $date->toMySQL() ) ;
+			}
+		}
+		
+		// created date
+		if(!$table->created){
+			$table->created = $date->toMySQL();
+		}
+		
+		// created user
+		if(!$table->created_by){
+			$table->created_by = $user->get('id');
+		}
+		
+		// ordering
+		if (!$table->id) {
 			// Set ordering to the last item if not set
-			if (@$table->ordering === '') {
-				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__{COMPONENT_NAME}_{CONTROLLER_NAME}');
+			if (!$table->ordering) {
+				$db->setQuery('SELECT MAX(ordering) FROM #__{COMPONENT_NAME}_{CONTROLLER_NAMES}');
 				$max = $db->loadResult();
 				$table->ordering = $max+1;
 			}
-
 		}
 	}
 

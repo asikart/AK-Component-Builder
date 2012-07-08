@@ -50,7 +50,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends JView
 		$user		= JFactory::getUser();
 		$isNew		= ($this->item->id == 0);
 
-		JToolBarHelper::title(JText::_('COM_{COMPONENT_NAME_UC}_TITLE_{CONTROLLER_NAME_UC}'), '{CONTROLLER_NAME}.png');
+		JToolBarHelper::title(JText::_('COM_{COMPONENT_NAME_UC}_TITLE_{CONTROLLER_NAME_UC}'), 'article-add.png');
 
 		JToolBarHelper::apply('{CONTROLLER_NAME}.apply');
 		JToolBarHelper::save('{CONTROLLER_NAME}.save');

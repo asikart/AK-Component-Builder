@@ -132,8 +132,8 @@ class AKBuilderCli extends JApplicationCli
 		$client = $input->get( 'c' , 1 ) ;
 		if( $client == 1 ) {
 			$this->missingParams('c') ;
-		}elseif( $client != 'site' && $client != 'administrator' ){
-			$this->missingParams( 'c' , 'Wrong Client Type, only support "site" or "administrator" .' );
+		}elseif( $client != 'site' && $client != 'administrator' && $client != 'admin' ){
+			$this->missingParams( 'c' , 'Wrong Client Type, only support "site" , "administrator" or "admin" .' );
 		}
 		
 		// is extension name exists
@@ -152,7 +152,11 @@ class AKBuilderCli extends JApplicationCli
 	{
 		include_once (__DIR__.DS.'akbuilder'.DS.'akbuilder.php') ;
 		$input 	= $this->input ;
-		return AKBuilder::getInstance( $input->get('t', 'component' ) , $input->get('e') , $input->get('c') );
+		
+		$client = $input->get('c', 'administrator');
+		if($client == 'admin') $client = 'administrator' ;
+		
+		return AKBuilder::getInstance( $input->get('t', 'component' ) , $input->get('e') , $client );
 	}
 	
 	public function addSubsystem()

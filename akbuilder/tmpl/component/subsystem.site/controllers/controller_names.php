@@ -13,17 +13,17 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.controlleradmin');
 
 /**
- * {CONTROLLER_NAME_UCFIRST}s list controller class.
+ * {CONTROLLER_NAMES_UCFIRST} list controller class.
  */
-class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST}s extends JControllerAdmin
+class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.
 	 * @since	1.6
 	 */
-	public function &getModel($name = '{CONTROLLER_NAME}', $prefix = '{COMPONENT_NAME_UCFIRST}Model')
+	public function &getModel($name = '{CONTROLLER_NAME}', $prefix = '{COMPONENT_NAME_UCFIRST}Model', $config = array() )
 	{
-		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
+		$model = parent::getModel($name, $prefix, $config);
 		return $model;
 	}
 }

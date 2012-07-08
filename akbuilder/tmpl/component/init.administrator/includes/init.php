@@ -40,6 +40,8 @@ if( $app->isSite() ){
 	include_once JPath::clean( {COMPONENT_NAME_UC}_ADMIN."/helpers/{COMPONENT_NAME}.php" ) ;
 }
 
+// set Base to fix toolbar anchor bug
+$doc->setBase( JFactory::getURI()->toString() );
 
 // include css
 $doc->addStyleSheet('administrator/templates/bluestork/css/template.css');

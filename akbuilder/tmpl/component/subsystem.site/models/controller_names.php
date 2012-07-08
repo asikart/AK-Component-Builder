@@ -14,7 +14,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of {COMPONENT_NAME_UCFIRST} records.
  */
-class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST}s extends JModelList
+class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 {
 
     /**
@@ -33,7 +33,11 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST}s extends JModelList
             );
             
         $config['tables'] = array(
-				'#__{COMPONENT_NAME}_{CONTROLLER_NAME}'
+				'#__{COMPONENT_NAME}_{CONTROLLER_NAMES}',
+				'#__categories',
+				'#__users',
+				'#__viewlevels',
+				'#__languages'
 			);
             
             $config['filter_fields'] = {COMPONENT_NAME_UCFIRST}Helper::_('db.mergeFilterFields', $config['filter_fields'] , $config['tables'] );
@@ -99,12 +103,12 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST}s extends JModelList
 	public function getFilter()
 	{
 		// Get filter inputs from from xml files in /models/form.
-		JForm::addFormPath({COMPONENT_NAME_UC}_SITE.'/models/forms');
-        JForm::addFieldPath({COMPONENT_NAME_UC}_SITE.'/models/fields');
+		JForm::addFormPath({COMPONENT_NAME_UC}_ADMIN.'/models/forms');
+        JForm::addFieldPath({COMPONENT_NAME_UC}_ADMIN.'/models/fields');
 		
 		// load forms
-		$form['search'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAME}s.search', '{CONTROLLER_NAME}s_search', array( 'control' => 'search' ,'load_data'=>'true'));
-		$form['filter'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAME}s.filter', '{CONTROLLER_NAME}s_filter', array( 'control' => 'filter' ,'load_data'=>'true'));
+		$form['search'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.search', '{CONTROLLER_NAMES}_search', array( 'control' => 'search' ,'load_data'=>'true'));
+		$form['filter'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.filter', '{CONTROLLER_NAMES}_filter', array( 'control' => 'filter' ,'load_data'=>'true'));
 		
 		// Get default data of this form. Any State key same as form key will auto match.
 		$form['search']->bind( $this->getState('search') );
@@ -137,7 +141,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST}s extends JModelList
 		}
 		
 		foreach($filter as $k => $v ){
-			if($v)
+			if($v !== '*')
 				$q->where("{$k}='{$v}'") ;
 		}
 		// Filter and search
@@ -147,7 +151,11 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST}s extends JModelList
 		
 		//build query
 		$q->select($select)
-			->from('#__{COMPONENT_NAME}_{CONTROLLER_NAME} AS a')
+			->from('#__{COMPONENT_NAME}_{CONTROLLER_NAMES} AS a')
+			->leftJoin('#__categories 	AS b ON a.catid = b.id')
+			->leftJoin('#__users 		AS c ON a.created_by = c.id')
+			->leftJoin('#__viewlevels 	AS d ON a.access = d.id')
+			->leftJoin('#__languages 	AS e ON a.language = e.lang_code')
 			//->where("")
 			->order( " {$order} {$dir}" ) ;
 		

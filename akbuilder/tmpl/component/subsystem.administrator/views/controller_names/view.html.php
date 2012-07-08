@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of {COMPONENT_NAME_UCFIRST}.
  */
-class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST}s extends JView
+class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends JView
 {
 	protected $items;
 	protected $pagination;
@@ -51,7 +51,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST}s extends JView
 		$state	= $this->get('State');
 		$canDo	= {COMPONENT_NAME_UCFIRST}Helper::getActions($state->get('filter.category_id'));
 
-		JToolBarHelper::title(JText::_('COM_{COMPONENT_NAME_UC}_TITLE_{CONTROLLER_NAME_UC}S'), '{CONTROLLER_NAME}s.png');
+		JToolBarHelper::title(JText::_('COM_{COMPONENT_NAME_UC}_TITLE_{CONTROLLER_NAME_UC}S'), 'article.png');
 
         //Check if the form exists before showing the add/edit buttons
         $formPath = JPATH_COMPONENT_ADMINISTRATOR.DS.'views'.DS.'{CONTROLLER_NAME}';
@@ -62,15 +62,15 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST}s extends JView
 
 		    if ($canDo->get('core.edit')) {
 			    JToolBarHelper::editList('{CONTROLLER_NAME}.edit','JTOOLBAR_EDIT');
-			    JToolBarHelper::deleteList('', '{CONTROLLER_NAME}s.delete','JTOOLBAR_EMPTY_TRASH');
+			    JToolBarHelper::deleteList('', '{CONTROLLER_NAMES}.delete','JTOOLBAR_EMPTY_TRASH');
 		    }
         }
 
 		if ($canDo->get('core.edit.state')) {
 			    JToolBarHelper::divider();
-			    JToolBarHelper::publish('{CONTROLLER_NAME}s.publish', 'JTOOLBAR_ENABLE', true);
-				JToolBarHelper::unpublish('{CONTROLLER_NAME}s.unpublish', 'JTOOLBAR_DISABLE', true);
-            	JToolBarHelper::custom('{CONTROLLER_NAME}s.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
+			    JToolBarHelper::publish('{CONTROLLER_NAMES}.publish', 'JTOOLBAR_ENABLE', true);
+				JToolBarHelper::unpublish('{CONTROLLER_NAMES}.unpublish', 'JTOOLBAR_DISABLE', true);
+            	JToolBarHelper::custom('{CONTROLLER_NAMES}.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
 		}
         
 		if ($canDo->get('core.admin')) {

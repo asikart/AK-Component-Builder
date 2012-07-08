@@ -22,10 +22,22 @@ class {COMPONENT_NAME_UCFIRST}Helper
 	{
 
 		JSubMenuHelper::addEntry(
-			JText::_('COM_{COMPONENT_NAME_UC}_TITLE_{CONTROLLER_NAME_UC}S'),
-			'index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAME}s',
-			$vName == '{CONTROLLER_NAME}s'
+			JText::_('JCATEGORY'),
+			'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
+			$vName == 'categories'
 		);
+		
+		$folders = JFolder::folders(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_{COMPONENT_NAME}'.DS.'views');
+		
+		foreach( $folders as $folder ){
+			if( substr($folder, -2) == 'is' || substr($folder, -1) == 's'){
+				JSubMenuHelper::addEntry(
+					JText::_('COM_{COMPONENT_NAME_UC}_TITLE_'.strtoupper($folder)),
+					'index.php?option=com_{COMPONENT_NAME}&view='.$folder,
+					$vName == $folder
+				);
+			}
+		}
 
 	}
 

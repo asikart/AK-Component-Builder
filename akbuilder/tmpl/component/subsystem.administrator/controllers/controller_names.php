@@ -13,9 +13,9 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.controlleradmin');
 
 /**
- * {CONTROLLER_NAME_UCFIRST}s list controller class.
+ * {CONTROLLER_NAMES_UCFIRST} list controller class.
  */
-class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST}s extends JControllerAdmin
+class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.

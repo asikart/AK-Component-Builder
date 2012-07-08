@@ -7,8 +7,8 @@
 			label="Search"
 		>
 			<!--<option value="0">Select Column</option>-->
-			<option value="title">title</option>
-			<option value="catid">category</option>
+			<option value="a.title">JGLOBAL_TITLE</option>
+			<option value="b.title">JCATEGORY</option>
 		</field>
 		
 		<field name="index"

@@ -46,7 +46,7 @@ class AKBuilderComponent extends AKBuilder
 		}
 	}
 	
-	public function init($name='item', $client='administrator')
+	public function init($name='item.items', $client='administrator')
 	{
 		/*
 		$folders = array();
@@ -76,39 +76,40 @@ class AKBuilderComponent extends AKBuilder
 		$this->addSubsystem( $name , $client );
 	}
 	
-	public function addSubSystem($name='item', $client='administrator' )
+	public function addSubSystem($name='item.items', $client='administrator' )
 	{
 		$this->tmpl_path = AKBUILDER_PATH.DS.'tmpl'.DS.$this->type.DS.'subsystem.'.$this->client ;
 	
 		$this->addControllers($name,  $client);
 		$this->addModels($name,  $client);
 		$this->addViews($name,  $client);
-		//$this->addSQL($name);
+		$this->addTable($name,  $client);
+		$this->addSQL($name);
 	}
 	
-	public function addControllers($name='item', $client='administrator')
+	public function addControllers($name='item.items', $client='administrator')
 	{
 		$this->addFiles('controllers', $name, $client) ;
 	}
 	
-	public function addModels($name='item', $client='administrator')
+	public function addModels($name='item.items', $client='administrator')
 	{
 		$this->addFiles('models', $name, $client) ;
 	}
 	
-	public function addViews($name='item', $client='administrator')
+	public function addViews($name='item.items', $client='administrator')
 	{
 		$this->addFiles('views', $name, $client) ;
 	}
 	
-	public function addTable($name='item', $client='administrator')
+	public function addTable($name='item.items', $client='administrator')
 	{
-		
+		$this->addFiles('tables', $name, $client) ;
 	}
 	
-	public function addSQL($name='item', $client='administrator')
+	public function addSQL($name='item.items', $client='administrator')
 	{
-		/*
+		
 		$conf = JFactory::getConfig();
  
         $host = $conf->get('host');
@@ -122,7 +123,7 @@ class AKBuilderComponent extends AKBuilder
         $options = array('driver' => $driver, 'host' => $host, 'user' => $user, 'password' => $password, 'database' => $database, 'prefix' => $prefix);
  
         $db = JDatabase::getInstance($options);
-		print_r( mysql_connect($options['host'], $options['user'], $options['password'], true) );exit();
+		//print_r( mysql_connect($options['host'], $options['user'], $options['password'], true) );exit();
 		
 		$db  = JFactory::getDbo();
 		
@@ -130,7 +131,7 @@ class AKBuilderComponent extends AKBuilder
 		$sql = $this->replaceName($sql,$name);
 		
 		$db->setQuery( $sql );
-		$db->queryBatch();*/
+		$db->queryBatch();
 	}
 	
 	public function addHelper($name='item', $client='administrator')
@@ -153,7 +154,7 @@ class AKBuilderComponent extends AKBuilder
 		
 	}
 	
-	public function addFile( $file = 'controller.php', $name = 'items' , $client = 'administrator' )
+	public function addFile( $file = 'controller.php', $name = 'item.items' , $client = 'administrator' )
 	{
 		$file_path 	= JPath::clean($this->tmpl_path.'/'.$file) ;
 		$content 	= $this->replaceName( JFile::read( $file_path , '.' , true, true) , $name );
@@ -164,7 +165,7 @@ class AKBuilderComponent extends AKBuilder
 			JFile::write( $target_path , $content ) ;
 	}
 	
-	public function addFiles( $type = 'controllers', $name = 'items' , $client = 'administrator' )
+	public function addFiles( $type = 'controllers', $name = 'item.items' , $client = 'administrator' )
 	{
 		$files = JFolder::files( $this->tmpl_path.DS.$type, '.' , true, true);
 		
@@ -189,15 +190,29 @@ class AKBuilderComponent extends AKBuilder
 		}
 	}
 	
-	public function replaceName($content = '' , $name = 'item')
+	public function replaceName($content = '' , $name = 'item.items')
 	{
+		// handles name item and name list
+		$name = explode('.', $name);
+		$nameItem = $name[0] ;
+		$nameList = isset($name[1]) ? $name[1] : $name[0].'s' ;
+		
+		
 		$r['{COMPONENT_NAME}'] 			= strtolower($this->component) ;
 		$r['{COMPONENT_NAME_UC}'] 		= strtoupper($this->component) ;
 		$r['{COMPONENT_NAME_UCFIRST}'] 	= ucfirst($this->component) ;
-		$r['{CONTROLLER_NAME}'] 		= strtolower($name) ;
-		$r['{CONTROLLER_NAME_UC}'] 		= strtoupper($name) ;
-		$r['{CONTROLLER_NAME_UCFIRST}'] = ucfirst($name) ;
-		$r['controller_name'] 			= strtolower($name);
+		
+		$r['{CONTROLLER_NAMES}'] 		= strtolower($nameList) ;
+		$r['{CONTROLLER_NAMES_UC}'] 	= strtoupper($nameList) ;
+		$r['{CONTROLLER_NAMES_UCFIRST}']= ucfirst($nameList) ;
+		
+		$r['{CONTROLLER_NAME}'] 		= strtolower($nameItem) ;
+		$r['{CONTROLLER_NAME_UC}'] 		= strtoupper($nameItem) ;
+		$r['{CONTROLLER_NAME_UCFIRST}'] = ucfirst($nameItem) ;
+		
+		$r['controller_names'] 			= strtolower($nameList);
+		$r['controller_name'] 			= strtolower($nameItem);
+		
 		$r['component_name'] 			= strtolower($this->component);
 		
 		return strtr( $content , $r ) ;

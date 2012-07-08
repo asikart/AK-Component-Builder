@@ -35,7 +35,7 @@
 	<administration>
 		<menu>COM_{COMPONENT_NAME_UC}</menu>
 		<submenu>
-			<menu link="option=com_{COMPONENT_NAME}&amp;view={CONTROLLER_NAME}s" view="{CONTROLLER_NAME}s" img="class:{CONTROLLER_NAME}s" alt="{COMPONENT_NAME_UCFIRST}/{CONTROLLER_NAME_UCFIRST}s">COM_{COMPONENT_NAME_UC}_{CONTROLLER_NAME_UC}S</menu>
+			<menu link="option=com_{COMPONENT_NAME}&amp;view={CONTROLLER_NAMES}" view="{CONTROLLER_NAMES}" img="class:{CONTROLLER_NAMES}" alt="{COMPONENT_NAME_UCFIRST}/{CONTROLLER_NAMES_UCFIRST}">COM_{COMPONENT_NAME_UC}_{CONTROLLER_NAME_UC}S</menu>
 
         </submenu>
 		<files folder="administrator">

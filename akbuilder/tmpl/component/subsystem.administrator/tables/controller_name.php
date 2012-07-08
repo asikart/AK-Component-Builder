@@ -22,7 +22,7 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME} extends JTable
 	 */
 	public function __construct(&$db)
 	{
-		parent::__construct('#__{COMPONENT_NAME}_{CONTROLLER_NAME}', 'id', $db);
+		parent::__construct('#__{COMPONENT_NAME}_{CONTROLLER_NAMES}', 'id', $db);
 	}
 
 	/**

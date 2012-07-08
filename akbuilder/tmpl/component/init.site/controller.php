@@ -25,9 +25,9 @@ class {COMPONENT_NAME_UCFIRST}Controller extends JController
 	public function display($cachable = false, $urlparams = false)
 	{
 		// Load the submenu.
-		//{COMPONENT_NAME_UCFIRST}Helper::addSubmenu(JRequest::getCmd('view', '{CONTROLLER_NAME}s'));
+		//{COMPONENT_NAME_UCFIRST}Helper::addSubmenu(JRequest::getCmd('view', '{CONTROLLER_NAMES}'));
 
-		$view		= JRequest::getCmd('view', '{CONTROLLER_NAME}s');
+		$view		= JRequest::getCmd('view', '{CONTROLLER_NAMES}');
         JRequest::setVar('view', $view);
 
 		parent::display();

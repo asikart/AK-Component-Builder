@@ -19,7 +19,7 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends JContr
 {
 
     function __construct() {
-        $this->view_list = '{CONTROLLER_NAME}s';
+        $this->view_list = '{CONTROLLER_NAMES}';
         parent::__construct();
     }
 	
