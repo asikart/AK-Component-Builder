@@ -10,17 +10,6 @@
 	<version>1.0.0</version>
 	<description>desc of {COMPONENT_NAME}</description>
 
-	<install> <!-- Runs on install -->
-    	<sql>
-        	<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
-  		</sql>
-    </install>
-    <uninstall> <!-- Runs on uninstall -->
-    	<sql>
-        	<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
-  		</sql>
-   </uninstall>
-
 	<files folder="site">
 		<filename>index.html</filename>
 		<filename>{COMPONENT_NAME}.php</filename>
