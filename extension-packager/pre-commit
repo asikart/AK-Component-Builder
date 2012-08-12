@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# admin
+cp -rf /var/www/{joomla}/administrator/components/{com_example}/* admin
+echo "Admin copied" ;
+
+# site
+cp -rf /var/www/{joomla}/administrator/components/{com_example}/* site
+echo "Site copied" ;
+
+
+# xml and install script
+# cp -f /var/www/{joomla}/administrator/components/{com_example}/akquickicons.xml .
+# echo "Component XML copied" ;
+
+# cp -f /var/www/{joomla}/administrator/components/{com_example}/install.php .
+# echo "Component install scrip copied" ;
+
+# modules site
+cp -rf /var/www/{joomla}/modules/{mod_example}/* module
+echo "Module copied" ;
+
+# modules admin
+# cp -rf /var/www/{joomla}/administrator/modules/{mod_example}/* module
+# echo "Module admin copied" ;
+
+# plugins
+cp -rf /var/www/{joomla}/plugins/{folder}/{example}/* plugin
+echo "Plugin copied" ;
+
+rm ../{example}.zip
+zip -rq ../{example}.zip *
+echo "Ziped files" ;
+
+git add .
+
+exit 0
