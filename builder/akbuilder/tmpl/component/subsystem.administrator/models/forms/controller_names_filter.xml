@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="filter">
+		<field
+			name="a.published"
+			type="list"
+			default=""
+			onchange="this.form.submit();"
+		>
+			<option value="*">-請選擇-</option>
+			<option value="1">JPUBLISHED</option>
+	        <option value="0">JUNPUBLISHED</option>
+		</field>
+	</fieldset>
+</form>

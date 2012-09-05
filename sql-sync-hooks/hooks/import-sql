@@ -1,0 +1,8 @@
+#!/bin/bash
+#DBUSER=$(php ./.git/hooks/get-db-user.php)
+#DBPASS=$(php ./.git/hooks/get-db-pass.php)
+#DB=$(php ./.git/hooks/get-db-name.php)
+#SCHEMAPATH="/var/www/ipos"
+
+# mysql -u $DBUSER -p$DBPASS $DB < $DB.sql
+php ./cli/mysqlimport.php $1

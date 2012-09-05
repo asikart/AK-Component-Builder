@@ -1,0 +1,19 @@
+#!/bin/bash
+DBUSER=$(php ./.git/hooks/get-db-user.php)
+DBPASS=$(php ./.git/hooks/get-db-pass.php)
+DB=$(php ./.git/hooks/get-db-name.php)
+
+# This is for Ubuntu server
+# mysqldump -u $DBUSER -p$DBPASS --add-drop-table $DB > "$DB.sql"
+# mysqldump -u $DBUSER -p$DBPASS --add-drop-table --no-data $DB > "$DB-table.sql"
+# mysqldump -u $DBUSER -p$DBPASS --no-create-info $DB > "$DB-data.sql"
+
+# This is for Mac OSX MAMP
+/Applications/MAMP/Library/bin/mysqldump -u $DBUSER -p$DBPASS --add-drop-table $DB > "$DB.sql"
+/Applications/MAMP/Library/bin/mysqldump -u $DBUSER -p$DBPASS --add-drop-table --no-data $DB > "$DB-table.sql"
+/Applications/MAMP/Library/bin/mysqldump -u $DBUSER -p$DBPASS --no-create-info $DB > "$DB-data.sql"
+
+git add "$DB.sql"
+git add "$DB-table.sql"
+git add "$DB-data.sql"
+exit 0
