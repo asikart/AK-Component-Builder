@@ -24,6 +24,8 @@ class AKBuilderComponent extends AKBuilder
 	
 	public $existsfiles = array();
 	
+	public $convertfiles = array();
+	
 	public function __construct( $name='com_custom', $client='administrator' )
 	{
 		$this->component = $name ;
@@ -87,6 +89,27 @@ class AKBuilderComponent extends AKBuilder
 		$this->addSQL($name);
 	}
 	
+	public function convertTemplate($name='sakura.sakuras', $client='administrator')
+	{
+		$this->tmpl_path = AKBUILDER_PATH.DS.'tmpl'.DS.$this->type ;
+		
+		$files = JFolder::files( $this->tmpl_path, '.' , true, true);
+		
+		$tmpl = array();
+		
+		foreach( $files as $k => $v ){
+			$tmpl[$k]['target'] 	= $this->replaceName( $v , $name, true );
+			$tmpl[$k]['content'] 	= $this->replaceName( JFile::read( $v ) , $name, true );
+			
+			JFile::delete($v);
+		}
+		
+		foreach( $tmpl as $v ){
+			JFile::write( $v['target'] , $v['content'] ) ;
+			$this->convertfiles[] = $v['target'] ;
+		}
+	}
+	
 	public function addControllers($name='item.items', $client='administrator')
 	{
 		$this->addFiles('controllers', $name, $client) ;
@@ -112,22 +135,21 @@ class AKBuilderComponent extends AKBuilder
 		
 		$conf = JFactory::getConfig();
  
-        $host = $conf->get('host');
-        $user = $conf->get('user');
-        $password = $conf->get('password');
-        $database = $conf->get('db');
-        $prefix = $conf->get('dbprefix');
-        $driver = $conf->get('dbtype');
-        $debug = $conf->get('debug');
+        $host 		= $conf->get('host');
+        $user 		= $conf->get('user');
+        $password 	= $conf->get('password');
+        $database 	= $conf->get('db');
+        $prefix 	= $conf->get('dbprefix');
+        $driver 	= $conf->get('dbtype');
+        $debug 		= $conf->get('debug');
  
         $options = array('driver' => $driver, 'host' => $host, 'user' => $user, 'password' => $password, 'database' => $database, 'prefix' => $prefix);
  
         $db = JDatabase::getInstance($options);
-		//print_r( mysql_connect($options['host'], $options['user'], $options['password'], true) );exit();
 		
 		$db  = JFactory::getDbo();
 		
-		$sql = JFile::read( $this->tmpl_path.DS.'sql'.DS.'install.mysql.utf8.sql' );
+		$sql = JFile::read( $this->tmpl_path.DS.'sql'.DS.'install.sql' );
 		$sql = $this->replaceName($sql,$name);
 		
 		$db->setQuery( $sql );
@@ -190,7 +212,7 @@ class AKBuilderComponent extends AKBuilder
 		}
 	}
 	
-	public function replaceName($content = '' , $name = 'item.items')
+	public function replaceName($content = '' , $name = 'item.items', $flip = false)
 	{
 		// handles name item and name list
 		$name = explode('.', $name);
@@ -210,10 +232,14 @@ class AKBuilderComponent extends AKBuilder
 		$r['{CONTROLLER_NAME_UC}'] 		= strtoupper($nameItem) ;
 		$r['{CONTROLLER_NAME_UCFIRST}'] = ucfirst($nameItem) ;
 		
-		$r['controller_names'] 			= strtolower($nameList);
-		$r['controller_name'] 			= strtolower($nameItem);
+		//$r['controller_names'] 			= strtolower($nameList);
+		//$r['controller_name'] 			= strtolower($nameItem);
 		
-		$r['component_name'] 			= strtolower($this->component);
+		//$r['component_name'] 			= strtolower($this->component);
+		
+		if($flip){
+			$r = array_flip($r);
+		}
 		
 		return strtr( $content , $r ) ;
 	}

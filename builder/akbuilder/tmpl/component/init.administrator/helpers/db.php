@@ -15,20 +15,24 @@ defined('_JEXEC') or die;
  */
 class {COMPONENT_NAME_UCFIRST}HelperDb
 {
-	public static function getSelectList( $table_array = array() , $all = true )
+	public static function getSelectList( $tables = array() , $all = true )
 	{
 		$db = JFactory::getDbo();
-		$tables = $db->getTableFields( $table_array );
-		$select = array();
+		
+		$select = array() ;
 		$fields = array() ;
 		$i = 'a' ;
 		
-		foreach( $tables as $table ){
-			if($all)
-				$select[] = "{$i}.*" ;
+		foreach( $tables as $k => $table ){
 			
-			foreach( $table as $key=>$var ){
-				$fields[] = "{$i}.{$key} AS {$i}_{$key}" ;
+			$columns = $db->getTableColumns( $table );
+			
+			if($all){
+				$select[] = "{$k}.*" ;
+			}
+			
+			foreach( $columns as $key=>$var ){
+				$fields[] = "{$k}.{$key} AS {$k}_{$key}" ;
 			}
 			
 			$i = ord($i);
@@ -42,14 +46,23 @@ class {COMPONENT_NAME_UCFIRST}HelperDb
 	public static function mergeFilterFields( $filter_fields , $tables = array() )
 	{
 		$db = JFactory::getDbo();
-		$tables = $db->getTableFields( $tables );
 		$fields = array() ;
 		$i = 'a' ;
 		
-		foreach( $tables as $table ){
-
-			foreach( $table as $key=>$var ){
-				$fields[] = "{$i}.{$key}" ;
+		$ignore = array(
+			'params'
+		) ;
+		
+		foreach( $tables as $k => $table ){
+			
+			$columns = $db->getTableColumns( $table );
+			
+			foreach( $columns as $key=>$var ){
+				if( in_array($key, $ignore) ){
+					continue;
+				}
+				
+				$fields[] = "{$k}.{$key}" ;
 				$fields[] = $key ;
 			}
 			

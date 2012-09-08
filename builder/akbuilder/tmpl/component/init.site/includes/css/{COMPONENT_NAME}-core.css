@@ -1,0 +1,47 @@
+/*!
+ * com_{COMPONENT_NAME} v1.0.0
+ *
+ * Copyright 2012 Asikart.com
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Generator: AKHelper
+ * Author: Asika
+ */
+
+
+/* Fix Bluestork and Bootstrap Conflict */
+#ak-panel-wrap {
+	margin-top: 15px;
+}
+
+#toolbar-box .pagetitle {
+	background-position: 0 0;
+	width: auto;
+	height: auto;
+}
+
+div.toolbar-list span {
+	background-position: 0 0;
+	width: auto;
+	height: auto;
+}
+
+#toolbar ul li.button {
+	margin-top: -10px;
+}
+
+ul.adminformlist li label {
+	display: inline-block;
+	min-width: 135px;
+	float: left;
+}
+
+ul.adminformlist li {
+	display: block;
+	clear: both;
+}
+
+div.button2-left {
+	margin-top: 0;
+}

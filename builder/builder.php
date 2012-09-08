@@ -104,6 +104,9 @@ class AKBuilderCli extends JApplicationCli
 		elseif( $args == 'project init' ):
 			$this->check();
 			$this->initProject();
+		elseif($args == 'convert template'):
+			$this->check();
+			$this->convertTemplate();
 		endif;
 		
 		//$command = implode( ' ' , $this->input->args ) ;
@@ -177,6 +180,15 @@ class AKBuilderCli extends JApplicationCli
 		$this->success($builder);
 	}
 	
+	public function convertTemplate()
+	{
+		$input 	= $this->input ;
+		$builder = $this->getAKBuilder();
+		$builder->convertTemplate( $input->get('n') );
+		
+		$this->success($builder);
+	}
+	
 	public function success($builder)
 	{
 		foreach( $builder->addfiles as $f ){
@@ -185,6 +197,10 @@ class AKBuilderCli extends JApplicationCli
 		
 		foreach( $builder->existsfiles as $f ){
 			$this->out( "File exists: $f" );
+		}
+		
+		foreach( $builder->convertfiles as $f ){
+			$this->out( "File Converted: $f" );
 		}
 		
 		$this->out("Create successfully.");

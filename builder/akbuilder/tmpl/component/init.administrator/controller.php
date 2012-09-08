@@ -27,11 +27,24 @@ class {COMPONENT_NAME_UCFIRST}Controller extends JController
 		// Load the submenu.
 		{COMPONENT_NAME_UCFIRST}Helper::addSubmenu(JRequest::getCmd('view', '{CONTROLLER_NAMES}'));
 
-		$view		= JRequest::getCmd('view', '{CONTROLLER_NAMES}');
+		$view = JRequest::getCmd('view', '{CONTROLLER_NAMES}');
         JRequest::setVar('view', $view);
 
 		parent::display();
 
 		return $this;
 	}
+	
+	public function redirect()
+    {
+		$redirect = JRequest::getVar('return') ;
+		
+        if ($redirect)
+        {
+            $this->setRedirect(base64_decode($redirect)) ;
+        }
+		
+		parent::redirect();
+        return false;
+    }
 }

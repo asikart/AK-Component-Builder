@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="information">
+		
+		<field name="title"
+			type="text"
+			label="JGLOBAL_TITLE"
+			description="JFIELD_TITLE_DESC"
+			required="true"
+			size="50"
+		/>
+		
+		<field name="alias"
+			type="text"
+			label="JFIELD_ALIAS_LABEL"
+			description="JFIELD_ALIAS_DESC"
+			size="50"
+		/>
+		
+		<field name="catid"
+			type="category"
+			label="JCATEGORY"
+			description="JFIELD_CATEGORY_DESC"
+			extension="com_{COMPONENT_NAME}"
+		>
+			<option value="0">COM_{COMPONENT_NAME_UC}_TITLE_UNCATEGORISED</option>
+		</field>
+
+        <field name="published"
+	        type="list"
+	        label="JSTATUS"
+	        description="JFIELD_PUBLISHED_DESC"
+	        class="inputbox"
+	        size="1"
+	        default="1"
+		>
+	        <option value="1">JPUBLISHED</option>
+	        <option value="0">JUNPUBLISHED</option>
+        </field>
+		
+		<field name="images"
+			type="media"
+			label="COM_{COMPONENT_NAME_UC}_IMAGES"
+			description="COM_{COMPONENT_NAME_UC}_IMAGES_DESC"
+		/>
+		
+		<field name="url"
+			type="text"
+			label="COM_{COMPONENT_NAME_UC}_URL"
+			description="COM_{COMPONENT_NAME_UC}_URL_DESC"
+			size="60"
+		/>
+		
+		<field name="introtext"
+			type="editor"
+			label="COM_{COMPONENT_NAME_UC}_INTROTEXT"
+			description="COM_{COMPONENT_NAME_UC}_INTROTEXT_DESC"
+			filter="raw"
+			buttons="true"
+			hide="readmore,pagebreak,article"
+		/>
+		
+		<field name="fulltext"
+			type="editor"
+			label="COM_{COMPONENT_NAME_UC}_FULLTEXT"
+			description="COM_{COMPONENT_NAME_UC}_FULLTEXT_DESC"
+			filter="raw"
+			buttons="true"
+			hide="readmore,pagebreak,article"
+		/>
+
+        <field name="checked_out" type="hidden" filter="unset" />
+    	<field name="checked_out_time" type="hidden" filter="unset" />
+		
+	</fieldset>
+	
+	<fieldset name="created">
+		<field name="id" 
+			type="text" 
+			default="0" 
+			label="JGLOBAL_FIELD_ID_LABEL"
+        	readonly="true" 
+			class="readonly"
+        	description="JGLOBAL_FIELD_ID_DESC"
+		/>
+		
+		<field name="asset_id" type="hidden" filter="unset" />
+		
+		<field name="created_by"
+			type="user"
+			label="COM_{COMPONENT_NAME_UC}_CREATED_BY"
+			description="COM_{COMPONENT_NAME_UC}_CREATED_BY_DESC"
+		/>
+		
+		<field name="created"
+			type="calendar"
+			label="COM_{COMPONENT_NAME_UC}_CREATED"
+			description="COM_{COMPONENT_NAME_UC}_CREATED_DESC"
+		/>
+		
+		<field name="publish_up"
+			type="calendar"
+			label="COM_{COMPONENT_NAME_UC}_PUBLISH_UP"
+			description="COM_{COMPONENT_NAME_UC}_PUBLISH_UP_DESC"
+		/>
+		
+		<field name="publish_down"
+			type="calendar"
+			label="COM_{COMPONENT_NAME_UC}_PUBLISHED_DOWN"
+			description="COM_{COMPONENT_NAME_UC}_PUBLISH_DOWN_DESC"
+		/>
+		
+		<field name="access"
+			type="accesslevel"
+			label="JFIELD_ACCESS_LABEL"
+			description="JFIELD_ACCESS_DESC"
+		/>
+		
+		<field name="language"
+			type="language"
+			label="JGRID_HEADING_LANGUAGE"
+			description="JGRID_HEADING_LANGUAGE"
+		>
+			<option value="*">JALL</option>
+		</field>
+		
+	</fieldset>
+	
+	<fieldset name="rules">
+		<field name="rules"
+			type="rules"
+			label="JFIELD_RULES_LABEL"
+			translate_label="false"
+			class="inputbox"
+			filter="rules"
+			component="com_{COMPONENT_NAME}"
+			section="{CONTROLLER_NAME}"
+			validate="rules"
+		/>
+	</fieldset>
+	
+</form>
