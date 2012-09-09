@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="{GROUP_NAME}">
+	<name>plg_{GROUP_NAME}_{EXTENSION_NAME}</name>
+	<author>Asika</author>
+	<creationDate>July 2010</creationDate>
+	<copyright>Copyright (C) 2005 - 2011 Asikart.com. All rights reserved.</copyright>
+	<authorEmail>asika@asikart.com</authorEmail>
+	<authorUrl>http://asikart.com</authorUrl>
+	<version>1.0</version>
+	<description>PLG_{GROUP_NAME_UC}_{EXTENSION_NAME_UC}_XML_DESCRIPTION</description>
+	
+	
+	<scriptfile>install.php</scriptfile>
+	
+	<!-- plugin {GROUP_NAME} now has no sql file
+	<install>
+    	<sql>
+        	<file driver="mysql" charset="utf8">sql/install.sql</file>
+  		</sql>
+    </install>
+	
+	
+	<uninstall>
+    	<sql>
+        	<file driver="mysql" charset="utf8">sql/uninstall.sql</file>
+  		</sql>
+    </uninstall>
+	-->
+	
+	
+	<files>
+		<filename plugin="{EXTENSION_NAME}">{EXTENSION_NAME}.php</filename>
+		<filename>index.html</filename>
+		<filename>install.php</filename>
+		<folder>language</folder>
+		<folder>lib</folder>
+	</files>
+
+	<config>
+		<fields name="params">
+
+			<fieldset name="basic">
+				<field name="field1" type="text"
+					description="{EXTENSION_NAME_UCFIRST} field 1"
+					label="{EXTENSION_NAME_UCFIRST} field 1"
+				/>
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field name="include_path" type="text"
+					label="PLG_{GROUP_NAME_UC}_{EXTENSION_NAME_UC}_INCLUDE_PATH"
+					default="easyset"
+				/>
+			</fieldset>
+
+		</fields>
+	</config>
+	
+	
+	<updateservers>
+		<!--<server type="collection">http://{EXTENSION_NAME}.com/list.xml</server>-->
+		<server type="extension" priority="1" name="Asikart {EXTENSION_NAME_UCFIRST} Plugin">http://updateserver.com/plugins/plg_{EXTENSION_NAME}.xml</server>
+	</updateservers>
+	
+	
+</extension>

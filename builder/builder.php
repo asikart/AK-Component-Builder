@@ -91,12 +91,6 @@ class AKBuilderCli extends JApplicationCli
 		$args = $this->input->args;
 		$args = implode( ' ' , $args ) ;
 		
-		if( !isset($args[0]) ){
-			$this->out("Need Params.");
-			$this->close();
-		}
-		
-		//if( $args == 'project init' ) $this->close('123') ;
 		
 		if( $args == 'add subsystem' ):
 			$this->check();
@@ -107,87 +101,126 @@ class AKBuilderCli extends JApplicationCli
 		elseif($args == 'convert template'):
 			$this->check();
 			$this->convertTemplate();
+		elseif($this->input->get('help') == 1):
+			$this->showHelp();
 		endif;
 		
-		//$command = implode( ' ' , $this->input->args ) ;
+		$this->showHelp();
+		
 		$this->out("Command {$args} not found.");
 		$this->close();
-		
-		//$this->out( print_r($this->input) );
-
-		// Print a blank line at the end.
-		$this->out();
 	}
+	
+	
 	
 	public function check()
 	{
 		$args = $this->input->args;
+		$args = implode( ' ' , $args ) ;
 		
 		$input 	= $this->input ;
 		
-		// is name exists
-		$name = $input->get( 'n' , 1 ) ;
-		if( $name == 1 ) {
-			$this->missingParams('n') ;
-		}
-		
-		// is client exists
-		$client = $input->get( 'c' , 1 ) ;
-		if( $client == 1 ) {
-			$this->missingParams('c') ;
-		}elseif( $client != 'site' && $client != 'administrator' && $client != 'admin' ){
-			$this->missingParams( 'c' , 'Wrong Client Type, only support "site" , "administrator" or "admin" .' );
-		}
-		
 		// is extension name exists
-		$ext = $input->get( 'e' , 1 ) ;
-		if( $ext == 1 ) {
+		$this->extension = $input->get( 'e' , 1 ) ;
+		
+		if( $this->extension == 1 ) {
 			$this->missingParams('e', $msg) ;
 		}
 		
-		$type	= $input->get( 't' , 'component' );
-		if( $type != 'component' ){
-			$this->missingParams( 'Extension type only support component now.' );
+		$this->type = substr($this->extension, 0, 3) ;
+		switch($this->type){
+			case 'com' : $this->type = 'component' ; 	break ;
+			case 'mod' : $this->type = 'module' ; 	break ;
+			case 'plg' : $this->type = 'plugin' ; 	break ;
+			default : $this->missingParams(null, 'Extension type "'.$this->type.'" not exists.');
+		}
+		
+		// is name exists
+		$this->name = $input->get( 'n' , 1 ) ;
+		if( $this->type == 'component' && $this->name == 1 ) {
+			$this->missingParams('n') ;
+		}else{
+			$this->name = "item.items" ;
+		}
+		
+		
+		// is client exists
+		$this->client = $input->get( 'c' , 1 ) ;
+		
+		if( $this->type == 'plugin' ){
+			if( $this->client != 1  ){
+				$this->missingParams( 'c' , 'Extension type "Plugin" does not support "client" .' );
+			}
+		}elseif( $args == 'convert template' ){
+			$this->client = 'all' ;
+		}else{
+			if( $this->client == 1 ) {
+				$this->missingParams('c') ;
+			}elseif( $this->client != 'site' && $this->client != 'administrator' && $this->client != 'admin' ){
+				$this->missingParams( 'c' , 'Wrong Client Type, only support "site" , "administrator" or "admin" .' );
+			}
+		}
+		
+		if( $this->client == 'admin' ) $this->client = 'administrator' ;
+		
+		
+		// if is Plugin, need group param
+		$this->group = $input->get( 'g' , 1 ) ;
+		if( $this->type == 'plugin' && $this->group == 1 ){
+			$this->missingParams('g', 'Extension type "Plugin" need -g (group) param.') ;
+		}elseif($this->type != 'plugin'){
+			$this->group = null ;
 		}
 	}
+	
+	
 	
 	public function getAKBuilder()
 	{
 		include_once (__DIR__.DS.'akbuilder'.DS.'akbuilder.php') ;
-		$input 	= $this->input ;
 		
-		$client = $input->get('c', 'administrator');
-		if($client == 'admin') $client = 'administrator' ;
-		
-		return AKBuilder::getInstance( $input->get('t', 'component' ) , $input->get('e') , $client );
+		return AKBuilder::getInstance( $this->type , $this->extension , $this->client, array('group'=> $this->group) );
 	}
+	
+	
 	
 	public function addSubsystem()
 	{
 		$input 	= $this->input ;
 		$builder = $this->getAKBuilder();
-		$builder->addSubsystem( $input->get('n') );
+		
+		if( method_exists( $builder, 'addSubsystem') ){
+			$builder->addSubsystem( $this->name );
+		}else{
+			$this->missingParams( null , 'This extension type does not support subsystem.' );
+		}
 		
 		$this->success($builder);
 	}
+	
+	
 	
 	public function initProject()
 	{
 		$input 	= $this->input ;
 		$builder = $this->getAKBuilder();
-		$builder->init( $input->get('n') );
+		$builder->init( $this->name );
 		
 		$this->success($builder);
 	}
+	
+	
 	
 	public function convertTemplate()
 	{
 		$input 	= $this->input ;
 		$builder = $this->getAKBuilder();
-		$builder->convertTemplate( $input->get('n') );
+		$builder->convertTemplate( $this->name );
 		
 		$this->success($builder);
 	}
+	
+	
 	
 	public function success($builder)
 	{
@@ -207,6 +240,8 @@ class AKBuilderCli extends JApplicationCli
 		$this->close();
 	}
 	
+	
+	
 	public function missingParams($key, $msg = null)
 	{
 		if(!$msg){
@@ -214,10 +249,31 @@ class AKBuilderCli extends JApplicationCli
 		}
 	
 		$this->out( $msg );
+		$this->out( '- You can type "--help" to get some help.' );
 		$this->out();
 		$this->close();
 	}
-
+	
+	
+	
+	/*
+	 * function showHelp
+	 * @param 
+	 */
+	
+	public function showHelp()
+	{
+		$help = __DIR__.'/akbuilder/help.txt' ;
+		
+		jimport('joomla.filesystem.file');
+		
+		if(JFile::exists($help)) {
+			$this->out( JFile::read($help) );
+			$this->out();
+			$this->close();	
+		}
+	}
+	
 }
 
 // Instantiate the application object, passing the class name to JCli::getInstance

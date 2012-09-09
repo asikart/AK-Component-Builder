@@ -8,129 +8,48 @@ defined('_JEXEC') or die;
 class AKBuilderComponent extends AKBuilder
 {
 
-	public $component = '' ;
-	
-	public $isNew = false ;
-	
-	public $type = 'component' ;
-	
-	public $path = '' ;
-	
-	public $tmpl_path = '' ;
-	
-	public $client = '' ;
-	
-	public $addfiles = array();
-	
-	public $existsfiles = array();
-	
-	public $convertfiles = array();
-	
-	public function __construct( $name='com_custom', $client='administrator' )
+	public function __construct($type = 'cpmponent', $name='com_custom', $client='administrator', $option = array() )
 	{
-		$this->component = $name ;
-		
-		if( substr($this->component,0,4) == 'com_' ){
-			$this->component = substr($this->component, 4) ;
-		}
-		
-		$this->client 	= $client ;
-		$this->tmpl_path = AKBUILDER_PATH.DS.'tmpl'.DS.$this->type ;
+		parent::__construct($type, $name, $client, $option);
 		
 		switch($client){
 			case 'site':
-				$this->path = JPATH_ROOT.DS.'components'.DS.'com_'.$this->component ;
+				$this->target_path = JPATH_ROOT.'/'.$this->type.'/'.'com_'.$this->extension ;
 			break;
 			
 			case 'administrator':
-				$this->path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_'.$this->component ;
+			default :
+				$this->target_path = JPATH_ADMINISTRATOR.'/'.$this->type.'/com_'.$this->extension ;
 			break;
 		}
 	}
 	
+	
+	
 	public function init($name='item.items', $client='administrator')
 	{
-		/*
-		$folders = array();
-		$files	 = array();
-		
-		$folders[] = 'controllers' ;
-		$folders[] = 'models' ;
-		$folders[] = 'views' ;
-		$folders[] = 'language' ;
-		
-		if($client == 'administrator' ){
-			$folders[] = 'helpers' ;
-			$folders[] = 'sql' ;
-			$folders[] = 'tables' ;
-			
-			$files[] = 'access.xml' ;
-			$files[] = 'component_name.xml' ;
-			$files[] = 'config.xml' ;
-			$files[] = 'controller.php' ;
-			$files[] = '' ;
-			$files[] = '' ;
-			$files[] = '' ;
-		}
-		*/
 		$this->tmpl_path = AKBUILDER_PATH.DS.'tmpl'.DS.$this->type.DS.'init.'.$this->client ;
 		$this->addFiles( '' , $name , $client );
 		$this->addSubsystem( $name , $client );
 	}
 	
+	
+	
 	public function addSubSystem($name='item.items', $client='administrator' )
 	{
-		$this->tmpl_path = AKBUILDER_PATH.DS.'tmpl'.DS.$this->type.DS.'subsystem.'.$this->client ;
+		$this->tmpl_path = AKBUILDER_PATH.'/tmpl/'.$this->type.'/subsystem.'.$this->client ;
 	
-		$this->addControllers($name,  $client);
-		$this->addModels($name,  $client);
-		$this->addViews($name,  $client);
-		$this->addTable($name,  $client);
-		$this->addSQL($name);
+		//$this->addControllers($name,  $client);
+		//$this->addModels($name,  $client);
+		//$this->addViews($name,  $client);
+		//$this->addTable($name,  $client);
+		$this->addFiles( '' , $name , $client );
+		$this->importSQL($name);
 	}
 	
-	public function convertTemplate($name='sakura.sakuras', $client='administrator')
-	{
-		$this->tmpl_path = AKBUILDER_PATH.DS.'tmpl'.DS.$this->type ;
-		
-		$files = JFolder::files( $this->tmpl_path, '.' , true, true);
-		
-		$tmpl = array();
-		
-		foreach( $files as $k => $v ){
-			$tmpl[$k]['target'] 	= $this->replaceName( $v , $name, true );
-			$tmpl[$k]['content'] 	= $this->replaceName( JFile::read( $v ) , $name, true );
-			
-			JFile::delete($v);
-		}
-		
-		foreach( $tmpl as $v ){
-			JFile::write( $v['target'] , $v['content'] ) ;
-			$this->convertfiles[] = $v['target'] ;
-		}
-	}
 	
-	public function addControllers($name='item.items', $client='administrator')
-	{
-		$this->addFiles('controllers', $name, $client) ;
-	}
 	
-	public function addModels($name='item.items', $client='administrator')
-	{
-		$this->addFiles('models', $name, $client) ;
-	}
-	
-	public function addViews($name='item.items', $client='administrator')
-	{
-		$this->addFiles('views', $name, $client) ;
-	}
-	
-	public function addTable($name='item.items', $client='administrator')
-	{
-		$this->addFiles('tables', $name, $client) ;
-	}
-	
-	public function addSQL($name='item.items', $client='administrator')
+	public function importSQL($name='item.items', $client='administrator')
 	{
 		
 		$conf = JFactory::getConfig();
@@ -149,11 +68,47 @@ class AKBuilderComponent extends AKBuilder
 		
 		$db  = JFactory::getDbo();
 		
-		$sql = JFile::read( $this->tmpl_path.DS.'sql'.DS.'install.sql' );
-		$sql = $this->replaceName($sql,$name);
+		$sql = JFile::read( $this->tmpl_path.'/sql/install.sql' );
+		$sql = $this->replaceName($sql, $name);
 		
 		$db->setQuery( $sql );
 		$db->queryBatch();
+	}
+	
+	
+	
+	public function convertTemplate($name='sakura.sakuras')
+	{
+		if($this->client == 'all'){
+			$this->tmpl_path = AKBUILDER_PATH.'/tmpl/' . $this->type ;
+		}else{
+			$this->tmpl_path = AKBUILDER_PATH.'/tmpl/' . $this->type . '/init.' . $this->client ;
+		}
+		
+		parent::convertTemplate($name);
+	}
+	
+	
+	
+	/*
+	public function addControllers($name='item.items', $client='administrator')
+	{
+		$this->addFiles('controllers', $name, $client) ;
+	}
+	
+	public function addModels($name='item.items', $client='administrator')
+	{
+		$this->addFiles('models', $name, $client) ;
+	}
+	
+	public function addViews($name='item.items', $client='administrator')
+	{
+		$this->addFiles('views', $name, $client) ;
+	}
+	
+	public function addTable($name='item.items', $client='administrator')
+	{
+		$this->addFiles('tables', $name, $client) ;
 	}
 	
 	public function addHelper($name='item', $client='administrator')
@@ -176,71 +131,30 @@ class AKBuilderComponent extends AKBuilder
 		
 	}
 	
-	public function addFile( $file = 'controller.php', $name = 'item.items' , $client = 'administrator' )
-	{
-		$file_path 	= JPath::clean($this->tmpl_path.'/'.$file) ;
-		$content 	= $this->replaceName( JFile::read( $file_path , '.' , true, true) , $name );
-		
-		$target_path = $this->replaceName( JPath::clean($this->path.'/'.$file) , $name );
-		
-		if( !JFile::exists( $target_path ) )
-			JFile::write( $target_path , $content ) ;
-	}
+	*/
 	
-	public function addFiles( $type = 'controllers', $name = 'item.items' , $client = 'administrator' )
-	{
-		$files = JFolder::files( $this->tmpl_path.DS.$type, '.' , true, true);
-		
-		//AK::show($files);
-		
-		$tmpl = array();
-		
-		foreach( $files as $k => $v ){
-			$tmpl[$k]['target'] 	= $this->replaceName( str_replace( $this->tmpl_path , $this->path , $v) , $name );
-			$tmpl[$k]['content'] 	= $this->replaceName( JFile::read( $v ) , $name );
-		}
-		
-		//AK::show($tmpl);
-		
-		foreach( $tmpl as $v ){
-			if( !JFile::exists( $v['target'] ) ){
-				JFile::write( $v['target'] , $v['content'] ) ;
-				$this->addfiles[] = $v['target'] ;
-			}else{
-				$this->existsfiles[] = $v['target'] ;
-			}
-		}
-	}
 	
-	public function replaceName($content = '' , $name = 'item.items', $flip = false)
+	/*
+	 * function _buildReplaceKey
+	 * @param $name
+	 */
+	
+	public function _buildReplaceKey($name = 'item.items')
 	{
-		// handles name item and name list
-		$name = explode('.', $name);
-		$nameItem = $name[0] ;
-		$nameList = isset($name[1]) ? $name[1] : $name[0].'s' ;
+		parent::_buildReplaceKey($name) ;
 		
+		$r['{COMPONENT_NAME}'] 			= strtolower($this->extension) ;
+		$r['{COMPONENT_NAME_UC}'] 		= strtoupper($this->extension) ;
+		$r['{COMPONENT_NAME_UCFIRST}'] 	= ucfirst($this->extension) ;
 		
-		$r['{COMPONENT_NAME}'] 			= strtolower($this->component) ;
-		$r['{COMPONENT_NAME_UC}'] 		= strtoupper($this->component) ;
-		$r['{COMPONENT_NAME_UCFIRST}'] 	= ucfirst($this->component) ;
+		$r['{CONTROLLER_NAMES}'] 		= strtolower($this->list_name) ;
+		$r['{CONTROLLER_NAMES_UC}'] 	= strtoupper($this->list_name) ;
+		$r['{CONTROLLER_NAMES_UCFIRST}']= ucfirst($this->list_name) ;
 		
-		$r['{CONTROLLER_NAMES}'] 		= strtolower($nameList) ;
-		$r['{CONTROLLER_NAMES_UC}'] 	= strtoupper($nameList) ;
-		$r['{CONTROLLER_NAMES_UCFIRST}']= ucfirst($nameList) ;
+		$r['{CONTROLLER_NAME}'] 		= strtolower($this->item_name) ;
+		$r['{CONTROLLER_NAME_UC}'] 		= strtoupper($this->item_name) ;
+		$r['{CONTROLLER_NAME_UCFIRST}'] = ucfirst($this->item_name) ;
 		
-		$r['{CONTROLLER_NAME}'] 		= strtolower($nameItem) ;
-		$r['{CONTROLLER_NAME_UC}'] 		= strtoupper($nameItem) ;
-		$r['{CONTROLLER_NAME_UCFIRST}'] = ucfirst($nameItem) ;
-		
-		//$r['controller_names'] 			= strtolower($nameList);
-		//$r['controller_name'] 			= strtolower($nameItem);
-		
-		//$r['component_name'] 			= strtolower($this->component);
-		
-		if($flip){
-			$r = array_flip($r);
-		}
-		
-		return strtr( $content , $r ) ;
+		$this->replace_key = $r ;
 	}
 }
