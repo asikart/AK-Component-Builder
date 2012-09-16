@@ -19,7 +19,9 @@ class {COMPONENT_NAME_UCFIRST}Helper
 	 * Configure the Linkbar.
 	 */
 	public static function addSubmenu($vName = '')
-	{
+	{		
+		jimport('joomla.filesystem.folder');
+		jimport('joomla.filesystem.file');
 
 		JSubMenuHelper::addEntry(
 			JText::_('JCATEGORY'),
@@ -27,7 +29,7 @@ class {COMPONENT_NAME_UCFIRST}Helper
 			$vName == 'categories'
 		);
 		
-		$folders = JFolder::folders(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_{COMPONENT_NAME}'.DS.'views');
+		$folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
 		
 		foreach( $folders as $folder ){
 			if( substr($folder, -2) == 'is' || substr($folder, -1) == 's'){
@@ -76,7 +78,7 @@ class {COMPONENT_NAME_UCFIRST}Helper
         static $paths;
  
         if (!isset($paths)) {
-            $paths = array( {COMPONENT_NAME_UC}_ADMIN.DS.'helpers' );
+            $paths = array( JPATH_COMPONENT_ADMINISTRATOR.'/helpers' );
         }
  
         // force path to array

@@ -22,6 +22,6 @@ include_once JPATH_COMPONENT_ADMINISTRATOR.'/includes/init.php';
 // Include dependancies
 jimport('joomla.application.component.controller');
 
-$controller	= JController::getInstance('{COMPONENT_NAME_UCFIRST}');
+$controller	= JControllerLegacy::getInstance('{COMPONENT_NAME_UCFIRST}');
 $controller->execute(JRequest::getCmd('task'));
 $controller->redirect();

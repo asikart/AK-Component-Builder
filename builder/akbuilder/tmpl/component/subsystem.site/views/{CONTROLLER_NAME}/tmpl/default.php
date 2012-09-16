@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JHtml::_('core');
+JHtml::_('behavior.framework');
 
 // Create shortcuts to some parameters.
 $params		= $this->item->params;

@@ -54,7 +54,7 @@ abstract class mod{EXTENSION_NAME_UCFIRST}Helper
 		$q->where('a.published > 0') ;
 		
 		$nullDate = $db->Quote($db->getNullDate());
-		$nowDate = $db->Quote($date->toMySQL(true));
+		$nowDate = $db->Quote($date->toSql(true));
 
 		$q->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
 		$q->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
@@ -96,7 +96,7 @@ abstract class mod{EXTENSION_NAME_UCFIRST}Helper
 			->from('#__{EXTENSION_NAME}_{CONTROLLER_NAMES} AS a')
 			->join('LEFT', '#__categories AS b ON a.catid = b.id')
 			//->where("")
-			->order("created ASC")
+			->order("{$order} {$dir}")
 			;
 		
 		$db->setQuery($q);
@@ -132,20 +132,24 @@ abstract class mod{EXTENSION_NAME_UCFIRST}Helper
 	
 	
 	
-	public static function getSelectList( $table_array = array() , $all = true )
+	public static function getSelectList( $tables = array() , $all = true )
 	{
-		$db 	= JFactory::getDbo();
-		$tables = $db->getTableFields( $table_array );
-		$select = array();
+		$db = JFactory::getDbo();
+		
+		$select = array() ;
 		$fields = array() ;
 		$i = 'a' ;
 		
-		foreach( $tables as $table ){
-			if($all)
-				$select[] = "{$i}.*" ;
+		foreach( $tables as $k => $table ){
 			
-			foreach( $table as $key=>$var ){
-				$fields[] = /*($i == 'a') ? "{$i}.{$key} AS {$key}" : */"{$i}.{$key} AS {$i}_{$key}" ;
+			$columns = $db->getTableColumns( $table );
+			
+			if($all){
+				$select[] = "{$k}.*" ;
+			}
+			
+			foreach( $columns as $key=>$var ){
+				$fields[] = "{$k}.{$key} AS {$k}_{$key}" ;
 			}
 			
 			$i = ord($i);
@@ -154,6 +158,5 @@ abstract class mod{EXTENSION_NAME_UCFIRST}Helper
 		}
 		
 		return $final = implode( "," , $select ).",\n".implode( ",\n" , $fields );
-	}
-	
+	}	
 }

@@ -81,7 +81,7 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends JContr
 		return $append ;
 	}
 	
-	protected function postSaveHook(JModel &$model, $validData = array())
+	protected function postSaveHook(JModelLegacy &$model, $validData = array())
     {
 		
     }
@@ -90,13 +90,13 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends JContr
 	public function setRedirect($url, $msg = null, $type = null)
     {
 		$task  = $this->getTask() ;
-		$array = array('save', 'cancel', 'publish', 'unpublish', 'delete');
+		$redirect_tasks = array('save', 'cancel', 'publish', 'unpublish', 'delete');
 		
 		if(!$this->redirect){
 			$this->redirect = base64_decode(JRequest::getVar('return')) ;
 		}
 		
-        if ($this->redirect && in_array($task, $array)){
+        if ($this->redirect && in_array($task, $redirect_tasks)){
             return parent::setRedirect($this->redirect, $msg, $type) ;
         }else{
 			return parent::setRedirect($url, $msg, $type) ;

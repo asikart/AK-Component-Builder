@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 		<ul class="{EXTENSION_NAME}-module-list nav nav-tabs nav-stacked">
 		<?php foreach( $items as $item ): ?>
 			<li class="{EXTENSION_NAME}-module-list-item">
-				<i class="icon-chevron-right"></i><?php echo JHtml::_('link', $item->link, "{$item->a_created} - {$item->a_title}"); ?>
+				<?php echo JHtml::_('link', $item->link, "{$item->a_created} - {$item->a_title}"); ?>
 			</li>
 		<?php endforeach; ?>
 		</ul>

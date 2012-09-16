@@ -123,18 +123,18 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME} extends JModelAdmin
 			}
 			
 			if(!$table->alias){
-				$table->alias = JFilterOutput::stringURLSafe( $date->toMySQL() ) ;
+				$table->alias = JFilterOutput::stringURLSafe( $date->toSql() ) ;
 			}
 		}
 		
 		// created date
 		if(isset($table->created) && !$table->created){
-			$table->created = $date->toMySQL();
+			$table->created = $date->toSql();
 		}
 		
 		// modified date
 		if(isset($table->modified) && $table->id){
-			$table->modified = $date->toMySQL();
+			$table->modified = $date->toSql();
 		}
 		
 		// created user

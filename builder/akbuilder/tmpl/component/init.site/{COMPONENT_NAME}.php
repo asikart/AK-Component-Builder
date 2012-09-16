@@ -17,11 +17,11 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_{COMPONENT_NAME}')) {
 }
 
 // include helper
-include_once JPATH_COMPONENT_ADMINISTRATOR.DS.'includes'.DS.'init.php' ;
+include_once JPATH_COMPONENT_ADMINISTRATOR.'/includes/init.php' ;
 
 // Include dependancies
 jimport('joomla.application.component.controller');
 
-$controller	= JController::getInstance('{COMPONENT_NAME_UCFIRST}');
+$controller	= JControllerLegacy::getInstance('{COMPONENT_NAME_UCFIRST}');
 $controller->execute(JRequest::getCmd('task'));
 $controller->redirect();

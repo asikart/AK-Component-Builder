@@ -26,21 +26,24 @@ jimport('joomla.application.component.modelitem');
 
 jimport('joomla.html.toolbar');
 
+jimport('joomla.filesystem.folder');
+jimport('joomla.filesystem.file');
+
 // include Component Custom class
-include_once JPath::clean( {COMPONENT_NAME_UC}_ADMIN."/class/viewpanel.class.php" ) ;
-include_once JPath::clean( {COMPONENT_NAME_UC}_ADMIN."/helpers/aktext.php" ) ;
-include_once JPath::clean( {COMPONENT_NAME_UC}_ADMIN."/helpers/toolbar.php" ) ;
+include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR."/class/viewpanel.class.php" ) ;
+include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR."/helpers/aktext.php" ) ;
+include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR."/helpers/toolbar.php" ) ;
 include_once JPath::clean( JPATH_ADMINISTRATOR."/includes/toolbar.php" ) ;
 
 if( $app->isSite() ){
-	include_once JPath::clean( {COMPONENT_NAME_UC}_ADMIN."/helpers/{COMPONENT_NAME}.php" ) ;
+	include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR."/helpers/{COMPONENT_NAME}.php" ) ;
 	$lang->load('', JPATH_ADMINISTRATOR);
-	$lang->load('com_{COMPONENT_NAME}', {COMPONENT_NAME_UC}_ADMIN );
+	$lang->load('com_{COMPONENT_NAME}', JPATH_COMPONENT_ADMINISTRATOR );
 	
 	// include css
 	{COMPONENT_NAME_UCFIRST}Helper::_('include.core');
 }else{
-	include_once JPath::clean( {COMPONENT_NAME_UC}_ADMIN."/helpers/{COMPONENT_NAME}.php" ) ;
+	include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR."/helpers/{COMPONENT_NAME}.php" ) ;
 }
 
 // set Base to fix toolbar anchor bug

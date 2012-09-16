@@ -34,13 +34,13 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends JCont
 	public function setRedirect($url, $msg = null, $type = null)
     {
 		$task  = $this->getTask() ;
-		$array = array('save', 'publish', 'unpublish', 'delete');
+		$redirect_tasks = array('save', 'cancel', 'publish', 'unpublish', 'delete');
 		
 		if(!$this->redirect){
 			$this->redirect = base64_decode(JRequest::getVar('return')) ;
 		}
 		
-        if ($this->redirect && in_array($task, $array)){
+        if ($this->redirect && in_array($task, $redirect_tasks)){
             return parent::setRedirect($this->redirect, $msg, $type) ;
         }else{
 			return parent::setRedirect($url, $msg, $type) ;

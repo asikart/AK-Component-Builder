@@ -11,7 +11,7 @@
 // No direct access
 defined('_JEXEC') or die;
 
-class {COMPONENT_NAME_UCFIRST}Controller extends JController
+class {COMPONENT_NAME_UCFIRST}Controller extends JControllerLegacy
 {
 	/**
 	 * Method to display a view.
@@ -34,17 +34,4 @@ class {COMPONENT_NAME_UCFIRST}Controller extends JController
 
 		return $this;
 	}
-	
-	public function redirect()
-    {
-		$redirect = JRequest::getVar('return') ;
-		
-        if ($redirect)
-        {
-            $this->setRedirect(base64_decode($redirect)) ;
-        }
-		
-		parent::redirect();
-        return false;
-    }
 }

@@ -65,7 +65,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 		JToolBarHelper::title( ucfirst($this->getName()) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST'), 'article.png');
 		
         //Check if the form exists before showing the add/edit buttons
-        $formPath = JPATH_COMPONENT_ADMINISTRATOR.DS.'views'.DS.$this->item_name;
+        $formPath = JPATH_COMPONENT_ADMINISTRATOR.'/views/'.$this->item_name;
         if (file_exists($formPath)) {
             if ($canDo->get('core.create')) {
 			    JToolBarHelper::addNew( $this->item_name.'.add','JTOOLBAR_NEW');

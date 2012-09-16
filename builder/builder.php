@@ -4,7 +4,7 @@
 if (array_key_exists('REQUEST_METHOD', $_SERVER)) die();
 
 /**
- * Finder CLI Bootstrap
+ * Scaffold CLI Bootstrap
  *
  * Run the framework bootstrap with a couple of mods based on the script's needs
  */
@@ -31,8 +31,6 @@ require_once JPATH_LIBRARIES . '/import.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
-// Force library to be in JError legacy mode
-JError::$legacy = true;
 
 // Import necessary classes not handled by the autoloaders
 jimport('joomla.application.menu');
@@ -55,7 +53,7 @@ ini_set('display_errors', 1);
 $lang = JFactory::getLanguage();
 
 /**
- * A command line cron job to run the Finder indexer.
+ * A command line to generate extension scaffold.
  *
  * @package     Joomla.CLI
  * @subpackage  com_finder
@@ -139,10 +137,7 @@ class AKBuilderCli extends JApplicationCli
 		$this->name = $input->get( 'n' , 1 ) ;
 		if( $this->type == 'component' && $this->name == 1 ) {
 			$this->missingParams('n') ;
-		}else{
-			$this->name = "item.items" ;
 		}
-		
 		
 		// is client exists
 		$this->client = $input->get( 'c' , 1 ) ;

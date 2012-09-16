@@ -5,7 +5,7 @@
 
 defined('_JEXEC') or die;
 
-include_once JPATH_ADMINISTRATOR.DS.'includes'.DS.'toolbar.php' ;
+include_once JPATH_ADMINISTRATOR.'/includes/toolbar.php' ;
 
 class AKToolBarHelper extends JToolBarHelper
 {

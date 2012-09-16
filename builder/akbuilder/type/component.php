@@ -14,12 +14,12 @@ class AKBuilderComponent extends AKBuilder
 		
 		switch($client){
 			case 'site':
-				$this->target_path = JPATH_ROOT.'/'.$this->type.'/'.'com_'.$this->extension ;
+				$this->target_path = JPATH_ROOT.'/components/'.'com_'.$this->extension ;
 			break;
 			
 			case 'administrator':
 			default :
-				$this->target_path = JPATH_ADMINISTRATOR.'/'.$this->type.'/com_'.$this->extension ;
+				$this->target_path = JPATH_ADMINISTRATOR.'/components/com_'.$this->extension ;
 			break;
 		}
 	}
@@ -71,8 +71,12 @@ class AKBuilderComponent extends AKBuilder
 		$sql = JFile::read( $this->tmpl_path.'/sql/install.sql' );
 		$sql = $this->replaceName($sql, $name);
 		
-		$db->setQuery( $sql );
-		$db->queryBatch();
+		$sqls = $db->splitSql($sql) ;
+		
+		foreach( $sqls as $sql ):
+			$db->setQuery( $sql );
+			$db->query();
+		endforeach;
 	}
 	
 	
