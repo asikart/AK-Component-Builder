@@ -107,8 +107,8 @@
 			<field name="num_columns" type="list"
 				description="JGLOBAL_NUM_COLUMNS_DESC"
 				label="JGLOBAL_NUM_COLUMNS_LABEL"
-				default="2"
 			>
+				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">J1</option>
 				<option value="2">J2</option>
 				<option value="3">J3</option>

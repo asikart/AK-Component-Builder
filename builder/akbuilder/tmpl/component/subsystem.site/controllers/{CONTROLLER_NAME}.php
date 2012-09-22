@@ -81,7 +81,7 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends JContr
 		return $append ;
 	}
 	
-	protected function postSaveHook(JModelLegacy &$model, $validData = array())
+	protected function postSaveHook( &$model, $validData = array())
     {
 		
     }

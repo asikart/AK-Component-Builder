@@ -26,25 +26,40 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
      */
     public function __construct($config = array())
     {
+		
+		// Set query tables
+		// ========================================================================
+		$config['tables'] = array(
+			'a' => '#__{COMPONENT_NAME}_{CONTROLLER_NAMES}',
+			'b' => '#__categories',
+			'c' => '#__users',
+			'd' => '#__viewlevels',
+			'e' => '#__languages'
+		);
+		
+		
+		
+		// Set filter fields
+		// ========================================================================
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
                 'filter_order_Dir', 'filter_order', 
 				'search' , 'filter'
             );
-            
-        $config['tables'] = array(
-				'a' => '#__{COMPONENT_NAME}_{CONTROLLER_NAMES}',
-				'b' => '#__categories',
-				'c' => '#__users',
-				'd' => '#__viewlevels',
-				'e' => '#__languages'
-			);
-            
+			
             $config['filter_fields'] = {COMPONENT_NAME_UCFIRST}Helper::_('db.mergeFilterFields', $config['filter_fields'] , $config['tables'] );
         }
 		
+		
+		
+		// Fulltext search setting
+		// ========================================================================
+		$config['fulltext_search'] = false ;
+		
+		
+		
 		$this->config = $config ;
-
+		
         parent::__construct($config);
     }
 
@@ -58,17 +73,14 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication();
-
-		// Load the filter state.
-		$search = $app->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
-		$this->setState('filter.search', $search);
-
-		$published = $app->getUserStateFromRequest($this->context.'.filter.state', 'filter_published', '', 'string');
-		$this->setState('filter.state', $published);
+		
 
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_{COMPONENT_NAME}');
 		$this->setState('params', $params);
+		
+		// Fulltext search
+		$this->setState( 'search.fulltext', $this->config['fulltext_search'] );
 		
 		
 		foreach( $this->filter_fields as $field ){
@@ -79,6 +91,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 		parent::populateState('a.id', 'asc');
 	}
 
+	
 	/**
 	 * Method to get a store id based on model configuration state.
 	 *
@@ -100,6 +113,13 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 	}
 	
 	
+	/**
+	 * Method to get list page filter form.
+	 *
+	 * @return	object		JForm object.
+	 * @since	2.5
+	 */
+	
 	public function getFilter()
 	{
 		// Get filter inputs from from xml files in /models/form.
@@ -117,6 +137,29 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 		return $form;
 	}
 	
+	
+	/*
+	 * function getFulltextSearch
+	 * @param 
+	 */
+	
+	public function getFullSearchFields()
+	{
+		$file = JPATH_COMPONENT.'/models/forms/{CONTROLLER_NAMES}_search.xml' ;
+		
+		$xml = simplexml_load_file($file);
+		$field = $xml->xpath('/form/fieldset/field') ;
+		$options = $field[0]->option ;
+		
+		$fields = array();
+		foreach( $options as $option ):
+			$attr = $option->attributes();
+			$fields[] = $attr['value'];
+		endforeach;
+		
+		return $fields ;
+	}
+	
 
 	/**
 	 * Build an SQL query to load the list data.
@@ -126,6 +169,9 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 	 */
 	protected function getListQuery()
 	{
+		// Get some data
+		// ========================================================================
+		
 		// Create a new query object.
 		$db		= $this->getDbo();
 		$q		= $db->getQuery(true);
@@ -136,15 +182,41 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 		$filter = $this->getState('filter',array()) ;
 		$search = $this->getState('search') ;
 		
+		
+		
+		// Search
+		// ========================================================================
 		if($search['index']){
-			$q->where("{$search['field']} LIKE '%{$search['index']}%'");
+			
+			if($this->getState( 'search.fulltext' )){
+				$fields = $this->getFullSearchFields();
+				
+				foreach( $fields as &$field ):
+					$field = "{$field} LIKE '%{$search['index']}%'" ;
+				endforeach;
+				
+				$q->where( "( ".implode(' OR ', $fields )." )" );
+				
+			}else{
+				$q->where("{$search['field']} LIKE '%{$search['index']}%'");
+			}
+			
 		}
 		
+		
+		
+		// Filter
+		// ========================================================================
 		foreach($filter as $k => $v ){
-			if($v !== '*')
+			if($v !== '*'){
 				$q->where("{$k}='{$v}'") ;
+			}
 		}
-		// Filter and search
+		
+		
+		
+		// Build query
+		// ========================================================================
 		
 		// get select columns
 		$select = {COMPONENT_NAME_UCFIRST}Helper::_( 'db.getSelectList', $this->config['tables'] );

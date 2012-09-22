@@ -12,6 +12,7 @@
 defined('_JEXEC') or die;
 
 JHtml::_('behavior.framework');
+{COMPONENT_NAME_UCFIRST}Helper::_('include.bootstrap');
 
 // Create shortcuts to some parameters.
 $params		= $this->item->params;
@@ -26,11 +27,11 @@ $uri 		= JFactory::getURI() ;
 	<div id="{COMPONENT_NAME}-wrap" class="container-fluid {CONTROLLER_NAMES}<?php echo $this->get('pageclass_sfx');?>">
 		<div id="{COMPONENT_NAME}-wrap-inner">
 			
-			<div class="{CONTROLLER_NAME}-item item<?php if($item->published == 0) echo ' well'; ?>">
+			<div class="{CONTROLLER_NAME}-item item<?php if($item->published == 0) echo ' well well-small'; ?>">
 				<div class="{CONTROLLER_NAME}-item-inner">
 					
 					
-					<?php if ($canEdit || true) : ?>
+					<?php if ($canEdit) : ?>
 					<!-- Edit -->
 					<!-- ============================================================================= -->
 					<div class="edit-icon btn-toolbar fltrt">

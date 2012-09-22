@@ -27,4 +27,17 @@ class AKToolBarHelper extends JToolBarHelper
 		$app->set('JComponentTitle', $html);
 		
 	}
+	
+	
+	/*
+	 * function __callStatic
+	 */
+	
+	public static function __callStatic($name, $args)
+	{
+		$app = JFactory::getApplication() ;
+		
+		$app->triggerEvent('onAKToolbarAppendButton', array($name, &$args) ) ;
+		call_user_func_array( array('JToolBarHelper', $name), $args );
+	}
 }

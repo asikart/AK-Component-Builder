@@ -26,21 +26,29 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
      */
     public function __construct($config = array())
     {
-        if (empty($config['filter_fields'])) {
-            $config['filter_fields'] = array(
-                'filter_order_Dir', 'filter_order', 
-				'search' , 'filter'
-            );
-            
-        $config['tables'] = array(
+		
+		// Set query tables
+		// ========================================================================
+		$config['tables'] = array(
 				'a' => '#__{COMPONENT_NAME}_{CONTROLLER_NAMES}',
 				'b' => '#__categories',
 				'c' => '#__users',
 				'd' => '#__viewlevels',
 				'e' => '#__languages'
 			);
-            
+		
+		
+		
+		// Set filter fields
+		// ========================================================================
+        if (empty($config['filter_fields'])) {
+            $config['filter_fields'] = array(
+                'filter_order_Dir', 'filter_order', 
+				'search' , 'filter'
+            );    
         }
+		
+		
 		
 		$this->config = $config ;
 
@@ -177,6 +185,13 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 		return parent::getStoreId($id);
 	}
 	
+	
+	/**
+	 * Method to get list page filter form.
+	 *
+	 * @return	object		JForm object.
+	 * @since	2.5
+	 */
 	
 	public function getFilter()
 	{

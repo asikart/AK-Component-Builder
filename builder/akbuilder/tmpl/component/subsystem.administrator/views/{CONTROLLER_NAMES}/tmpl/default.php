@@ -26,12 +26,19 @@ $saveOrder	= $listOrder == 'a.ordering';
 <form action="<?php echo JRoute::_('index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAMES}'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
+			
+			<?php
+				$field = $this->filter['search']->getField('field') ;
+				echo $field->label . ' ' ;
+				
+				if( !$this->state->get('search.fulltext') ){
+					echo $field->input ;
+				}
+			?>
+			
 			<?php 
-				foreach($this->filter['search']->getFieldset('search') as $search ):
-					echo $search->label ;
-					echo ' ' ;
-					echo $search->input ;
-				endforeach;
+				$index = $this->filter['search']->getField('index') ;
+				echo $index->input ;
 			?>
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 			<button type="button" onclick="document.id('search_index').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>

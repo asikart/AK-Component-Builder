@@ -1,53 +1,57 @@
 <?php
 /**
- * @version		$Id: {EXTENSION_NAME}.php 21097 2011-04-07 15:38:03Z dextercowley $
- * @copyright	Copyright (C) 2005 - 2012 Asikart.com. All rights reserved.
+ * @version     1.0.0
+ * @package     com_fbimporter
+ * @copyright   Copyright (C) 2012. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Created by AKHelper - http://asikart.com
  */
 
-// No direct access
+
+// no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.plugin.plugin');
+{COMPONENT_NAME}Loader('admin://class/plugin.class');
 
 /**
- * {EXTENSION_NAME_UCFIRST} {GROUP_NAME_UCFIRST} Plugin
- *
- * @package		Joomla.Plugin
- * @subpackage	{GROUP_NAME_UCFIRST}.{EXTENSION_NAME}
- * @since		1.5
+ * Fbimporter Pro plugin
  */
-class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
+class plg{COMPONENT_NAME_UCFIRST}Pro extends AKPlugin
 {
-	
-	public static $_self ;
-	
-	/**
-	 * Constructor
-	 *
-	 * @access      public
-	 * @param       object  $subject The object to observe
-	 * @param       array   $config  An array that holds the plugin configuration
-	 * @since       1.6
-	 */
-    public function __construct(&$subject, $config)
-    {
-		parent::__construct( $subject, $config );
-		$this->loadLanguage();
-		$this->app = JFactory::getApplication();
-		
-		self::$_self = $this ;
-    }
-	
+	// Default {COMPONENT_NAME_UCFIRST} Events
+	// ======================================================================================
 	
 	
 	/*
-	 * function getInstance
+	 * function onAKToolbarAppendButton
+	 * @param $context
 	 */
 	
-	public static function getInstance()
+	public function onAKToolbarAppendButton($context, $args = array())
 	{
-		return self::$_self ;
+		/*
+		switch($context){
+			case 'preferences' :
+				$args[] = 550 ;
+				$args[] = 875 ;
+				$args[] = 'JToolbar_Options' ;
+				$args[] = 'administrator/components/com_fbimporter/class/version/pro' ;
+				break;
+		}
+		*/
 	}
+	
+	
+	/*
+	 * function onAfterAddSubmenu
+	 * @param $vName
+	 */
+	
+	public function onAfterAddSubmenu($context, $vName)
+	{
+		
+	}
+	
 	
 	
 	// Content Events
@@ -55,7 +59,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	
 	
 	/**
-	 * {EXTENSION_NAME_UCFIRST} prepare content method
+	 * Pro prepare content method
 	 *
 	 * Method is called by the view
 	 *
@@ -77,7 +81,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	
 	
 	/**
-	 * {EXTENSION_NAME_UCFIRST} after display title method
+	 * Pro after display title method
 	 *
 	 * Method is called by the view and the results are imploded and displayed in a placeholder
 	 *
@@ -103,7 +107,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	
 	
 	/**
-	 * {EXTENSION_NAME_UCFIRST} before display content method
+	 * Pro before display content method
 	 *
 	 * Method is called by the view and the results are imploded and displayed in a placeholder
 	 *
@@ -129,7 +133,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	
 
 	/**
-	 * {EXTENSION_NAME_UCFIRST} after display content method
+	 * Pro after display content method
 	 *
 	 * Method is called by the view and the results are imploded and displayed in a placeholder
 	 *
@@ -155,7 +159,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	
 	
 	/**
-	 * {EXTENSION_NAME_UCFIRST} before save content method
+	 * Pro before save content method
 	 *
 	 * Method is called right before content is saved into the database.
 	 * Article object is passed by reference, so any changes will be saved!
@@ -183,7 +187,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	
 	
 	/**
-	 * {EXTENSION_NAME_UCFIRST} after save content method
+	 * Pro after save content method
 	 * Article is passed by reference, but after the save, so no changes will be saved.
 	 * Method is called right after the content is saved
 	 *
@@ -207,7 +211,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	
 
 	/**
-	 * {EXTENSION_NAME_UCFIRST} before delete method.
+	 * Pro before delete method.
 	 *
 	 * @param	string	The context for the content passed to the plugin.
 	 * @param	object	The data relating to the content that is to be deleted.
@@ -228,7 +232,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	
 	
 	/**
-	 * {EXTENSION_NAME_UCFIRST} after delete method.
+	 * Pro after delete method.
 	 *
 	 * @param	string	The context for the content passed to the plugin.
 	 * @param	object	The data relating to the content that was deleted.
@@ -249,7 +253,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	
 
 	/**
-	 * {EXTENSION_NAME_UCFIRST} after delete method.
+	 * Pro after delete method.
 	 *
 	 * @param	string	The context for the content passed to the plugin.
 	 * @param	array	A list of primary key ids of the content that has changed state.
@@ -461,84 +465,5 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		@include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
-	}
-	
-	
-	
-	// AKFramework Functions
-	// ====================================================================================
-	
-	
-	/**
-	 * function call
-	 * 
-	 * A proxy to call class and functions
-	 * Example: $this->call('folder1.folder2.function', $args) ; OR $this->call('folder1.folder2.Class::function', $args)
-	 * 
-	 * @param	string	$uri	The class or function file path.
-	 * 
-	 */
-	
-	public function call( $uri ) {
-		// Split paths
-		$path = explode( '.' , $uri );
-		$func = array_pop($path);
-		$func = explode( '::', $func );
-		
-		// set class name of function name.
-		if(isset($func[1])){
-			$class_name = $func[0] ;
-			$func_name = $func[1] ;
-			$file_name = $class_name ;
-		}else{
-			$func_name = $func[0] ;
-			$file_name = $func_name ;
-		}
-		
-		$func_path 		= implode('/', $path).'/'.$file_name;
-		$include_path = JPATH_ROOT.'/'.$this->params->get('include_path', 'easyset');
-		
-		// include file.
-		if( !function_exists ( $func_name )  && !class_exists($class_name) ) :			
-			$file = trim($include_path, '/').'/'.$func_path.'.php' ;
-			
-			if( !file_exists($file) ) {
-				$file = dirname(__FILE__).'/lib/'.$func_path.'.php' ;
-			}
-			
-			if( file_exists($file) ) {
-				include_once( $file ) ;
-			}
-		endif;
-		
-		// Handle args
-		$args = func_get_args();
-        array_shift( $args );
-        
-		// Call Function
-		if(isset($class_name) && method_exists( $class_name, $func_name )){
-			return call_user_func_array( array( $class_name, $func_name ) , $args );
-		}elseif(function_exists ( $func_name )){
-			return call_user_func_array( $func_name , $args );
-		}
-		
-	}
-	
-	
-	
-	public function includeEvent($func) {
-		$include_path = JPATH_ROOT.'/'.$this->params->get('include_path', 'easyset');
-		$event = trim($include_path, '/').'/'.'events'.DS.$func.'.php' ;
-		if(file_exists( $event )) return $event ;
-	}
-	
-	
-	
-	public function resultBool($result = array()) {
-		foreach( $result as $result ):
-			if(!$result) return false ;
-		endforeach;
-		
-		return true ;
 	}
 }

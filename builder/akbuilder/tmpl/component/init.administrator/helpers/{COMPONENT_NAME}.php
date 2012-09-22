@@ -42,6 +42,7 @@ class {COMPONENT_NAME_UCFIRST}Helper
 		}
 
 	}
+	
 
 	/**
 	 * Gets a list of the actions that can be performed.
@@ -72,6 +73,18 @@ class {COMPONENT_NAME_UCFIRST}Helper
 
 		return $result;
 	}
+	
+	
+	/*
+	 * function getVersion
+	 * @param 
+	 */
+	
+	public static function getVersion()
+	{
+		return JVERSION ;
+	}
+	
 	
 	public static function addIncludePath( $path='' )
     {

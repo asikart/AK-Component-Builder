@@ -89,7 +89,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 		}
 		
 		if ($canDo->get('core.admin')) {
-			JToolBarHelper::preferences('com_{COMPONENT_NAME}');
+			AKToolBarHelper::preferences('com_{COMPONENT_NAME}');
 		}
 
 	}

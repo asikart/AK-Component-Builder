@@ -66,6 +66,16 @@
 	</administration>
 	
 	
+	<modules>
+		
+	</modules>
+	
+	
+	<plugins>
+		
+	</plugins>
+	
+	
 	<updateservers>
         <server type="extension" priority="1" name="Asikart {COMPONENT_NAME_UCFIRST} Component">http://asikart.com/update/com_{COMPONENT_NAME}.xml</server>
     </updateservers>

@@ -46,7 +46,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 			
 			
 			
-			<!-- Description -->
+			<!-- Category Description -->
 			<?php if ($this->params->get('show_description', 1) || $this->params->def('show_description_image', 1)) : ?>
 				<div class="category-desc">
 				<?php if ($this->params->get('show_description_image') && $this->category->params->get('image')) : ?>
@@ -58,79 +58,81 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<div class="clr"></div>
 				</div>
 			<?php endif; ?>
-			<!-- Description End -->
+			<!-- Category Description End -->
 			
 			
 			
 			<!-- {CONTROLLER_NAMES_UCFIRST} List -->
 			<div id="{CONTROLLER_NAMES}-wrap">
-				<?php $leadingcount=0 ; ?>
+				
+				
+				<!--Lead items-->
 				<?php if (!empty($this->lead_items)) : ?>
-				<div class="row-fluid">
+				
 					<?php foreach ($this->lead_items as &$item) : ?>
-						<div class="item span12<?php echo $item->a_published == 0 ? ' well' : null; ?>">
+					<div class="row-fluid">
+						<div class="item span12<?php echo $item->a_published == 0 ? ' well well-small' : null; ?>">
 							<?php
 								$this->item = &$item;
 								echo $this->loadTemplate('item');
 							?>
 						</div>
-						<?php
-							$leadingcount++;
-						?>
-					<?php endforeach; ?>
-				</div>
-				<?php endif; ?>
-				<?php
-					$introcount=(count($this->intro_items));
-					$counter=0;
-				?>
-				<?php if (!empty($this->intro_items)) : ?>
-				
-					<?php foreach ($this->intro_items as $key => &$item) : ?>
-					<?php
-						$key= ($key-$leadingcount)+1;
-						$rowcount=( ((int)$key-1) %	(int) $this->columns) +1;
-						
-						$span = round( 12 / $this->columns );
-						
-						if ($rowcount==1) : ?>
-					<div class="row-fluid">
-					<?php endif; ?>
-					<div class="item span<?php echo $span; ?><?php echo $item->a_published == 0 ? ' well' : null; ?>">
-						<?php
-							$this->item = &$item;
-							echo $this->loadTemplate('item');
-						?>
 					</div>
-					<?php $counter++; ?>
-					
-					<?php if (($rowcount == $this->columns) or ($counter ==$introcount)): ?>
-						<span class="row-separator"></span>
-						</div>
-		
-					<?php endif; ?>
-							
 					<?php endforeach; ?>
 				
+				<?php endif; ?>
+				<!--Lead items End-->
+				
+				
+				
+				<!--Columns-->
+				<?php if (!empty($this->intro_items)) : ?>
+					
+					<?php
+						$counter = 1;
+						$span = round( 12 / $this->columns );
+					?>
+					
+					<?php foreach ($this->intro_items as $key => &$item) : ?>
+						
+						<?php $rowcount = $counter % $this->columns; ?>
+						
+						<?php if ( $rowcount == 1 ) : ?>
+						<div class="row-fluid">
+						<?php endif; ?>
+						
+							<div class="item span<?php echo $span; ?><?php echo $item->a_published == 0 ? ' well well-small' : null; ?>">
+								<?php
+									$this->item = &$item;
+									echo $this->loadTemplate('item');
+								?>
+							</div>
+					
+						<?php if (( $rowcount == 0) ): ?>
+							<span class="row-separator"></span>
+						</div>
+			
+						<?php endif; ?>
+						
+						<?php $counter++; ?>
+					<?php endforeach; ?>
 				
 				<?php endif; ?>
+				<!--Columns End-->
 				
+				
+				
+				<!--Links-->
 				<?php if (!empty($this->link_items)) : ?>
 				
 					<?php echo $this->loadTemplate('links'); ?>
 				
 				<?php endif; ?>
+				<!--Links End-->
 				
 				
-					<?php if (!empty($this->children[$this->category->id])&& $this->maxLevel != 0) : ?>
-						<div class="cat-children">
-						<h3>
-							<?php echo JTEXT::_('JGLOBAL_SUBCATEGORIES'); ?>
-						</h3>
-							<?php echo $this->loadTemplate('children'); ?>
-						</div>
-					<?php endif; ?>
 				
+				<!--Pagination-->
 				<?php if (($this->params->def('show_pagination', 1) == 1  || ($this->params->get('show_pagination') == 2)) && ($this->pagination->get('pages.total') > 1)) : ?>
 					<div class="pagination">
 						<?php if ($this->params->def('show_pagination_results', 1)) : ?>
@@ -142,6 +144,10 @@ $saveOrder	= $listOrder == 'a.ordering';
 						<?php echo $this->pagination->getPagesLinks(); ?>
 					</div>
 				<?php  endif; ?>
+				<!--Pagination End-->
+				
+				
+				
 			</div>
 			<!-- {CONTROLLER_NAMES_UCFIRST} List End -->
 			

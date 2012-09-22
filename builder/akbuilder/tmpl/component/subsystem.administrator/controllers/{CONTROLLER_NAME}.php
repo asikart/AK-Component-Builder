@@ -21,6 +21,16 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends JContr
 	public $view_list = '{CONTROLLER_NAMES}' ;
 	public $view_item = '{CONTROLLER_NAME}' ;
 	
+	
+	/**
+     * Constructor.
+     *
+     * @param   array  $config  An optional associative array of configuration settings.
+     *
+     * @see     JController
+     * @since   11.1
+     */
+	
     function __construct() {
 		
 		$this->allow_url_params = array(
@@ -29,6 +39,7 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends JContr
 		
         parent::__construct();
     }
+	
 	
 	/**
 	 * Proxy for getModel.
@@ -39,6 +50,17 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends JContr
 		$model = parent::getModel($name, $prefix, $config);
 		return $model;
 	}
+	
+	
+	/**
+     * Method to run batch operations.
+     *
+     * @param   object  $model  The model of the component being processed.
+     *
+     * @return    boolean     True if successful, false otherwise and internal error is set.
+     *
+     * @since    11.1
+     */
 	
 	public function batch($model = null)
 	{
@@ -53,6 +75,18 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends JContr
 		return parent::batch($model);
 	}
 	
+	
+	/**
+     * Gets the URL arguments to append to an item redirect.
+     *
+     * @param   integer  $recordId  The primary key id for the item.
+     * @param   string   $urlVar    The name of the URL variable for the id.
+     *
+     * @return  string  The arguments to append to the redirect URL.
+     *
+     * @since   11.1
+     */
+	
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
 	{
 		$append = parent::getRedirectToItemAppend($recordId , $urlVar );
@@ -65,6 +99,15 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends JContr
 		
 		return $append ;
 	}
+	
+	
+	/**
+     * Gets the URL arguments to append to a list redirect.
+     *
+     * @return  string  The arguments to append to the redirect URL.
+     *
+     * @since   11.1
+     */
 	
 	protected function getRedirectToListAppend()
 	{
@@ -79,12 +122,36 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends JContr
 		return $append ;
 	}
 	
-	protected function postSaveHook(JModelLegacy &$model, $validData = array())
+	
+	/**
+     * Function that allows child controller access to model data
+     * after the data has been saved.
+     *
+     * @param   JModel  &$model     The data model object.
+     * @param   array   $validData  The validated data.
+     *
+     * @return  void 
+     *
+     * @since   11.1
+     */
+	
+	protected function postSaveHook( &$model, $validData = array())
     {
 		
     }
 	
 	
+	/**
+     * Set a URL for browser redirection.
+     *
+     * @param   string  $url   URL to redirect to.
+     * @param   string  $msg   Message to display on redirect. Optional, defaults to value set internally by controller, if any.
+     * @param   string  $type  Message type. Optional, defaults to 'message' or the type set by a previous call to setMessage.
+     *
+     * @return  JController  This object to support chaining.
+     *
+     * @since   11.1
+     */
 	
 	public function setRedirect($url, $msg = null, $type = null)
     {

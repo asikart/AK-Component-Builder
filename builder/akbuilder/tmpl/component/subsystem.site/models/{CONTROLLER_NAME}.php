@@ -116,11 +116,31 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME} extends JModelAdmin
 		$this->setState('item.id', $pk);
 
 		// Load the parameters.
-		$params = $app->getParams();
+		$params = JComponentHelper::getParams('com_{COMPONENT_NAME}');
 		$this->setState('params', $params);
 		
 		parent::populateState();
 	}
+	
+	
+	/**
+     * Method to allow derived classes to preprocess the form.
+     *
+     * @param   JForm   $form   A JForm object.
+     * @param   mixed   $data   The data expected for the form.
+     * @param   string  $group  The name of the plugin group to import (defaults to "content").
+     *
+     * @return  void 
+     *
+     * @see     JFormField
+     * @since   11.1
+     * @throws  Exception if there is an error in the form event.
+     */
+    protected function preprocessForm(JForm $form, $data, $group = 'content')
+	{
+		parent::preprocessForm($form, $data, $group);
+	}
+	
 	
 	/**
 	 * Prepare and sanitise the table prior to saving.

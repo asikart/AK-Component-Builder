@@ -5,15 +5,29 @@
 
 defined('_JEXEC') or die;
 
-$doc = JFactory::getDocument();
-$app = JFactory::getApplication();
-$lang = JFactory::getLanguage();
+$doc 	= JFactory::getDocument();
+$app 	= JFactory::getApplication();
+$lang 	= JFactory::getLanguage();
 
-// define
+
+
+// Define
+// ========================================================================
 define('{COMPONENT_NAME_UC}_SITE' , JPATH_COMPONENT_SITE ) ;
 define('{COMPONENT_NAME_UC}_ADMIN', JPATH_COMPONENT_ADMINISTRATOR);
+define('{COMPONENT_NAME_UC}_SELF' , JPATH_COMPONENT);
 
-//include joomla api
+
+
+// Include global helper.
+include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR . "/helpers/{COMPONENT_NAME}.php" ) ;
+include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR . "/includes/loader.php" ) ;
+include_once JPath::clean( JPATH_ADMINISTRATOR."/includes/toolbar.php" ) ;
+
+
+
+// Include joomla api
+// ========================================================================
 jimport('joomla.application.component.controller');
 jimport('joomla.application.component.controllerform');
 jimport('joomla.application.component.controlleradmin');
@@ -29,22 +43,35 @@ jimport('joomla.html.toolbar');
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 
-// include Component Custom class
-include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR."/class/viewpanel.class.php" ) ;
-include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR."/helpers/aktext.php" ) ;
-include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR."/helpers/toolbar.php" ) ;
-include_once JPath::clean( JPATH_ADMINISTRATOR."/includes/toolbar.php" ) ;
+
+
+// Include Component Custom class
+// ========================================================================
+{COMPONENT_NAME}Loader("admin://class/viewpanel.class" ) ;
+{COMPONENT_NAME}Loader("admin://class/aktext.class" ) ;
+{COMPONENT_NAME}Loader("admin://class/toolbar.class" ) ;
+
+
+
+// Include Helpers
+// ========================================================================
 
 if( $app->isSite() ){
-	include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR."/helpers/{COMPONENT_NAME}.php" ) ;
+	
+	// Include Admin language as global language.
 	$lang->load('', JPATH_ADMINISTRATOR);
 	$lang->load('com_{COMPONENT_NAME}', JPATH_COMPONENT_ADMINISTRATOR );
 	
-	// include css
+	// Include Joomla! admin css
 	{COMPONENT_NAME_UCFIRST}Helper::_('include.core');
+	
+	// set Base to fix toolbar anchor bug
+	$doc->setBase( JFactory::getURI()->toString() );
 }else{
-	include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR."/helpers/{COMPONENT_NAME}.php" ) ;
+
 }
 
-// set Base to fix toolbar anchor bug
-$doc->setBase( JFactory::getURI()->toString() );
+
+// Detect version
+{COMPONENT_NAME_UCFIRST}Helper::_('version.detectVersion');
+

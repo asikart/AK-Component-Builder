@@ -20,6 +20,7 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends JCont
 	public $view_list = '{CONTROLLER_NAMES}' ;
 	public $view_item = '{CONTROLLER_NAME}' ;
 	
+	
 	/**
 	 * Proxy for getModel.
 	 * @since	1.6
@@ -31,6 +32,17 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends JCont
 	}
 	
 	
+	/**
+     * Set a URL for browser redirection.
+     *
+     * @param   string  $url   URL to redirect to.
+     * @param   string  $msg   Message to display on redirect. Optional, defaults to value set internally by controller, if any.
+     * @param   string  $type  Message type. Optional, defaults to 'message' or the type set by a previous call to setMessage.
+     *
+     * @return  JController  This object to support chaining.
+     *
+     * @since   11.1
+     */
 	
 	public function setRedirect($url, $msg = null, $type = null)
     {
