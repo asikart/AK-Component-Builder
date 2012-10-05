@@ -61,7 +61,7 @@ class AKPlugin extends JPlugin
         array_shift( $args );
         
 		// Call Function
-		if(isset($class_name) && method_exists( $class_name, $func_name )){
+		if(isset($class_name) && is_callable( array($class_name, $func_name) )){
 			return call_user_func_array( array( $class_name, $func_name ) , $args );
 		}elseif(function_exists ( $func_name )){
 			return call_user_func_array( $func_name , $args );
