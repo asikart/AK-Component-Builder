@@ -5,7 +5,7 @@
 			key = "JHELP_MENUS_MENU_ITEM_ARTICLE_CATEGORY_BLOG"
 		/>
 		<message>
-			<![CDATA[COM_CONTENT_CATEGORY_VIEW_BLOG_DESC]]>
+			<![CDATA[COM_{COMPONENT_NAME_UC}_LIST_VIEW_DESC]]>
 		</message>
 	</layout>
 

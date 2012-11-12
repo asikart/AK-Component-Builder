@@ -5,6 +5,8 @@
 			type="list"
 			default="title"
 			label="JSEARCH_FILTER_LABEL"
+			labelclass="pull-left"
+			class="input-small" 
 		>
 			<!--<option value="0">Select Column</option>-->
 			<option value="a.title">JGLOBAL_TITLE</option>
@@ -13,6 +15,7 @@
 		
 		<field name="index"
 			type="text"
+			placeholder="JSEARCH_FILTER_LABEL"
 			label=""
 		/>
 	</fieldset>

@@ -5,7 +5,7 @@
 			key = "JHELP_MENUS_MENU_ITEM_ARTICLE_SINGLE_ARTICLE"
 		/>
 		<message>
-			<![CDATA[com_{COMPONENT_NAME}_article_view_default_desc]]>
+			<![CDATA[com_{COMPONENT_NAME}_item_view_default_desc]]>
 		</message>
 	</layout>
 

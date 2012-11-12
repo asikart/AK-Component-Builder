@@ -7,8 +7,11 @@
 	>
 
         <field name="{CONTROLLER_NAME}_list"
-             type="{CONTROLLER_NAME}_list"
+             type="itemlist"
              default="1"
+			  extension="com_{COMPONENT_NAME}"
+			 view_list="{CONTROLLER_NAMES}"
+			 view_item="{CONTROLLER_NAME}"
              label="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}"
              description="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
 		>
@@ -16,8 +19,11 @@
          </field>
 		
 		<field name="{CONTROLLER_NAME}_modal"
-             type="{CONTROLLER_NAME}_modal"
+             type="modal"
              default="1"
+			 extension="com_{COMPONENT_NAME}"
+			 view_list="{CONTROLLER_NAMES}"
+			 view_item="{CONTROLLER_NAME}"
              label="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}"
              description="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
 		/>
