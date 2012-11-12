@@ -2,8 +2,9 @@
 <extension version="2.5" type="plugin" group="{GROUP_NAME}">
 	<name>plg_{GROUP_NAME}_{EXTENSION_NAME}</name>
 	<author>Asika</author>
-	<creationDate>July 2010</creationDate>
-	<copyright>Copyright (C) 2005 - 2011 Asikart.com. All rights reserved.</copyright>
+	<creationDate>2012-11-12</creationDate>
+	<copyright>Copyright (C) 2012 Asikart.com</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>asika@asikart.com</authorEmail>
 	<authorUrl>http://asikart.com</authorUrl>
 	<version>1.0</version>

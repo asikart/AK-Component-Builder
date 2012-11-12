@@ -2,8 +2,8 @@
 <extension type="module" version="2.5" client="administrator" method="upgrade">
 	<name>mod_{EXTENSION_NAME}</name>
 	<author>Asika</author>
-	<creationDate>2012-04-11</creationDate>
-	<copyright>Copyright (C) 2005 - 2011 Asikart.com</copyright>
+	<creationDate>2012-11-12</creationDate>
+	<copyright>Copyright (C) 2012 Asikart.com</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>asika@asikart.com</authorEmail>
 	<authorUrl>http://asikart.com</authorUrl>
