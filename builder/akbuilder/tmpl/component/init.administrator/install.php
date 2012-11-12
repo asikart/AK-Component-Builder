@@ -110,7 +110,7 @@ class com_{COMPONENT_NAME_UCFIRST}InstallerScript
 				
 				$plugin = is_array($plugin) ? $plugin : array($plugin) ;
 				
-				// Install per module
+				// Install per plugin
 				foreach( $plugin as $var ):
 					$install_path = $path.'/../plugins/'.$var ;
 					
@@ -118,9 +118,14 @@ class com_{COMPONENT_NAME_UCFIRST}InstallerScript
 						// Enable this plugin
 						$q = $db->getQuery(true) ;
 						
-						$plg_name 	= explode('/', $var) ;
-						$plg_name 	= array_pop($plg_name) ;
-						$plg_group 	= $installer->manifest->getAttribute('group') ;
+						$path 	= explode('/', $var) ;
+						$plg_name 	= array_pop($path) ;
+						
+						if( substr( $plg_name,0 ,4 ) == 'plg_' ){
+							$plg_name = substr( $plg_name, 4 ) ;
+						}
+						
+						$plg_group 	= (string) $installer->manifest['group'] ;
 						
 						$q->update('#__extensions')
 							->set("enabled = 1")
