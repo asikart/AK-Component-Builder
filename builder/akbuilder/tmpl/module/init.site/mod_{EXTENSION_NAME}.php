@@ -1,6 +1,6 @@
 <?php
 /**
- * @package		Asikart Joomla! Module {EXTENSION_NAME_UCFIRST}
+ * @package		Asikart.Module
  * @subpackage	mod_{EXTENSION_NAME}
  * @copyright	Copyright (C) 2012 Asikart.com, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt

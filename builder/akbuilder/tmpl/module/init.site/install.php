@@ -1,7 +1,13 @@
 <?php
+/**
+ * @package		Asikart.Module
+ * @subpackage	mod_{EXTENSION_NAME}
+ * @copyright	Copyright (C) 2012 Asikart.com, Inc. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ */
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// no direct access
+defined('_JEXEC') or die;
  
 /**
  * Script file of {EXTENSION_NAME_UCFIRST} Module

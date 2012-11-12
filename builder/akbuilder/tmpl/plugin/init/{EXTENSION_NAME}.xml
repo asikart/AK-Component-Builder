@@ -59,7 +59,7 @@
 	
 	<updateservers>
 		<!--<server type="collection">http://{EXTENSION_NAME}.com/list.xml</server>-->
-		<server type="extension" priority="1" name="Asikart {EXTENSION_NAME_UCFIRST} Plugin">http://updateserver.com/plugins/plg_{EXTENSION_NAME}.xml</server>
+		<server type="extension" priority="1" name="Asikart {EXTENSION_NAME_UCFIRST} Plugin">http://update.asikart.com/plugins/plg_{EXTENSION_NAME}.xml</server>
 	</updateservers>
 	
 	

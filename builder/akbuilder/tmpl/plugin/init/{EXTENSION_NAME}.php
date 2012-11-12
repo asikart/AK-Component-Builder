@@ -1,10 +1,12 @@
 <?php
 /**
- * @version		$Id: {EXTENSION_NAME}.php 21097 2011-04-07 15:38:03Z dextercowley $
- * @copyright	Copyright (C) 2005 - 2012 Asikart.com. All rights reserved.
+ * @package		Asikart.Plugin
+ * @subpackage	{GROUP_NAME}.plg_{EXTENSION_NAME}
+ * @copyright	Copyright (C) 2012 Asikart.com, Inc. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// No direct access
+// no direct access
 defined('_JEXEC') or die;
 
 jimport('joomla.plugin.plugin');
@@ -72,7 +74,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 	}
 	
 	
@@ -96,7 +98,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $result ;
 	}
@@ -122,7 +124,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $result ;
 	}
@@ -148,7 +150,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $result ;
 	}
@@ -176,7 +178,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -200,7 +202,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -221,7 +223,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -242,7 +244,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -264,7 +266,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -290,7 +292,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $result;
 	}
@@ -320,7 +322,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -345,7 +347,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -367,7 +369,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -389,7 +391,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -414,7 +416,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -437,7 +439,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
@@ -458,7 +460,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 		// Code here
 		
 		
-		@include $this->includeEvent(__FUNCTION__);
+		if( $path = $this->includeEvent(__FUNCTION__) ) @include $this->includeEvent(__FUNCTION__);
 		
 		return $this->resultBool($result);
 	}
