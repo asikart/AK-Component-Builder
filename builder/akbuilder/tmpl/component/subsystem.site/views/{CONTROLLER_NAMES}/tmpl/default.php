@@ -89,7 +89,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php if (!empty($this->intro_items)) : ?>
 					
 					<?php
-						$counter = 1;
+						$counter = 1 + $this->columns;
 						$span = round( 12 / $this->columns );
 					?>
 					
@@ -108,7 +108,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 								?>
 							</div>
 					
-						<?php if (( $rowcount == 0) ): ?>
+						<?php if ( $rowcount == 0 || $this->columns == 1): ?>
 							<span class="row-separator"></span>
 						</div>
 			

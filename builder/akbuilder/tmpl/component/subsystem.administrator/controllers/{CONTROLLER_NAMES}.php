@@ -91,7 +91,7 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends JCont
 		$redirect_tasks = array('save', 'cancel', 'publish', 'unpublish', 'delete');
 		
 		if(!$this->redirect){
-			$this->redirect = base64_decode(JRequest::getVar('return')) ;
+			$this->redirect = {COMPONENT_NAME_UCFIRST}Helper::_('uri.base64', 'decode', JRequest::getVar('return')) ;
 		}
 		
         if ($this->redirect && in_array($task, $redirect_tasks)){

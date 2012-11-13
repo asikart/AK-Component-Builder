@@ -48,7 +48,7 @@ class {COMPONENT_NAME_UCFIRST}HelperInclude
 	 * @param 
 	 */
 	
-	public static function foundation($app = true, $js = true)
+	public static function foundation($appl = true, $js = true)
 	{
 		$doc = JFactory::getDocument();
 		$app = JFactory::getApplication() ;
@@ -56,12 +56,12 @@ class {COMPONENT_NAME_UCFIRST}HelperInclude
 		$prefix = $app->isSite() ? 'administrator/' : '' ;
 		
 		JHtml::_('stylesheet', $prefix.'components/com_{COMPONENT_NAME}/includes/foundation/stylesheets/foundation.min.css');
-		if($app) JHtml::_('stylesheet', $prefix.'components/com_{COMPONENT_NAME}/includes/foundation/stylesheets/app.css');
+		if($appl) JHtml::_('stylesheet', $prefix.'components/com_{COMPONENT_NAME}/includes/foundation/stylesheets/app.css');
 		
 		if($js){
 			JHtml::_('script', $prefix.'components/com_{COMPONENT_NAME}/includes/foundation/javascripts/modernizr.foundation.js');
 			JHtml::_('script', $prefix.'components/com_{COMPONENT_NAME}/includes/foundation/javascripts/foundation.min.js');
-			if($app) JHtml::_('script', $prefix.'components/com_{COMPONENT_NAME}/includes/foundation/javascripts/app.js');
+			if($appl) JHtml::_('script', $prefix.'components/com_{COMPONENT_NAME}/includes/foundation/javascripts/app.js');
 		}
 	}
 	

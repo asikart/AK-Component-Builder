@@ -11,11 +11,13 @@
 // no direct access
 defined('_JEXEC') or die;
 
+include_once JPath::clean( JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/class/proxy.class.php' ) ;
+
 
 /**
  * {COMPONENT_NAME_UCFIRST} helper.
  */
-class {COMPONENT_NAME_UCFIRST}Helper
+class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 {
 	/**
 	 * Configure the Linkbar.
@@ -111,92 +113,14 @@ class {COMPONENT_NAME_UCFIRST}Helper
 		return JVERSION ;
 	}
 	
+	/*
+	 * function show
+	 * @param $data
+	 */
 	
-	public static function addIncludePath( $path='' )
-    {
-        static $paths;
- 
-        if (!isset($paths)) {
-            $paths = array( JPATH_COMPONENT_ADMINISTRATOR.'/helpers' );
-        }
- 
-        // force path to array
-        settype($path, 'array');
- 
-        // loop through the path directories
-        foreach ($path as $dir)
-        {
-            if (!empty($dir) && !in_array($dir, $paths)) {
-                array_unshift($paths, JPath::clean( $dir ));
-            }
-        }
- 
-        return $paths;
-    }
+	public static function show($data)
+	{
+		echo '<pre>'.print_r($data, 1).'</pre>' ;
+	}
 	
-	
-	public static function _( $type )
-    {
-        //Initialise variables
-        $prefix = '{COMPONENT_NAME_UCFIRST}Helper';
-        $file   = '';
-        $func   = $type;
- 
-        // Check to see if we need to load a helper file
-        $parts = explode('.', $type);
- 
-        switch(count($parts))
-        {
-            case 3 :
-            {
-                $prefix        = preg_replace( '#[^A-Z0-9_]#i', '', $parts[0] );
-                $file        = preg_replace( '#[^A-Z0-9_]#i', '', $parts[1] );
-                $func        = preg_replace( '#[^A-Z0-9_]#i', '', $parts[2] );
-            } break;
- 
-            case 2 :
-            {
-                $file        = preg_replace( '#[^A-Z0-9_]#i', '', $parts[0] );
-                $func        = preg_replace( '#[^A-Z0-9_]#i', '', $parts[1] );
-            } break;
-        }
- 
-        $className    = $prefix.ucfirst($file);
- 
-        if (!class_exists( $className ))
-        {
-            jimport('joomla.filesystem.path');
-            if ($path = JPath::find(self::addIncludePath(), strtolower($file).'.php'))
-            {
-                require_once $path;
- 
-                if (!class_exists( $className ))
-                {
-                    JError::raiseWarning( 0, $className.'::' .$func. ' not found in file.' );
-                    return false;
-                }
-            }
-            else
-            {
-                JError::raiseWarning( 0, $prefix.$file . ' not supported. File not found.' );
-                return false;
-            }
-        }
- 
-        if (is_callable( array( $className, $func ) ))
-        {
-            $temp = func_get_args();
-            array_shift( $temp );
-            $args = array();
-            foreach ($temp as $k => $v) {
-                $args[] = &$temp[$k];
-            }
-            return call_user_func_array( array( $className, $func ), $args );
-        }
-        else
-        {
-            JError::raiseWarning( 0, $className.'::'.$func.' not supported.' );
-            return false;
-        }
-    }
 }

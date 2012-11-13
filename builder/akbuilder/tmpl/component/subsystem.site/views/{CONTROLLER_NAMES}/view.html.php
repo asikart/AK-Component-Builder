@@ -125,7 +125,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 			$this->intro_items[$i] = &$this->items[$i];
 		}
 
-		$this->columns = max(1, $this->params->def('num_columns', 1));
+		$this->columns = max(1, $this->params->def('num_columns', 2));
 		$order = $this->params->def('multi_column_order', 1);
 
 		$limit = $numLeading + $numIntro + $numLinks;

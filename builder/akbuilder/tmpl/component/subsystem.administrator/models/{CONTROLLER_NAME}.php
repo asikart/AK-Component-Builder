@@ -60,8 +60,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME} extends JModelAdmin
 		if (empty($form)) {
 			return false;
 		}
-		//$data = $this->loadFormData();
-		//$form->bindLevel($data, 'information');
+		
 		return $form;
 	}
 	
@@ -109,13 +108,18 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME} extends JModelAdmin
 			$data = new JObject($data);
 		}
 		
+		
+		
 		// This seeting is for Fields Group
 		// Convert data[field] to data[fields_group][field] then Jform can bind data into forms.
+		// ==========================================================================================
 		$fields = $this->getFields();
 		
 		foreach( $fields as $field ):
 			$data->$field = clone $data ;
 		endforeach;
+		
+		
 		
 		return $data;
 	}
@@ -190,7 +194,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME} extends JModelAdmin
 	protected function prepareTable(&$table)
 	{
 		jimport('joomla.filter.output');
-		AK::show(JRequest::get() );
+		
 		$date 	= JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
 		$user 	= JFactory::getUser() ;
 		$db 	= JFactory::getDbo();
@@ -205,18 +209,18 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME} extends JModelAdmin
 			}
 			
 			if(!$table->alias){
-				$table->alias = JFilterOutput::stringURLSafe( $date->toSql() ) ;
+				$table->alias = JFilterOutput::stringURLSafe( $date->toSql(true) ) ;
 			}
 		}
 		
 		// created date
 		if(isset($table->created) && !$table->created){
-			$table->created = $date->toSql();
+			$table->created = $date->toSql(true);
 		}
 		
 		// modified date
 		if(isset($table->modified) && $table->id){
-			$table->modified = $date->toSql();
+			$table->modified = $date->toSql(true);
 		}
 		
 		// created user

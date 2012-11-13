@@ -181,8 +181,8 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 	protected function getStoreId($id = '')
 	{
 		// Compile the store id.
-		$id.= ':' . $this->getState('search');
-		$id.= ':' . $this->getState('filter');
+		$id.= ':' . json_encode($this->getState('search'));
+		$id.= ':' . json_encode($this->getState('filter'));
 
 		return parent::getStoreId($id);
 	}

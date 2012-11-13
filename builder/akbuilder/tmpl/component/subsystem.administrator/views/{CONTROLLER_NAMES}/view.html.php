@@ -118,6 +118,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 		
 		// Sidebar Filters
 		// ========================================================================
+		/*
 		if( JVERSION >= 3 ){
 			
 			JHtmlSidebar::setAction('index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAMES}');
@@ -143,7 +144,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 			endforeach;
 			
 		}
-		
+		*/
 	}
 	
 	

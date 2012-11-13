@@ -39,7 +39,7 @@ $uri 		= JFactory::getURI() ;
 					<!-- ============================================================================= -->
 					<div class="edit-icon btn-toolbar fltrt">
 						<div class="btn-group">
-							<?php echo JHtml::_( 'link', JRoute::_('index.php?option=com_{COMPONENT_NAME}&task={CONTROLLER_NAME}.edit&id='.$item->id.'&return='.base64_encode($uri->toString())) , JText::_('JTOOLBAR_EDIT'), array( 'class' => 'btn btn-small' ) ); ?>
+							<?php echo JHtml::_( 'link', JRoute::_('index.php?option=com_{COMPONENT_NAME}&task={CONTROLLER_NAME}.edit&id='.$item->id.'&return='.{COMPONENT_NAME_UCFIRST}Helper::_('uri.base64', 'encode', $uri->toString())) , JText::_('JTOOLBAR_EDIT'), array( 'class' => 'btn btn-small' ) ); ?>
 							<button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
 								<span class="caret"></span>
 							</button>

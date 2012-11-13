@@ -108,8 +108,8 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 	protected function getStoreId($id = '')
 	{
 		// Compile the store id.
-		$id.= ':' . $this->getState('search');
-		$id.= ':' . $this->getState('filter');
+		$id.= ':' . json_encode($this->getState('search'));
+		$id.= ':' . json_encode($this->getState('filter'));
 
 		return parent::getStoreId($id);
 	}
@@ -132,6 +132,8 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 		JForm::addFormPath(JPATH_COMPONENT.'/models/forms');
         JForm::addFieldPath(JPATH_COMPONENT.'/models/fields');
 		
+		
+		/* If you need generate sidebar filter by Joomla! itself, uncomment this.
 		if( JVERSION >=3 ) {
 			
 			// Get filter inputs from raw xml file.
@@ -141,25 +143,21 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 			$filters 	= $xml->xpath('//fieldset[@name="filter_sidebar"]') ;
 			$filters	= $filters[0]->field;
 			
-			//$search		= $xml->xpath('//fieldset[@name="search"]') ;
-			//$search		= $search[0]->field;
 			
 			$form['filter_sidebar'] 	= $filters ;
-			//$form['search']				= $search ;
 			
 		}
-		//else{
+		*/
 		
-			// load forms
-			$form['search'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.search', '{CONTROLLER_NAMES}_search', array( 'control' => 'search' ,'load_data'=>'true'));
-			$form['filter'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.filter', '{CONTROLLER_NAMES}_filter', array( 'control' => 'filter' ,'load_data'=>'true'));
-			
-			
-			// Get default data of this form. Any State key same as form key will auto match.
-			$form['search']->bind( $this->getState('search') );
-			$form['filter']->bind( $this->getState('filter') );
+		// load forms
+		$form['search'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.search', '{CONTROLLER_NAMES}_search', array( 'control' => 'search' ,'load_data'=>'true'));
+		$form['filter'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.filter', '{CONTROLLER_NAMES}_filter', array( 'control' => 'filter' ,'load_data'=>'true'));
 		
-		//}
+		
+		// Get default data of this form. Any State key same as form key will auto match.
+		$form['search']->bind( $this->getState('search') );
+		$form['filter']->bind( $this->getState('filter') );
+		
 		
 		return $this->filter = $form;
 	}
