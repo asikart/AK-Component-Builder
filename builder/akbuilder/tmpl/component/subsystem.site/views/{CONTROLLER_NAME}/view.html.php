@@ -11,19 +11,28 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.view');
+include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/viewitem.php' ;
 
 /**
- * View to edit
+ * View class for a list of {COMPONENT_NAME_UCFIRST}.
  */
-class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKView
+class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 {
-	protected $state;
-	protected $item;
-	protected $form;
+	/**
+	 * @var		string	The prefix to use with controller messages.
+	 * @since	1.6
+	 */
+	protected 	$text_prefix = 'COM_{COMPONENT_NAME_UC}';
+	protected 	$items;
+	protected 	$pagination;
+	protected 	$state;
 	
-	public	$list_name = '{CONTROLLER_NAMES}' ;
-	public	$item_name = '{CONTROLLER_NAME}' ;
+	public		$option 	= 'com_{COMPONENT_NAME}' ;
+	public		$list_name 	= '{CONTROLLER_NAMES}' ;
+	public		$item_name 	= '{CONTROLLER_NAME}' ;
+	public		$sort_fields ;
+	
+	
 
 	/**
 	 * Display the view
@@ -50,7 +59,6 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKView
 		
 		if( $layout == 'edit' ) {
 			$this->form	= $this->get('Form');
-			$this->addToolbar();
 			
 			parent::displayWithPanel($tpl);
 			return true ; 
@@ -63,6 +71,9 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKView
 		$item->link = JRoute::_("index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAME}&id={$item->id}&alias={$item->alias}&catid={$item->catid}");
 		$item->created_user = JFactory::getUser($item->created_by)->get('name') ;
 		$item->cat_title = $this->category->title ;
+		if($item->modified == '0000-00-00 00:00:00') {
+			$item->modified = '' ;
+		}
 		
 		
 		
@@ -201,55 +212,34 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKView
 	 */
 	protected function addToolbar()
 	{
-		JRequest::setVar('hidemainmenu', true);
+		AKToolBarHelper::title( '{CONTROLLER_NAME_UCFIRST}' . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_ITEM_EDIT'), 'article-add.png');
 
-		$user		= JFactory::getUser();
-		$isNew		= ($this->item->id == 0);
-
-		JToolBarHelper::title( '{CONTROLLER_NAME_UCFIRST}' . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_ITEM_EDIT'), 'article-add.png');
-
-		JToolBarHelper::apply('{CONTROLLER_NAME}.apply');
-		JToolBarHelper::save('{CONTROLLER_NAME}.save');
-		JToolBarHelper::custom('{CONTROLLER_NAME}.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-		JToolBarHelper::custom('{CONTROLLER_NAME}.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
-		JToolBarHelper::cancel('{CONTROLLER_NAME}.cancel');
+		parent::addToolbar();
 	}
 	
 	
+	
 	/*
-	 * function showInfo
-	 * @param $key
+	 * function handleFields
+	 * @param 
 	 */
 	
-	public function showInfo( $item, $key = null, $label = null, $strip = true, $link = null ,$class = null)
+	public function handleFields()
 	{
-		if(empty($item->$key)){
-			return false ;
-		}
+		$form = $this->form ;
 		
-		$lang  = $strip ? substr($key, 2) : $key ;
+		parent::handleFields();
 		
-		if(!$label){
-			$label = JText::_('COM_{COMPONENT_NAME_UC}_'.strtoupper($lang)) ;
+		// for Joomla! 3.0
+		if(JVERSION >= 3) {
+			
+			// $form->removeField('name', 'fields');
+			
 		}else{
-			$label = JText::_(strtoupper($label)) ;
+			
+			// $form->removeField('name', 'fields');
+			
 		}
 		
-		$value = $item->$key ;
-		
-		if($link){
-			$value = JHtml::_('link', $link, $value);
-		}
-		
-		$lang = str_replace( '_', '-', $lang );
-		
-		$info =
-<<<INFO
-		<div class="{$lang} {$class}" fltlft">
-			<span class="label">{$label}:</span>
-			<span class="valur">{$value}</span>
-		</div>
-INFO;
-		return $info ;
 	}
 }

@@ -54,4 +54,21 @@
 		</field>-->
 		
 	</fieldset>
+	
+	
+	<!-- Batch -->
+	<fieldset name="batch">
+		<field name="parent_id"
+			type="{CONTROLLER_NAME}_list"
+			label="COM_{COMPONENT_NAME_UC}_PARENT_ITEM"
+			description="COM_{COMPONENT_NAME_UC}_PARENT_ITEM_DESC"
+			labelclass="control-label"
+			class="input-xlarge inputbox"
+			access="true"
+		>
+			<option>JSELECT</option>
+			<option value="1">JLIB_HTML_ADD_TO_ROOT</option>
+		</field>
+	</fieldset>
+	
 </form>

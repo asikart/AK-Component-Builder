@@ -20,7 +20,7 @@ $canOrder	= $user->authorise('core.edit.state', 'com_{COMPONENT_NAME}');
 $saveOrder	= $listOrder == 'a.ordering';
 
 jimport('libraries.joomla.html.jgrid');
-
+{COMPONENT_NAME}Loader('admin://class/grid');
 
 
 

@@ -67,7 +67,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	 * @param	int		The 'page' number
 	 * @since	1.6
 	 */
-	public function onContentPrepare($context, &$article, &$params, $limitstart)
+	public function onContentPrepare($context, &$article, &$params, $page=0)
 	{
 		$app = JFactory::getApplication();
 		
@@ -90,7 +90,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	 * @return	string
 	 * @since	1.6
 	 */
-	public function onContentAfterTitle($context, &$article, &$params, $limitstart)
+	public function onContentAfterTitle($context, &$article, &$params, $page=0)
 	{
 		$app 	= JFactory::getApplication();
 		$result = null ;
@@ -116,7 +116,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	 * @return	string
 	 * @since	1.6
 	 */
-	public function onContentBeforeDisplay($context, &$article, &$params, $limitstart)
+	public function onContentBeforeDisplay($context, &$article, &$params, $page=0)
 	{
 		$app 	= JFactory::getApplication();
 		$result = null ;
@@ -142,7 +142,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	 * @return	string
 	 * @since	1.6
 	 */
-	public function onContentAfterDisplay($context, &$article, &$params, $limitstart)
+	public function onContentAfterDisplay($context, &$article, &$params, $page=0)
 	{
 		$app 	= JFactory::getApplication();
 		$result = null ;

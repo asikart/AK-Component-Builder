@@ -11,21 +11,29 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.view');
+include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/viewlist.php' ;
 
 /**
  * View class for a list of {COMPONENT_NAME_UCFIRST}.
  */
-class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
+class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKViewList
 {
-	protected $items;
-	protected $pagination;
-	protected $state;
+	/**
+	 * @var		string	The prefix to use with controller messages.
+	 * @since	1.6
+	 */
+	protected 	$text_prefix = 'COM_{COMPONENT_NAME_UC}';
+	protected 	$items;
+	protected 	$pagination;
+	protected 	$state;
 	
-	public	$list_name = '{CONTROLLER_NAMES}' ;
-	public	$item_name = '{CONTROLLER_NAME}' ;
-	public	$sort_fields ;
+	public		$option 	= 'com_{COMPONENT_NAME}' ;
+	public		$list_name 	= '{CONTROLLER_NAMES}' ;
+	public		$item_name 	= '{CONTROLLER_NAME}' ;
+	public		$sort_fields ;
 
+	
+	
 	/**
 	 * Display the view
 	 */
@@ -44,23 +52,11 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 			return false;
 		}
 		
-		// We don't need toolbar in the modal window.
-		if ($this->getLayout() !== 'modal') {
-			$this->addToolbar();
-			
-			if( JVERSION >= 3 ){
-				$this->sidebar = JHtmlSidebar::render();
-			}
-		}
-		
-		// if is frontend, show toolbar
-		if($app->isAdmin())	{
-			parent::display($tpl);
-		}else{
-			parent::displayWithPanel($tpl);
-		}
+		parent::displayWithPanel($tpl);
 	}
 
+	
+	
 	/**
 	 * Add the page title and toolbar.
 	 *
@@ -68,83 +64,10 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 	 */
 	protected function addToolbar()
 	{
-		$state	= $this->get('State');
-		$canDo	= {COMPONENT_NAME_UCFIRST}Helper::getActions();
-		$user 	= JFactory::getUser() ;
-		$filter_state 	= $this->state->get('filter') ;
+		// Set title.
+		AKToolBarHelper::title( ucfirst($this->getName()) . ' ' . JText::_($this->text_prefix.'_TITLE_LIST'), 'article.png');
 		
-        // Get the toolbar object instance
-		$bar = JToolBar::getInstance('toolbar');
-		
-		JToolBarHelper::title( ucfirst($this->getName()) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST'), 'article.png');
-       
-		
-		// Toolbar Buttons
-		// ========================================================================
-		if ($canDo->get('core.create') || (count($user->getAuthorisedCategories('com_content', 'core.create'))) > 0 ) {
-			JToolBarHelper::addNew( $this->item_name.'.add');
-		}
-
-		if ($canDo->get('core.edit')) {
-			JToolBarHelper::editList( $this->item_name.'.edit');
-		}
-
-		if ($canDo->get('core.edit.state')) {
-			JToolBarHelper::divider();
-			JToolBarHelper::publish( $this->list_name.'.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolBarHelper::unpublish( $this->list_name.'.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-			JToolbarHelper::checkin($this->list_name.'.checkin');
-			JToolBarHelper::divider();
-		}
-		
-		if ($filter_state['a.published'] == -2 && $canDo->get('core.delete')) {
-			JToolbarHelper::deleteList('Are you sure?', $this->list_name.'.delete');
-		}
-		elseif ($canDo->get('core.edit.state')) {
-			JToolbarHelper::trash($this->list_name.'.trash');
-		}
-		
-		// Add a batch modal button
-		if ($user->authorise('core.edit') && JVERSION >= 3)
-		{
-			AKToolbarHelper::modal( 'JTOOLBAR_BATCH', 'batchModal');
-		}
-		
-		if ($canDo->get('core.admin')) {
-			AKToolBarHelper::preferences('com_{COMPONENT_NAME}');
-		}
-		
-		
-		
-		// Sidebar Filters
-		// ========================================================================
-		/*
-		if( JVERSION >= 3 ){
-			
-			JHtmlSidebar::setAction('index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAMES}');
-			
-			$filters 		= $this->filter['filter_sidebar'] ;
-			
-			foreach( $filters as $filter ):
-				
-				$options = array();
-				$i = 0 ;
-				foreach( $filter->option as $option ):
-					$options[$i]['value'] 	= (string) $option['value'] ;
-					$options[$i]['text'] 	= (string) $option ;
-					$i++ ;
-				endforeach;
-				
-				
-				JHtmlSidebar::addFilter(
-					(string) $filter['title'],
-					(string) 'filter['.$filter['name'].']',
-					JHtml::_('select.options', $options, 'value', 'text', $filter_state[(string)$filter['name']], true)
-				);
-			endforeach;
-			
-		}
-		*/
+		parent::addToolbar();
 	}
 	
 	
@@ -157,8 +80,10 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 	 */
 	protected function getSortFields()
 	{
+		$ordering_key = $this->state->get('items.nested') ? 'a.lft' : 'a.ordering' ;
+		
 		$this->sort_fields = array(
-			'a.ordering' 		=> JText::_('JGRID_HEADING_ORDERING'),
+			$ordering_key 		=> JText::_('JGRID_HEADING_ORDERING'),
 			'a.published' 		=> JText::_('JPUBLISHED'),
 			'a.title' 			=> JText::_('JGLOBAL_TITLE'),
 			'b.title' 			=> JText::_('JCATEGORY'),
@@ -173,49 +98,4 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 	}
 	
 	
-	
-	
-	/*
-	 * function renderGrid
-	 * @param $table
-	 */
-	
-	public function renderGrid($table, $option = array())
-	{
-		// Set Grid
-		// =================================================================================
-		$grid = new JGrid();
-		
-		$grid->setTableOptions($option);
-		$grid->setColumns( array_keys($table['thead']['tr'][0]['th']) ) ;
-		
-		
-		
-		// Thead
-		// =================================================================================
-		$grid->addRow($table['thead']['tr'][0]['option'], 1) ;
-		
-		foreach( $table['thead']['tr'][0]['th'] as $key => $th ):
-			$grid->setRowCell($key, $th['content'] , $th['option']);
-		endforeach;
-		
-		
-		
-		// Tbody
-		// =================================================================================
-		foreach( $table['tbody']['tr'] as $tr ):
-			
-			$grid->addRow($tr['option']) ;
-			
-			foreach( $tr['td'] as $key2 => $td ):
-				
-				$grid->setRowCell($key2, $td['content'] , $td['option']);
-				
-			endforeach;
-			
-		endforeach;
-		
-		
-		return $grid ;
-	}
 }

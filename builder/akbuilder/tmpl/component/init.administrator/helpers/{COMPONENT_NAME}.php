@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once JPath::clean( JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/class/proxy.class.php' ) ;
+include_once JPath::clean( JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/class/proxy.php' ) ;
 
 
 /**
@@ -71,14 +71,14 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 		
 	}
 	
-
+	
 	/**
 	 * Gets a list of the actions that can be performed.
 	 *
 	 * @return	JObject
 	 * @since	1.6
 	 */
-	public static function getActions()
+	public static function getActions($option = null)
 	{
 		$user	= JFactory::getUser();
 		$result	= new JObject;
@@ -111,16 +111,6 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 	public static function getVersion()
 	{
 		return JVERSION ;
-	}
-	
-	/*
-	 * function show
-	 * @param $data
-	 */
-	
-	public static function show($data)
-	{
-		echo '<pre>'.print_r($data, 1).'</pre>' ;
 	}
 	
 }

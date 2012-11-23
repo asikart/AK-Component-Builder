@@ -11,8 +11,8 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.html.html');
-JFormHelper::loadFieldClass('list');
+JForm::addFieldPath( JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/class/form/fields');
+JFormHelper::loadFieldClass('itemlist');
 
 /**
  * Supports an HTML select list of categories

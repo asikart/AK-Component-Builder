@@ -12,92 +12,34 @@
 defined('_JEXEC') or die;
 
 
-jimport('joomla.application.component.controlleradmin');
+include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/controlleradmin.php' ;
 
 /**
  * {CONTROLLER_NAMES_UCFIRST} list controller class.
  */
-class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends JControllerAdmin
+class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends AKControllerAdmin
 {
 	public $view_list = '{CONTROLLER_NAMES}' ;
 	public $view_item = '{CONTROLLER_NAME}' ;
+	public $component = '{COMPONENT_NAME}';
 	
-	
-	/**
-     * Method to get a model object, loading it if required.
-     *
-     * @param   string  $name    The model name. Optional.
-     * @param   string  $prefix  The class prefix. Optional.
-     * @param   array   $config  Configuration array for model. Optional.
-     *
-     * @return  object  The model.
-     *
-     * @since   11.1
-     */
-	public function getModel($name = '{CONTROLLER_NAME}', $prefix = '{COMPONENT_NAME_UCFIRST}Model', $config = array())
-	{
-		$model = parent::getModel($name, $prefix, $config);
-		return $model;
-	}
 	
 	
 	/**
-	 * Method to save the submitted ordering values for records via AJAX.
-	 *
-	 * @return	void
-	 *
-	 * @since   3.0
-	 */
-	public function saveOrderAjax()
-	{
-		$pks 	= $this->input->post->get('cid', array(), 'array');
-		$order 	= $this->input->post->get('order', array(), 'array');
-		
-		// Sanitize the input
-		JArrayHelper::toInteger($pks);
-		JArrayHelper::toInteger($order);
-		
-		// Get the model
-		$model = $this->getModel();
-
-		// Save the ordering
-		$return = $model->saveorder($pks, $order);
-
-		if ($return)
-		{
-			echo "1";
-		}
-
-		// Close the application
-		JFactory::getApplication()->close();
-	}
-	
-	
-	/**
-     * Set a URL for browser redirection.
+     * Constructor.
      *
-     * @param   string  $url   URL to redirect to.
-     * @param   string  $msg   Message to display on redirect. Optional, defaults to value set internally by controller, if any.
-     * @param   string  $type  Message type. Optional, defaults to 'message' or the type set by a previous call to setMessage.
+     * @param   array  $config  An optional associative array of configuration settings.
      *
-     * @return  JController  This object to support chaining.
-     *
+     * @see     JController
      * @since   11.1
      */
 	
-	public function setRedirect($url, $msg = null, $type = null)
-    {
-		$task  = $this->getTask() ;
-		$redirect_tasks = array('save', 'cancel', 'publish', 'unpublish', 'delete');
+    function __construct() {
 		
-		if(!$this->redirect){
-			$this->redirect = {COMPONENT_NAME_UCFIRST}Helper::_('uri.base64', 'decode', JRequest::getVar('return')) ;
-		}
+		$this->redirect_tasks = array(
+			'save', 'cancel', 'publish', 'unpublish', 'delete'
+		);
 		
-        if ($this->redirect && in_array($task, $redirect_tasks)){
-            return parent::setRedirect($this->redirect, $msg, $type) ;
-        }else{
-			return parent::setRedirect($url, $msg, $type) ;
-		}
+        parent::__construct();
     }
 }

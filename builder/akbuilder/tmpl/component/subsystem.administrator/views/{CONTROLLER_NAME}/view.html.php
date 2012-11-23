@@ -11,19 +11,28 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.view');
+include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/viewitem.php' ;
 
 /**
  * View to edit
  */
-class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKView
+class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 {
-	protected $state;
-	protected $item;
-	protected $form;
+	/**
+	 * @var		string	The prefix to use with controller messages.
+	 * @since	1.6
+	 */
+	protected 	$text_prefix = 'COM_{COMPONENT_NAME_UC}';
+	protected 	$items;
+	protected 	$pagination;
+	protected 	$state;
 	
-	public	$list_name = '{CONTROLLER_NAMES}' ;
-	public	$item_name = '{CONTROLLER_NAME}' ;
+	public		$option 	= 'com_{COMPONENT_NAME}' ;
+	public		$list_name 	= '{CONTROLLER_NAMES}' ;
+	public		$item_name 	= '{CONTROLLER_NAME}' ;
+	public		$sort_fields ;
+	
+	
 
 	/**
 	 * Display the view
@@ -36,7 +45,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKView
 		$this->item		= $this->get('Item');
 		$this->form		= $this->get('Form');
 		$this->fields	= $this->get('Fields');
-		$this->canDo	= {COMPONENT_NAME_UCFIRST}Helper::getActions();
+		$this->canDo	= AKComponentHelper::getActions($this->option);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -44,32 +53,44 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKView
 			return false;
 		}
 
-		$this->addToolbar();
-		
-		// if is frontend, show toolbar
-		if($app->isAdmin())	{
-			parent::display($tpl);
-		}else{
-			parent::displayWithPanel($tpl);
-		}
+		parent::displayWithPanel($tpl) ;
 	}
 
+	
+	
 	/**
 	 * Add the page title and toolbar.
 	 */
 	protected function addToolbar()
 	{
-		JRequest::setVar('hidemainmenu', true);
-
-		$user		= JFactory::getUser();
-		$isNew		= ($this->item->id == 0);
-
-		JToolBarHelper::title( '{CONTROLLER_NAME_UCFIRST}' . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_ITEM_EDIT'), 'article-add.png');
-
-		JToolBarHelper::apply('{CONTROLLER_NAME}.apply');
-		JToolBarHelper::save('{CONTROLLER_NAME}.save');
-		JToolBarHelper::custom('{CONTROLLER_NAME}.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-		JToolBarHelper::custom('{CONTROLLER_NAME}.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
-		JToolBarHelper::cancel('{CONTROLLER_NAME}.cancel');
+		AKToolBarHelper::title( '{CONTROLLER_NAME_UCFIRST}' . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_ITEM_EDIT'), 'article-add.png');
+		
+		parent::addToolbar();
+	}
+	
+	
+	
+	/*
+	 * function handleFields
+	 * @param 
+	 */
+	
+	public function handleFields()
+	{
+		$form = $this->form ;
+		
+		parent::handleFields();
+		
+		// for Joomla! 3.0
+		if(JVERSION >= 3) {
+			
+			// $form->removeField('name', 'fields');
+			
+		}else{
+			
+			// $form->removeField('name', 'fields');
+			
+		}
+		
 	}
 }

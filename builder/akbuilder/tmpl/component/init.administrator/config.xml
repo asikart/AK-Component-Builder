@@ -3,13 +3,13 @@
 	<fieldset name="component"
 		label="COM_{COMPONENT_NAME_UC}_COMPONENT_LABEL"
 		description="COM_{COMPONENT_NAME_UC}_COMPONENT_DESC"
-		addfieldpath="administrator/components/com_{COMPONENT_NAME}/models/fields"
+		addfieldpath="administrator/components/com_{COMPONENT_NAME}/class/form/fields"
 	>
 
         <field name="{CONTROLLER_NAME}_list"
              type="itemlist"
              default="1"
-			  extension="com_{COMPONENT_NAME}"
+			 extension="com_{COMPONENT_NAME}"
 			 view_list="{CONTROLLER_NAMES}"
 			 view_item="{CONTROLLER_NAME}"
              label="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}"
@@ -132,7 +132,7 @@
 			description="JGLOBAL_NUM_INTRO_ARTICLES_DESC"
 			label="JGLOBAL_NUM_INTRO_ARTICLES_LABEL"
 			size="3"
-			default="6"
+			default="4"
 		/>
 
 		<field name="num_columns" type="list"

@@ -28,43 +28,25 @@ if(!defined('DS')){
 }
 
 
+
 // Include global helper.
-include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR . '/class/proxy.class.php' ) ;
-include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR . "/helpers/{COMPONENT_NAME}.php" ) ;
-include_once JPath::clean( JPATH_COMPONENT_ADMINISTRATOR . "/includes/loader.php" ) ;
-include_once JPath::clean( JPATH_ADMINISTRATOR . "/includes/toolbar.php" ) ;
-{COMPONENT_NAME_UCFIRST}Helper::setPrefix('{COMPONENT_NAME_UCFIRST}Helper') ;
-{COMPONENT_NAME_UCFIRST}Helper::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/helpers/core');
-{COMPONENT_NAME_UCFIRST}Helper::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/helpers/custom');
+include_once JPath::clean( JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAME}/includes/core.php" ) ;
 
 
 
 // Include joomla api
 // ========================================================================
-jimport('joomla.application.component.controller');
-jimport('joomla.application.component.controllerform');
-jimport('joomla.application.component.controlleradmin');
-
-jimport('joomla.application.component.view');
-
-jimport('joomla.application.component.modeladmin');
-jimport('joomla.application.component.modellist');
-jimport('joomla.application.component.modelitem');
-
 jimport('joomla.html.toolbar');
-
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 
 
 
-// Include Component Custom class
+// Include Windwalker class
 // ========================================================================
-{COMPONENT_NAME}Loader("admin://class/viewpanel.class" ) ;
-{COMPONENT_NAME}Loader("admin://class/aktext.class" ) ;
-{COMPONENT_NAME}Loader("admin://class/toolbar.class" ) ;
-{COMPONENT_NAME}Loader("admin://class/fieldmodal.class" ) ;
-{COMPONENT_NAME}Loader("admin://class/akhelper/akhelper.init" ) ;
+{COMPONENT_NAME}Loader("admin://class/toolbar" ) ;
+{COMPONENT_NAME}Loader("admin://class/text" ) ;
+
 
 
 
@@ -76,15 +58,19 @@ if( $app->isSite() ){
 	// Include Admin language as global language.
 	$lang->load('', JPATH_ADMINISTRATOR);
 	$lang->load('com_{COMPONENT_NAME}', JPATH_COMPONENT_ADMINISTRATOR );
+	{COMPONENT_NAME_UCFIRST}Helper::_('lang.loadAll', $lang->getTag());
+	
 	
 	// Include Joomla! admin css
-	{COMPONENT_NAME_UCFIRST}Helper::_('include.core');
+	{COMPONENT_NAME_UCFIRST}Helper::_('include.sortedStyle', 'includes/css');
+	
 	
 	// set Base to fix toolbar anchor bug
 	$doc->setBase( JFactory::getURI()->toString() );
 	
 }else{
-	
+	{COMPONENT_NAME_UCFIRST}Helper::_('lang.loadAll', $lang->getTag());
+	{COMPONENT_NAME_UCFIRST}Helper::_('include.sortedStyle', 'includes/css');
 }
 
 

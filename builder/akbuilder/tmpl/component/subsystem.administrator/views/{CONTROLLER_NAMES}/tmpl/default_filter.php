@@ -15,6 +15,7 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $saveOrder	= $listOrder == 'a.ordering';
 
+$app 	= JFactory::getApplication() ;
 $layout = JRequest::getVar('layout') ;
 
 // For Joomla!3.0
@@ -63,45 +64,48 @@ if( JVERSION >= 3 ) {
 	<?php endif; ?>
 	
 	
-	<?php if( $layout != 'modal' && JVERSION >= 3 ): ?>
+	<?php if( $layout != 'modal' && JVERSION >= 3 && $app->isAdmin() ): ?>
 	
-		<?php //if( false ): // Do not show this. ?>
-		<!-- Filter Order Dir -->
-		<div class="btn-group pull-right hidden-phone">
-			<label for="directionTable" class="element-invisible"><?php echo JText::_('JFIELD_ORDERING_DESC');?></label>
-			<select name="directionTable" id="directionTable" class="input-medium" onchange="Joomla.orderTable()">
-				<option value=""><?php echo JText::_('JFIELD_ORDERING_DESC');?></option>
-				<option value="asc" <?php if ($listDirn == 'asc') echo 'selected="selected"'; ?>><?php echo JText::_('JGLOBAL_ORDER_ASCENDING');?></option>
-				<option value="desc" <?php if ($listDirn == 'desc') echo 'selected="selected"'; ?>><?php echo JText::_('JGLOBAL_ORDER_DESCENDING');?></option>
-			</select>
-		</div>
-		
-		
-		<!-- Filter Order -->
-		<div class="btn-group pull-right">
-			<label for="sortTable" class="element-invisible"><?php echo JText::_('JGLOBAL_SORT_BY');?></label>
-			<select name="sortTable" id="sortTable" class="input-medium" onchange="Joomla.orderTable()">
-				<option value=""><?php echo JText::_('JGLOBAL_SORT_BY');?></option>
-				<?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $listOrder);?>
-			</select>
-		</div>
-		<?php //endif; ?>
+		<?php if( $layout != 'modal' ): ?>
 	
+			<?php //if( false ): // Do not show this. ?>
+			<!-- Filter Order Dir -->
+			<div class="btn-group pull-right hidden-phone">
+				<label for="directionTable" class="element-invisible"><?php echo JText::_('JFIELD_ORDERING_DESC');?></label>
+				<select name="directionTable" id="directionTable" class="input-medium" onchange="Joomla.orderTable()">
+					<option value=""><?php echo JText::_('JFIELD_ORDERING_DESC');?></option>
+					<option value="asc" <?php if ($listDirn == 'asc') echo 'selected="selected"'; ?>><?php echo JText::_('JGLOBAL_ORDER_ASCENDING');?></option>
+					<option value="desc" <?php if ($listDirn == 'desc') echo 'selected="selected"'; ?>><?php echo JText::_('JGLOBAL_ORDER_DESCENDING');?></option>
+				</select>
+			</div>
+			
+			
+			<!-- Filter Order -->
+			<div class="btn-group pull-right">
+				<label for="sortTable" class="element-invisible"><?php echo JText::_('JGLOBAL_SORT_BY');?></label>
+				<select name="sortTable" id="sortTable" class="input-medium" onchange="Joomla.orderTable()">
+					<option value=""><?php echo JText::_('JGLOBAL_SORT_BY');?></option>
+					<?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $listOrder);?>
+				</select>
+			</div>
+			<?php //endif; ?>
+		
+		<?php endif; ?>
 	
 	<?php else: ?>
-	
-		<?php if( $layout == 'modal' || JVERSION < 3 ): // Do not show this. ?>
 		
-		<?php if( JVERSION >= 3 ): ?>
-		<div class="clearfix"></div>
-		<?php endif; ?>
+		<?php if( $layout == 'modal' || JVERSION < 3 || (JVERSION >= 3 && $app->isSite()) ): // Do not show this. ?>
 		
-		<!-- Show Filters -->
-		<?php foreach( $this->filter['filter']->getFieldset('filter') as $filter ): ?>
-		<div class="btn-group pull-right span3 fltrt">
-			<?php echo $filter->input; ?>
-		</div>
-		<?php endforeach; ?>
+			<?php if( JVERSION >= 3 ): ?>
+			<div class="clearfix"></div>
+			<?php endif; ?>
+			
+			<!-- Show Filters -->
+			<?php foreach( $this->filter['filter']->getFieldset('filter') as $filter ): ?>
+			<div class="btn-group pull-right span3 fltrt">
+				<?php echo $filter->input; ?>
+			</div>
+			<?php endforeach; ?>
 		<?php endif; ?>
 	
 	<?php endif; ?>

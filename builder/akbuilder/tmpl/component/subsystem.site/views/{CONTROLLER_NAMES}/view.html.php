@@ -11,23 +11,30 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.view');
+include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/viewlist.php' ;
 
 /**
  * View class for a list of {COMPONENT_NAME_UCFIRST}.
  */
-class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
+class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKViewList
 {
-	protected $items;
-	protected $pagination;
-	protected $state;
+	/**
+	 * @var		string	The prefix to use with controller messages.
+	 * @since	1.6
+	 */
+	protected 	$text_prefix = 'COM_{COMPONENT_NAME_UC}';
+	protected 	$items;
+	protected 	$pagination;
+	protected 	$state;
 	
-	public	$list_name = '{CONTROLLER_NAMES}' ;
-	public	$item_name = '{CONTROLLER_NAME}' ;
+	public		$option 	= 'com_{COMPONENT_NAME}' ;
+	public		$list_name 	= '{CONTROLLER_NAMES}' ;
+	public		$item_name 	= '{CONTROLLER_NAME}' ;
+	public		$sort_fields ;
 	
-	public	$lead_items ;
-	public	$intro_items ;
-	public	$link_items ;
+	public		$lead_items ;
+	public		$intro_items ;
+	public		$link_items ;
 
 	/**
 	 * Display the view
@@ -71,6 +78,10 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 				$item->a_published = 0 ;
 			}
 			
+			if($item->a_modified == '0000-00-00 00:00:00') {
+				$item->a_modified = '' ;
+			}
+			
 			
 			// Plugins
 			// =====================================================================================
@@ -103,9 +114,9 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 		
 		// Count Leading, Items & Links Number
 		// =====================================================================================
-		$numLeading	= $this->params->def('num_leading_articles', 1);
-		$numIntro	= $this->params->def('num_intro_articles', 4);
-		$numLinks	= $this->params->def('num_links', 4);
+		$numLeading	= $this->params->def('num_leading_articles', $this->state->get('list.num_leading'));
+		$numIntro	= $this->params->def('num_intro_articles', $this->state->get('list.num_intro'));
+		$numLinks	= $this->params->def('num_links', $this->state->get('list.num_links'));
 		
 		
 		// For blog layouts, preprocess the breakdown of leading, intro and linked articles.
@@ -136,46 +147,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 		}
 		
 		
-		
 		parent::display($tpl);
-	}
-	
-	
-	/*
-	 * function showInfo
-	 * @param $key
-	 */
-	
-	public function showInfo( $item, $key = null, $label = null, $strip = true, $link = null ,$class = null)
-	{
-		if(empty($item->$key)){
-			return false ;
-		}
-		
-		$lang  = $strip ? substr($key, 2) : $key ;
-		
-		if(!$label){
-			$label = JText::_('COM_{COMPONENT_NAME_UC}_'.strtoupper($lang)) ;
-		}else{
-			$label = JText::_(strtoupper($label)) ;
-		}
-		
-		$value = $item->$key ;
-		
-		if($link){
-			$value = JHtml::_('link', $link, $value);
-		}
-		
-		$lang = str_replace( '_', '-', $lang );
-		
-		$info =
-<<<INFO
-		<div class="{$lang} {$class}" fltlft">
-			<span class="label">{$label}:</span>
-			<span class="valur">{$value}</span>
-		</div>
-INFO;
-		return $info ;
 	}
 	
 }

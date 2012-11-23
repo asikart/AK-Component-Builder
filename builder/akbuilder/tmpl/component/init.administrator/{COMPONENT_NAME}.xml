@@ -35,7 +35,6 @@
 		<filename>controller.php</filename>
 		<filename>router.php</filename>
 		<folder>views</folder>
-		<folder>tmpl</folder>
 		<folder>sql</folder>
 		<folder>models</folder>
 		<folder>controllers</folder>
@@ -46,7 +45,21 @@
 	
 	
 	<administration>
-		<menu>COM_{COMPONENT_NAME_UC}</menu>
+		<menu img="components/com_{COMPONENT_NAME}/images/admin-icons/menu-{COMPONENT_NAME}.png">COM_{COMPONENT_NAME_UC}</menu>
+		
+		<!-- Submenu
+			Note that all & must be escaped to &amp; for the file to be valid
+			XML and be parsed by the installer-->
+		<submenu>
+				
+			<menu link="option=com_{COMPONENT_NAME}&amp;view={CONTROLLER_NAMES}" view="{CONTROLLER_NAMES}"
+				img="components/com_{COMPONENT_NAME}/images/admin-icons/menu-{CONTROLLER_NAMES}.png"
+				alt="Weblinks/Links">com_{COMPONENT_NAME}_{CONTROLLER_NAMES}</menu>
+			<menu link="option=com_categories&amp;extension=com_{COMPONENT_NAME}"
+				view="categories" img="class:category" alt="{COMPONENT_NAME_UCFIRST}/Categories">jcategories</menu>
+		</submenu>
+		
+		
 		
 		<files folder="admin">
 			<filename>index.html</filename>

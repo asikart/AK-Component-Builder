@@ -77,6 +77,46 @@ class com_{COMPONENT_NAME_UCFIRST}InstallerScript
 		
 		
 		
+		// Show Installed table
+		// ========================================================================
+		include_once JPATH_ADMINISTRATOR.'/components/'.$manifest->name.'/class/grid.php';
+		$grid = new AKGrid();
+		
+		$option['class'] = 'adminlist table table-striped table-bordered' ;
+		$option['style'] = JVERSION >=3 ? 'width: 500px;' : 'width: 70%; margin: 15px;' ;
+		$grid->setTableOptions($option);
+		$grid->setColumns( array('num', 'type', 'name', 'state') ) ;
+		
+		$grid->addRow(array(), 1) ;
+		$grid->setRowCell('num', '#' , array());
+		$grid->setRowCell('type', JText::_('COM_INSTALLER_HEADING_TYPE') , array());
+		$grid->setRowCell('name', JText::_('COM_INSTALLER_HEADING_NAME') , array());
+		$grid->setRowCell('state', JText::_('JSTATUS') , array());
+		
+		
+		// Set cells
+		$i = 0 ;
+		
+		if(JVERSION >= 3){
+			$tick 	= '<i class="icon-publish"></i>' ;
+			$cross 	= '<i class="icon-unpublish"></i>' ;
+		}else{
+			$tick 	= '<img src="templates/bluestork/images/admin/tick.png" alt="Success" />' ;
+			$cross 	= '<img src="templates/bluestork/images/admin/publish_y.png" alt="Fail" />' ;
+		}
+		
+		$td_class = array('style' => 'text-align:center;') ;
+		
+		
+		// Set component install success info
+		$grid->addRow(array( 'class' => 'row'.($i % 2) )) ;
+		$grid->setRowCell('num', ++$i , $td_class);
+		$grid->setRowCell('type', JText::_('COM_INSTALLER_TYPE_COMPONENT') , $td_class);
+		$grid->setRowCell('name', JText::_(strtoupper($manifest->name)) , array());
+		$grid->setRowCell('state', $tick , $td_class);
+		
+		
+		
 		// Install modules
 		// ========================================================================
 		$modules 	= $manifest->modules ;
@@ -91,7 +131,21 @@ class com_{COMPONENT_NAME_UCFIRST}InstallerScript
 				// Install per module
 				foreach( $module as $var ):
 					$install_path = $path.'/../modules/'.$var ;
-					$result[] = $installer->install($install_path);
+					
+					// Do install
+					if($result[] = $installer->install($install_path)){
+						$status = $tick ;
+					}else{
+						$status = $cross ;
+					}
+					
+					// Set success table
+					$grid->addRow(array( 'class' => 'row'.($i % 2) )) ;
+					$grid->setRowCell('num', ++$i , $td_class);
+					$grid->setRowCell('type', JText::_('COM_INSTALLER_TYPE_MODULE') , $td_class);
+					$grid->setRowCell('name', JText::_(strtoupper($var)) , array());
+					$grid->setRowCell('state', $status , $td_class);
+					
 				endforeach;
 				
 			endforeach;
@@ -114,34 +168,54 @@ class com_{COMPONENT_NAME_UCFIRST}InstallerScript
 				foreach( $plugin as $var ):
 					$install_path = $path.'/../plugins/'.$var ;
 					
+					// Do install
 					if( $result[] = $installer->install($install_path) ){
-						// Enable this plugin
-						$q = $db->getQuery(true) ;
 						
-						$path 	= explode('/', $var) ;
+						// Get plugin name
+						$path 		= explode('/', $var) ;
 						$plg_name 	= array_pop($path) ;
-						
+							
 						if( substr( $plg_name,0 ,4 ) == 'plg_' ){
 							$plg_name = substr( $plg_name, 4 ) ;
 						}
 						
 						$plg_group 	= (string) $installer->manifest['group'] ;
 						
-						$q->update('#__extensions')
-							->set("enabled = 1")
-							->where("type = 'plugin'")
-							->where("element = '{$plg_name}'")
-							->where("folder = '{$plg_group}'")
-							;
 						
-						$db->setQuery($q);
-						$db->query();
+						// Enable this plugin.
+						if($type == 'install'):
+							$q = $db->getQuery(true) ;
+							
+							$q->update('#__extensions')
+								->set("enabled = 1")
+								->where("type = 'plugin'")
+								->where("element = '{$plg_name}'")
+								->where("folder = '{$plg_group}'")
+								;
+							
+							$db->setQuery($q);
+							$db->query();	
+						endif;
+						
+						$status = $tick ;
+					}else{
+						$status = $cross ;
 					}
+					
+					// Set success table
+					$grid->addRow(array( 'class' => 'row'.($i % 2) )) ;
+					$grid->setRowCell('num', ++$i , $td_class);
+					$grid->setRowCell('type', JText::_('COM_INSTALLER_TYPE_PLUGIN') , $td_class);
+					$grid->setRowCell('name', JText::_('plg_'.$plg_group.'_'.$plg_name) , array());
+					$grid->setRowCell('state', $status , $td_class);
 					
 				endforeach;
 				
 			endforeach;
 		}
+		
+		// Render install table
+		echo $grid ;
 		
 	}
 	

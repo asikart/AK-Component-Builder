@@ -14,20 +14,44 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
+{COMPONENT_NAME_UCFIRST}Helper::_('include.core');
 
 
+$app = JFactory::getApplication() ;
 if( JVERSION >= 3){
 	JHtml::_('formbehavior.chosen', 'select');
+	if($app->isSite()){
+		//{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
+	}
 }else{
 	{COMPONENT_NAME_UCFIRST}Helper::_('include.bluestork');
 	// {COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
 }
 
 
-$tabs = count( $this->fields ) > 1 ? true : false;
-$app = JFactory::getApplication() ;
 
-if($app->isAdmin()){
+// Init some API objects
+// ================================================================================
+$date 	= JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
+$doc 	= JFactory::getDocument() ;
+$uri 	= JFactory::getURI() ;
+$user	= JFactory::getUser() ;
+
+
+
+// For Site
+// ================================================================================
+if($app->isSite()) {
+	{COMPONENT_NAME_UCFIRST}Helper::_('include.isis');
+}
+
+
+
+// Edit setting
+// ================================================================================
+$tabs = count( $this->fields ) > 1 ? true : false;
+
+if($app->isAdmin()) {
 	$span_left 	= 8 ;
 	$span_right = 4 ;
 	
@@ -43,6 +67,10 @@ if($app->isAdmin()){
 
 ?>
 <script type="text/javascript">
+	<?php if( $app->isSite() ): ?>
+	{COMPONENT_NAME_UCFIRST}.fixToolbar(40, 300) ;
+	<?php endif; ?>
+	
 	Joomla.submitbutton = function(task)
 	{
 		if (task == '{CONTROLLER_NAME}.cancel' || document.formvalidator.isValid(document.id('{CONTROLLER_NAME}-form'))) {
@@ -87,29 +115,9 @@ if($app->isAdmin()){
 						<?php if( empty($fieldset->align) ) $fieldset->align = 'left' ; ?>
 						<?php if( $fieldset->align == 'right' ) continue; ?>
 						
-						<?php
-						if(!empty($fieldset->horz) && $fieldset->horz !== 'false'){
-							$form_class = 'form-horizontal' ;
-						}else{
-							$form_class = '' ;
-						}
-						?>
-						
-						<fieldset class="adminform <?php echo $form_class; ?>">
-						<legend><?php echo JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDSET_'.$fieldset->name); ?></legend>
-						
-						<?php foreach($this->form->getFieldset($fieldset->name) as $field ): ?>
-							<div class="control-group">
-								<?php echo $field->label; ?>
-								<div class="controls">
-									<?php echo $field->input; ?>
-								</div>
-							</div>
-						<?php endforeach; ?>
-						
-						<br /><br />
-						
-						</fieldset>
+						<!-- Fieldset -->
+						<?php $this->current_fieldset = $fieldset; ?>
+						<?php echo $this->loadTemplate('fieldset'); ?>
 						
 					<?php endforeach; ?>
 					
@@ -124,29 +132,9 @@ if($app->isAdmin()){
 						<?php if( empty($fieldset->align) ) $fieldset->align = 'left' ; ?>
 						<?php if( $fieldset->align == 'left' ) continue; ?>
 						
-						<?php
-						if(!empty($fieldset->horz) && $fieldset->horz !== 'false'){
-							$form_class = 'form-horizontal' ;
-						}else{
-							$form_class = '' ;
-						}
-						?>
-						
-						<fieldset class="adminform <?php echo $form_class; ?>">
-						<legend><?php echo JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDSET_'.$fieldset->name); ?></legend>
-						
-						<?php foreach($this->form->getFieldset($fieldset->name) as $field ): ?>
-							<div class="control-group">
-								<?php echo $field->label; ?>
-								<div class="controls">
-									<?php echo $field->input; ?>
-								</div>
-							</div>
-						<?php endforeach; ?>
-						
-						<br /><br />
-						
-						</fieldset>
+						<!-- Fieldset -->
+						<?php $this->current_fieldset = $fieldset; ?>
+						<?php echo $this->loadTemplate('fieldset'); ?>
 						
 					<?php endforeach; ?>
 					
@@ -163,9 +151,11 @@ if($app->isAdmin()){
 		<?php echo $tabs ? {COMPONENT_NAME_UCFIRST}Helper::_('panel.endTabs' ) : null ; ?>
 	
 	
-	
-	<input type="hidden" name="option" value="com_{COMPONENT_NAME}" />
-	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_('form.token'); ?>
+	<!-- Hidden Inputs -->
+	<div id="hidden-inputs">
+		<input type="hidden" name="option" value="com_{COMPONENT_NAME}" />
+		<input type="hidden" name="task" value="" />
+		<?php echo JHtml::_('form.token'); ?>
+	</div>
 	<div class="clr"></div>
 </form>

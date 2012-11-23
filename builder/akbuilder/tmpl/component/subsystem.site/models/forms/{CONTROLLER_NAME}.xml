@@ -31,7 +31,7 @@
 				<option value="0">COM_{COMPONENT_NAME_UC}_TITLE_UNCATEGORISED</option>
 			</field>
 			
-			<field name="images"
+			<field name="param_images"
 				type="media"
 				label="COM_{COMPONENT_NAME_UC}_IMAGES"
 				description="COM_{COMPONENT_NAME_UC}_IMAGES_DESC"

@@ -11,40 +11,35 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.controlleradmin');
+
+include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/controlleradmin.php' ;
 
 /**
  * {CONTROLLER_NAMES_UCFIRST} list controller class.
  */
-class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends JControllerAdmin
+class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends AKControllerAdmin
 {
 	public $view_list = '{CONTROLLER_NAMES}' ;
 	public $view_item = '{CONTROLLER_NAME}' ;
+	public $component = '{COMPONENT_NAME}';
+	
+	
 	
 	/**
-	 * Proxy for getModel.
-	 * @since	1.6
-	 */
-	public function &getModel($name = '{CONTROLLER_NAME}', $prefix = '{COMPONENT_NAME_UCFIRST}Model')
-	{
-		$model = parent::getModel($name, $prefix, array());
-		return $model;
-	}
+     * Constructor.
+     *
+     * @param   array  $config  An optional associative array of configuration settings.
+     *
+     * @see     JController
+     * @since   11.1
+     */
 	
-	
-	public function setRedirect($url, $msg = null, $type = null)
-    {
-		$task  = $this->getTask() ;
-		$redirect_tasks = array('save', 'cancel', 'publish', 'unpublish', 'delete');
+    function __construct() {
 		
-		if(!$this->redirect){
-			$this->redirect = {COMPONENT_NAME_UCFIRST}Helper::_('uri.base64', 'decode', JRequest::getVar('return')) ;
-		}
+		$this->redirect_tasks = array(
+			'save', 'cancel', 'publish', 'unpublish', 'delete'
+		);
 		
-        if ($this->redirect && in_array($task, $redirect_tasks)){
-            return parent::setRedirect($this->redirect, $msg, $type) ;
-        }else{
-			return parent::setRedirect($url, $msg, $type) ;
-		}
+        parent::__construct();
     }
 }

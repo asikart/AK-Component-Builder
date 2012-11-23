@@ -8,13 +8,16 @@ window.addEvent( 'domready', function(){
 	var a = $$('.toolbar-list .button a');
 	
 	div.addClass('btn-toolbar');
-	ul.addClass('btn-group');
+	ul.addClass('');
 	span.set('class', '');
-	li.addClass('btn');
 	
-	$$('#toolbar-apply').addClass('btn-info');
-	$$('#toolbar-save').addClass('btn-primary');
-	$$('#toolbar-cancel').addClass('btn-danger');
+	$$('li.divider').hide();
+	li.addClass('btn');
+	li.removeClass('button');
+	
+	$$('#toolbar-apply', '#toolbar-new').addClass('btn-info');
+	$$('#toolbar-save', '#toolbar-edit').addClass('btn-primary');
+	$$('#toolbar-cancel', '#toolbar-trash').addClass('btn-danger');
 	
 	// model button
 	$$('div.button2-left a').addClass('btn');

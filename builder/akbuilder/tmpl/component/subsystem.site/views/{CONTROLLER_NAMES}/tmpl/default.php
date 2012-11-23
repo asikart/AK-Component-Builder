@@ -89,8 +89,9 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php if (!empty($this->intro_items)) : ?>
 					
 					<?php
-						$counter = 1 + $this->columns;
-						$span = round( 12 / $this->columns );
+						$counter 	= 1 + $this->columns;
+						$span 		= round( 12 / $this->columns );
+						$total 		= count($this->intro_items) ;
 					?>
 					
 					<?php foreach ($this->intro_items as $key => &$item) : ?>
@@ -98,6 +99,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 						<?php $rowcount = $this->columns == 1 ? 1 : $counter % $this->columns; ?>
 						
 						<?php if ( $rowcount == 1 ) : ?>
+						<!-- LINE -->
 						<div class="row-fluid">
 						<?php endif; ?>
 						
@@ -108,9 +110,10 @@ $saveOrder	= $listOrder == 'a.ordering';
 								?>
 							</div>
 					
-						<?php if ( $rowcount == 0 || $this->columns == 1): ?>
+						<?php if ( $rowcount == 0 || $this->columns == 1 || ($counter == $total + $this->columns) ): ?>
 							<span class="row-separator"></span>
 						</div>
+						<!-- LINE END -->
 			
 						<?php endif; ?>
 						

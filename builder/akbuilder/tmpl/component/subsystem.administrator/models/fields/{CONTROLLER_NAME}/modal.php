@@ -11,12 +11,11 @@
 // no direct access
 defined('_JEXEC') or die;
 
+JForm::addFieldPath( JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/class/form/fields');
+JFormHelper::loadFieldClass('Modal');
+
 /**
- * Supports a modal article picker.
- *
- * @package		Joomla.Administrator
- * @subpackage	com_content
- * @since		1.6
+ * Supports a modal picker.
  */
 class JFormField{CONTROLLER_NAME_UCFIRST}_Modal extends JFormFieldModal
 {

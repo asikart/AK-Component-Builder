@@ -11,10 +11,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
+jimport('joomla.database.tablenested');
+
 /**
  * {CONTROLLER_NAME} Table class
  */
-class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME} extends JTable
+class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME_UCFIRST} extends JTable
 {
 	/**
 	 * Constructor
@@ -68,6 +70,7 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME} extends JTable
 	{
 		// for Fields group
 		// Convert jform[fields_group][field] to jform[field] or JTable cannot bind data.
+		// ==========================================================================================
 		$data = array() ;
 		foreach( $array as $val ):
 			if(is_array($val)) {
@@ -78,14 +81,33 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME} extends JTable
 		endforeach;
 		
 		
+		
+		// Set field['param_xxx'] to params
+		// ==========================================================================================
+		if(empty($array['params'])){
+			$array['params'] = array();
+		}
+		foreach( $array as $key => $row ):
+			if( substr($key, 0, 6) == 'param_' && $row){
+				$key2 = substr($key, 6) ;
+				$array['params'][$key2] = $row  ;
+			}
+		endforeach;
+		
+		
+		
 		// set params
+		// ==========================================================================================
 		if (isset($array['params']) && is_array($array['params'])) {
 			$registry = new JRegistry();
 			$registry->loadArray($array['params']);
 			$array['params'] = (string)$registry;
 		}
 		
+		
+		
 		 // Bind the rules.
+		 // ==========================================================================================
         if (isset($array['rules']) && is_array($array['rules']))
         {
             $rules = new JAccessRules($array['rules']);
@@ -94,5 +116,47 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME} extends JTable
 		
 		return parent::bind($array, $ignore);
 	}
-
+	
+	
+	/*
+	 * Setting Nested table, and rebuild.
+	 */
+	
+	public function rebuild($parentId = null, $leftId = 0, $level = 0, $path = '')
+	{
+		if(!$parentId){
+			// If root not exists, create one.
+			$table = JTable::getInstance('{CONTROLLER_NAME_UCFIRST}', '{COMPONENT_NAME_UCFIRST}Table') ;
+			if( !$table->load(1) ){
+				$k = $this->_tbl_key;
+				
+				$table->reset();
+				$table->$k = 1 ;
+				$table->title = 'ROOT' ;
+				$table->alias = 'root' ;
+				$table->catid = 1 ;
+				
+				$table->_db->insertObject( $this->_tbl, $table ) ;
+				
+				$table->reset() ;
+				$table->$k = null ;
+			}
+			
+			
+			// If cloumn ordering exists, we need clear it, or nested sorting can't work.
+			if(property_exists($this, 'ordering')){
+				$db = JFactory::getDbo();
+				$q = $db->getQuery(true) ;
+				
+				$q->update($this->_tbl)
+					->set('ordering = 0')
+					;
+				
+				$db->setQuery($q);
+				$db->query();
+			}
+		}
+		
+		return parent::rebuild($parentId, $leftId, $level, $path);
+	}
 }

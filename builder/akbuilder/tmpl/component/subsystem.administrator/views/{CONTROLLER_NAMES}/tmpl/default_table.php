@@ -29,17 +29,32 @@ $userId	= $user->get('id');
 $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_{COMPONENT_NAME}');
-$saveOrder	= $listOrder == 'a.ordering';
+$saveOrder	= $listOrder == 'a.ordering' || ($listOrder == 'a.lft' && $listDirn == 'asc');
 $trashed	= $this->state->get('filter.published') == -2 ? true : false;
+$nested		= $this->state->get('items.nested') ;
+$orderCol 	= $nested ? 'a.lft' : 'a.ordering' ;
+$show_root	= JRequest::getVar('show_root') ;
+
+
+// For Joomla!3.0
+// ================================================================================
+if( JVERSION >= 3 ) {
+	if ($saveOrder)
+	{
+		$method = $nested ? 'saveOrderNestedAjax' : 'saveOrderAjax' ;
+		$saveOrderingUrl = 'index.php?option=com_{COMPONENT_NAME}&task={CONTROLLER_NAMES}.'.$method.'&tmpl=component';
+		JHtml::_('sortablelist.sortable', 'itemList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false, $nested);
+	}
+}
 ?>
 
 <!-- List Table -->
-<table class="table table-striped adminlist" id="articleList">
+<table class="table table-striped adminlist" id="itemList">
 	<thead>
 		<tr>
 			<?php if( JVERSION >= 3 ): ?>
 			<th width="1%" class="nowrap center hidden-phone">
-				<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+				<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', $orderCol, $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 			</th>
 			<?php endif; ?>
 			
@@ -57,7 +72,7 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 			
 			<?php if( JVERSION < 3 ): ?>
 			<th width="10%">
-				<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', $orderCol, $listDirn, $listOrder); ?>
 				<?php if ($canOrder && $saveOrder) :?>
 					<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', '{CONTROLLER_NAMES}.saveorder'); ?>
 				<?php endif; ?>
@@ -77,7 +92,7 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 			</th>
 			
 			<th width="10%">
-				<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_CREATED_BY', 'c.name', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort',  'JAUTHOR', 'c.name', $listDirn, $listOrder); ?>
 			</th>
 			
 			<th width="5%">
@@ -112,14 +127,59 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 		
 		$item = new JObject($item);
 		
-		$ordering	= ($listOrder == 'a.ordering');
-		$canCreate	= $user->authorise('core.create',		'com_{COMPONENT_NAME}');
-		$canEdit	= $user->authorise('core.edit',			'com_{COMPONENT_NAME}');
-		$canCheckin	= $user->authorise('core.manage',		'com_{COMPONENT_NAME}');
-		$canChange	= $user->authorise('core.edit.state',	'com_{COMPONENT_NAME}');
-		$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}');
+		$ordering	= ($listOrder == $orderCol);
+		$canEdit	= $user->authorise('core.edit',			'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id);
+		$canCheckin	= $user->authorise('core.manage',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) || $item->a_checked_out == $userId || $item->a_checked_out == 0;;
+		$canChange	= $user->authorise('core.edit.state',	'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $canCheckin;
+		$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $item->created_user_id == $userId;
+		
+		// Nested ordering
+		if($nested){
+			
+			if($item->a_id == 1) {
+				$item->a_title = JText::_('JGLOBAL_ROOT') ;
+				$canEdit 	= false ;
+				$canChange 	= false ;
+				$canEditOwn = false ;
+			}
+			
+			$orderkey = array_search($item->a_id, $this->ordering[$item->a_parent_id]);
+		
+			// Get the parents of item for sorting
+			if ($item->a_level > 1)
+			{
+				$parentsStr = "";
+				$_currentParentId = $item->a_parent_id;
+				$parentsStr = " ".$_currentParentId;
+				for ($n = 0; $n < $item->a_level; $n++)
+				{
+					foreach ($this->ordering as $k => $v)
+					{
+						$v = implode("-", $v);
+						$v = "-".$v."-";
+						if (strpos($v, "-" . $_currentParentId . "-") !== false)
+						{
+							$parentsStr .= " ".$k;
+							$_currentParentId = $k;
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				$parentsStr = "";
+			}
+		}
+
 		?>
-		<tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->a_catid?>">
+		<tr class="row<?php echo $i % 2; ?>"
+			<?php if( $nested ): ?>
+				sortable-group-id="<?php echo $item->a_parent_id ;?>" item-id="<?php echo $item->a_id?>" parents="<?php echo $parentsStr?>" level="<?php echo $item->a_level?>"
+			<?php else: ?>
+				sortable-group-id="<?php echo $item->a_catid ;?>"
+			<?php endif; ?>
+		>
 		<?php if( JVERSION >= 3 ): ?>
 			<!-- Drag sort for Joomla!3.0 -->
 			<td class="order nowrap center hidden-phone">
@@ -134,7 +194,7 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 				<span class="sortable-handler hasTooltip <?php echo $disableClassName?>" title="<?php echo $disabledLabel?>">
 					<i class="icon-menu"></i>
 				</span>
-				<input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->a_ordering;?>" class="width-20 text-area-order " />
+				<input type="text" style="display:none" name="order[]" size="5" value="<?php echo $nested ? $orderkey + 1 : $item->a_ordering;?>" class="width-20 text-area-order " />
 			<?php else : ?>
 				<span class="sortable-handler inactive" >
 					<i class="icon-menu"></i>
@@ -147,11 +207,25 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 				<?php echo JHtml::_('grid.id', $i, $item->a_id); ?>
 			</td>
 			
-			<td class="nowrap has-context">
-				<div class="pull-left">
+			<td class="n/owrap has-context">
+				<!-- Nested dashs -->
+				<?php if( $nested ): ?>
+				<div class="pull-left fltlft">
+					<?php $offset = $show_root ? 0 : 1 ; ?>
+					<?php echo str_repeat('<span class="gi">&mdash;</span>', $item->a_level - $offset) ; ?>
+				</div>
+				<?php endif; ?>
+				
+				<div class="pull-left fltlft">
+				
+				
+				<!-- Checkout -->
 				<?php if ($item->get('a_checked_out')) : ?>
 					<?php echo JHtml::_('jgrid.checkedout', $i, $item->get('a_checked_out'), $item->get('a_checked_out_time'), '{CONTROLLER_NAMES}.', $canCheckin); ?>
 				<?php endif; ?>
+				
+				
+				<!-- Title -->
 				<?php if ($canEdit || $canEditOwn) : ?>
 					<a href="<?php echo JRoute::_('index.php?option=com_{COMPONENT_NAME}&task={CONTROLLER_NAME}.edit&id='.$item->a_id); ?>">
 						<?php echo $item->get('a_title'); ?>
@@ -160,6 +234,8 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 					<?php echo $item->get('a_title'); ?>
 				<?php endif; ?>
 				
+				
+				<!-- Sub Title -->
 				<?php if( JVERSION >= 3 ): ?>
 				<div class="small">
 					<?php echo JText::sprintf('JGLOBAL_LIST_ALIAS', $this->escape( $item->get('a_alias') ));?>
@@ -173,6 +249,7 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 				
 				
 				<?php if( JVERSION >= 3 ): ?>
+				<!-- Title Edit Button -->
 				<div class="pull-left">
 					<?php
 						// Create dropdown items
@@ -222,9 +299,9 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 						<?php endif; ?>
 					<?php endif; ?>
 					<?php $disabled = $saveOrder ?  '' : 'disabled="disabled"'; ?>
-					<input type="text" name="order[]" size="5" value="<?php echo $item->get('a_ordering');?>" <?php echo $disabled ?> class="text-area-order" />
+					<input type="text" name="order[]" size="5" value="<?php echo $nested ? $orderkey + 1 : $item->get('a_ordering');?>" <?php echo $disabled ?> class="text-area-order input-mini" />
 				<?php else : ?>
-					<?php echo $item->get('a_ordering'); ?>
+					<?php echo $nested ? $orderkey + 1 : $item->get('a_ordering');?>
 				<?php endif; ?>
 			</td>
 			<?php endif; ?>
@@ -254,7 +331,11 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 			</td>
 
 			<td class="center">
-				<?php echo (int) $item->get('a_id'); ?>
+				<span
+					<?php if( $nested ): ?>
+					class="hasTip" title="<?php echo $item->a_lft.'-'.$item->a_rgt; ?>"
+					<?php endif; ?>
+				><?php echo (int) $item->get('a_id'); ?></span>
 			</td>
 
 		</tr>

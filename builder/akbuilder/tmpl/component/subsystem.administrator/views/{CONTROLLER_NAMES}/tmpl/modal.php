@@ -22,6 +22,8 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_{COMPONENT_NAME}');
 $saveOrder	= $listOrder == 'a.ordering';
+$nested		= $this->state->get('items.nested') ;
+$show_root	= JRequest::getVar('show_root') ;
 
 if( JVERSION >= 3 ) {
 	JHtml::_('formbehavior.chosen', 'select');
@@ -83,17 +85,36 @@ if( JVERSION >= 3 ) {
 			
 			$ordering	= ($listOrder == 'a.ordering');
 			$canCreate	= $user->authorise('core.create',		'com_{COMPONENT_NAME}');
-			$canEdit	= $user->authorise('core.edit',			'com_{COMPONENT_NAME}');
-			$canCheckin	= $user->authorise('core.manage',		'com_{COMPONENT_NAME}');
-			$canChange	= $user->authorise('core.edit.state',	'com_{COMPONENT_NAME}');
-			$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}');
+			$canEdit	= $user->authorise('core.edit',			'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id);
+			$canCheckin	= $user->authorise('core.manage',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) || $item->a_checked_out == $userId || $item->a_checked_out == 0;;
+			$canChange	= $user->authorise('core.edit.state',	'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $canCheckin;
+			$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $item->created_user_id == $userId;
+			
+			if($nested && $item->a_id == 1){
+				$item->a_title = JText::_('JGLOBAL_ROOT') ;
+			}
 			?>
 			<tr class="row<?php echo $i % 2; ?>">
 				
 				<td>
-					<a class="pointer"
-					   onclick="if (window.parent) window.parent.<?php echo $this->escape($function);?>('<?php echo $item->a_id; ?>','<?php echo $this->escape(addslashes($item->a_title)); ?>');">
+					<!-- Nested dashs -->
+					<?php if( $nested ): ?>
+					<div class="pull-left fltlft">
+						<?php $offset = $show_root ? 0 : 1 ; ?>
+						<?php echo str_repeat('<span class="gi">&mdash;</span>', $item->a_level - $offset) ; ?>
+					</div>
+					<?php endif; ?>
+					
+					<!-- Title -->
+					<?php if( $canEdit): ?>
+					<a class="pointer" style="cursor: pointer;"
+					   onclick="if (window.parent) window.parent.<?php echo $this->escape($function);?>('<?php echo $item->a_id; ?>','<?php echo $this->escape(addslashes($item->a_title)); ?>');"
+						
+					>
 						<?php echo $this->escape($item->a_title); ?></a>
+					<?php else: ?>
+						<?php echo $this->escape($item->a_title); ?>
+					<?php endif; ?>
 					<!--<p class="smallsub">
 						<?php echo JText::sprintf('JGLOBAL_LIST_ALIAS', $this->escape( $item->get('a_alias') ));?>
 					</p>-->
@@ -120,7 +141,11 @@ if( JVERSION >= 3 ) {
 				</td>
 
 				<td class="center">
-					<?php echo (int) $item->get('a_id'); ?>
+					<span
+						<?php if( $nested ): ?>
+						class="hasTip hasTooltip" title="<?php echo $item->a_lft.'-'.$item->a_rgt; ?>"
+						<?php endif; ?>
+					><?php echo (int) $item->get('a_id'); ?></span>	
 				</td>
    
 			</tr>

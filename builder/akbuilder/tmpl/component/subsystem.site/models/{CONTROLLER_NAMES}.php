@@ -11,14 +11,24 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modellist');
+include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/modellist.php' ;
 
 /**
  * Methods supporting a list of {COMPONENT_NAME_UCFIRST} records.
  */
-class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
+class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelList
 {
-
+	/**
+	 * @var		string	The prefix to use with controller messages.
+	 * @since	1.6
+	 */
+	protected 	$text_prefix = 'COM_{COMPONENT_NAME_UC}';
+	
+	public 		$component = '{COMPONENT_NAME}' ;
+	public 		$item_name = '{CONTROLLER_NAME}' ;
+	public 		$list_name = '{CONTROLLER_NAMES}' ;
+	
+	
     /**
      * Constructor.
      *
@@ -124,9 +134,15 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 		
 		// Limit
 		// =====================================================================================
-		$limit = $params->get('num_leading_articles') + $params->get('num_intro_articles') + $params->get('num_links');
-		$this->setState('list.links', $params->get('num_links'));
+		$num_leading 	= $params->get('num_leading_articles', 1) ;
+		$num_intro		= $params->get('num_intro_articles', 4) ;
+		$num_links		= $params->get('num_links', 4);
+		$limit = $num_leading + $num_intro + $num_links ;
 		
+		$this->setState('list.num_leading', $num_leading);
+		$this->setState('list.num_intro', $num_intro);
+		$this->setState('list.num_links', $num_links);
+		$this->setState('list.links', $num_links);
 		$this->setState('list.limit', $limit);
 
 		
@@ -197,40 +213,11 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 	
 	public function getFilter()
 	{
-		// Get filter inputs from from xml files in /models/form.
-		JForm::addFormPath(JPATH_COMPONENT.'/models/forms');
-        JForm::addFieldPath(JPATH_COMPONENT.'/models/fields');
+		//$filter = parent::getFilter();
 		
-		// load forms
-		$form['search'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.search', '{CONTROLLER_NAMES}_search', array( 'control' => 'search' ,'load_data'=>'true'));
-		$form['filter'] = JForm::getInstance('com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.filter', '{CONTROLLER_NAMES}_filter', array( 'control' => 'filter' ,'load_data'=>'true'));
-		
-		// Get default data of this form. Any State key same as form key will auto match.
-		$form['search']->bind( $this->getState('search') );
-		$form['filter']->bind( $this->getState('filter') );
-		
-		return $form;
+		//return $filter ;
 	}
 	
-	
-	/*
-	 * function getCategory
-	 * @param 
-	 */
-	
-	public function getCategory()
-	{
-		if(!empty($this->category)){
-			return $this->category ;
-		}
-		
-		$pk = $this->getState('category.id') ;
-		
-		$this->category  = JTable::getInstance('Category');
-		$this->category->load($pk);
-		
-		return $this->category ;
-	}
 	
 
 	/**

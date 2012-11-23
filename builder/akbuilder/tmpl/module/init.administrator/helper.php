@@ -35,8 +35,6 @@ abstract class mod{EXTENSION_NAME_UCFIRST}Helper
 		$order 		= $params->get('orderby', 'a.created') ;
 		$dir   		= $params->get('order_dir', 'DESC') ;
 		
-		// if Choise all category, select ROOT category.
-		if(in_array(1, $catid)) $catid = array(1);
 		
 		// is is array, implode it.
 		if(is_array($catid)) $catid = implode(',', $catid) ;
@@ -45,7 +43,10 @@ abstract class mod{EXTENSION_NAME_UCFIRST}Helper
 		
 		// Category
 		// =====================================================================================
-		$q->where("a.catid IN ({$catid})") ;
+		// if Choise all category, select ROOT category.
+		if(!in_array(1, $catid)) {
+			$q->where("a.catid IN ({$catid})") ;
+		}
 		
 		
 		
