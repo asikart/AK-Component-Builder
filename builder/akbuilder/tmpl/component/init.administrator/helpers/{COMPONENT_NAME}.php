@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once JPath::clean( JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/class/proxy.php' ) ;
+include_once JPath::clean( AKPATH_BASE . '/proxy.php' ) ;
 
 
 /**

@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/viewlist.php' ;
+include_once AKPATH_COMPONENT.'/viewlist.php' ;
 
 /**
  * View class for a list of {COMPONENT_NAME_UCFIRST}.

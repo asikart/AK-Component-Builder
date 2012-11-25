@@ -118,6 +118,7 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME_UCFIRST} extends JTable
 	}
 	
 	
+	
 	/*
 	 * Setting Nested table, and rebuild.
 	 */

@@ -530,7 +530,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	
 	public function includeEvent($func) {
 		$include_path = JPATH_ROOT.'/'.$this->params->get('include_path', 'easyset');
-		$event = trim($include_path, '/').'/'.'events'.DS.$func.'.php' ;
+		$event = trim($include_path, '/').'/'.'events/'.$func.'.php' ;
 		if(file_exists( $event )) return $event ;
 	}
 	

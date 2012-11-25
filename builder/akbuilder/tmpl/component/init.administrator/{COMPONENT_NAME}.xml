@@ -68,7 +68,7 @@
 			<filename>install.php</filename>
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>
-			<folder>class</folder>
+			<folder>windwalker</folder>
 			<folder>controllers</folder>
 			<folder>helpers</folder>
 			<folder>images</folder>
@@ -84,12 +84,12 @@
 	
 	
 	<modules>
-		
+		<!--<module>mod_{COMPONENT_NAME}</module>-->
 	</modules>
 	
 	
 	<plugins>
-		
+		<!--<plugin>plg_system_{COMPONENT_NAME}</plugin>-->
 	</plugins>
 	
 	

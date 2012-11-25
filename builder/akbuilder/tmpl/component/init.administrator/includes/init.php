@@ -23,36 +23,16 @@ define('{COMPONENT_NAME_UC}_SITE' , JPATH_COMPONENT_SITE );
 define('{COMPONENT_NAME_UC}_ADMIN', JPATH_COMPONENT_ADMINISTRATOR);
 define('{COMPONENT_NAME_UC}_SELF' , JPATH_COMPONENT);
 
-if(!defined('DS')){
-	define('DS', DIRECTORY_SEPARATOR) ;
-}
-
-
-
-// Include global helper.
-include_once JPath::clean( JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAME}/includes/core.php" ) ;
-
-
-
-// Include joomla api
-// ========================================================================
-jimport('joomla.html.toolbar');
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
-
-
-
-// Include Windwalker class
-// ========================================================================
-{COMPONENT_NAME}Loader("admin://class/toolbar" ) ;
-{COMPONENT_NAME}Loader("admin://class/text" ) ;
-
-
 
 
 // Include Helpers
 // ========================================================================
 
+// Core init, it can use by module, plugin or other component.
+include_once JPath::clean( JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAME}/includes/core.php" ) ;
+
+
+// Some useful settings
 if( $app->isSite() ){
 	
 	// Include Admin language as global language.
@@ -75,5 +55,5 @@ if( $app->isSite() ){
 
 
 // Detect version
-{COMPONENT_NAME_UCFIRST}Helper::_('version.detectVersion');
+{COMPONENT_NAME_UCFIRST}Helper::_('plugin.attachPlugins');
 

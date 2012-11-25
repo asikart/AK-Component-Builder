@@ -11,9 +11,8 @@
 
 /* Fix Bluestork and Joomla! Conflict */
 window.addEvent( 'domready', function(){
-	var modal = $$('.adminform a.modal', '#toolbar-box a.modal') ;
+	var modal = $$('#ak-panel-wrap a.modal') ;
 	setTimeout(function(){ modal.removeClass('modal'); }, 500 );
-
 } );
 
 

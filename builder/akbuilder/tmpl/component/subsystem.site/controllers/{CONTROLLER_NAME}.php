@@ -12,7 +12,7 @@
 defined('_JEXEC') or die;
 
 
-include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/controllerform.php' ;
+include_once AKPATH_COMPONENT.'/controllerform.php' ;
 
 /**
  * {CONTROLLER_NAME_UCFIRST} controller class.

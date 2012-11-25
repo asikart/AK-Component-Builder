@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/viewitem.php' ;
+include_once AKPATH_COMPONENT.'/viewitem.php' ;
 
 /**
  * View class for a list of {COMPONENT_NAME_UCFIRST}.
@@ -163,11 +163,12 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		if ($active) {
 			$currentLink = $active->link;
 			
-			// If the current view is the active item and an {CONTROLLER_NAME} view for this {CONTROLLER_NAME}, then the menu item params take priority
+			// If the current view is the active item and an {CONTROLLER_NAME} view for this {CONTROLLER_NAME},
+			// then the menu item params take priority
 			if (strpos($currentLink, 'view={CONTROLLER_NAME}') && (strpos($currentLink, '&id='.(string) $item->id))) {
 				// $item->params are the {CONTROLLER_NAME} params, $temp are the menu item params
 				// Merge so that the menu item params take priority
-				$this->params->merge($temp);
+				$item->params->merge($temp);
 				
 				// Load layout from active query (in case it is an alternative menu item)
 				if (isset($active->query['layout'])) {
@@ -176,7 +177,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 			}else {
 				// Current view is not a single {CONTROLLER_NAME}, so the {CONTROLLER_NAME} params take priority here
 				// Merge the menu item params with the {CONTROLLER_NAME} params so that the {CONTROLLER_NAME} params take priority
-				$temp->merge($this->params);
+				$temp->merge($item->params);
 				$this->params = $temp;
 
 				// Check for alternative layouts (since we are not in a single-{CONTROLLER_NAME} menu item)

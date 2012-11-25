@@ -21,7 +21,7 @@ $app = JFactory::getApplication() ;
 if( JVERSION >= 3){
 	JHtml::_('formbehavior.chosen', 'select');
 	if($app->isSite()){
-		//{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
+		{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
 	}
 }else{
 	{COMPONENT_NAME_UCFIRST}Helper::_('include.bluestork');

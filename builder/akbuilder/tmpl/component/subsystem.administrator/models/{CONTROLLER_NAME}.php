@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/modeladmin.php' ;
+include_once AKPATH_COMPONENT.'/modeladmin.php' ;
 
 /**
  * {COMPONENT_NAME_UCFIRST} model.

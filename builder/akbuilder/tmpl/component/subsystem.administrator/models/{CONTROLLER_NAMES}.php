@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/modellist.php' ;
+include_once AKPATH_COMPONENT.'/modellist.php' ;
 
 /**
  * Methods supporting a list of {COMPONENT_NAME_UCFIRST} records.
@@ -65,7 +65,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		
 		// Other settings
 		// ========================================================================
-		$config['fulltext_search'] 	= false ;
+		$config['fulltext_search'] 	= true ;
 		
 		$config['core_sidebar'] 	= false ;
 		

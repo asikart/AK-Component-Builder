@@ -3,11 +3,11 @@
 	<fieldset name="component"
 		label="COM_{COMPONENT_NAME_UC}_COMPONENT_LABEL"
 		description="COM_{COMPONENT_NAME_UC}_COMPONENT_DESC"
-		addfieldpath="administrator/components/com_{COMPONENT_NAME}/class/form/fields"
+		addfieldpath="administrator/components/com_{COMPONENT_NAME}/models/fields"
 	>
 
         <field name="{CONTROLLER_NAME}_list"
-             type="itemlist"
+             type="{CONTROLLER_NAME}_list"
              default="1"
 			 extension="com_{COMPONENT_NAME}"
 			 view_list="{CONTROLLER_NAMES}"
@@ -19,7 +19,7 @@
          </field>
 		
 		<field name="{CONTROLLER_NAME}_modal"
-             type="modal"
+             type="{CONTROLLER_NAME}_modal"
              default="1"
 			 extension="com_{COMPONENT_NAME}"
 			 view_list="{CONTROLLER_NAMES}"

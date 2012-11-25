@@ -82,6 +82,8 @@ if( JVERSION >= 3 ) {
 </script>
 <?php endif; ?>
 
+<div id="<?php echo (JVERSION >= 3) ? 'joomla30' : 'joomla25' ?>">
+
 <!-- Form Begin -->
 <form action="<?php echo JFactory::getURI()->toString(); ?>" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
 	<?php if(!empty( $this->sidebar) && $app->isAdmin()): ?>
@@ -136,3 +138,5 @@ if( JVERSION >= 3 ) {
 			</div>
 		</div>
 </form>
+
+</div>

@@ -11,7 +11,8 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JForm::addFieldPath( JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/class/form/fields');
+include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/includes/core.php' ;
+JForm::addFieldPath( AKPATH_FORM.'/fields');
 JFormHelper::loadFieldClass('Modal');
 
 /**

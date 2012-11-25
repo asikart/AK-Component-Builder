@@ -129,9 +129,9 @@ if( JVERSION >= 3 ) {
 		
 		$ordering	= ($listOrder == $orderCol);
 		$canEdit	= $user->authorise('core.edit',			'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id);
-		$canCheckin	= $user->authorise('core.manage',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) || $item->a_checked_out == $userId || $item->a_checked_out == 0;;
+		$canCheckin	= $user->authorise('core.manage',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) || $item->a_checked_out == $userId || $item->a_checked_out == 0;
 		$canChange	= $user->authorise('core.edit.state',	'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $canCheckin;
-		$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $item->created_user_id == $userId;
+		$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $item->c_id == $userId;
 		
 		// Nested ordering
 		if($nested){
@@ -253,27 +253,33 @@ if( JVERSION >= 3 ) {
 				<div class="pull-left">
 					<?php
 						// Create dropdown items
-						JHtml::_('dropdown.edit', $item->id, '{CONTROLLER_NAMES}.');
-						JHtml::_('dropdown.divider');
-						if ($item->a_published) :
+						if($canEdit || $canEditOwn){
+							JHtml::_('dropdown.edit', $item->a_id, '{CONTROLLER_NAME}.');
+							JHtml::_('dropdown.divider');
+						}
+						
+						
+						if($canChange || $canEditOwn) {
+							if ($item->a_published) :
 							JHtml::_('dropdown.unpublish', 'cb' . $i, '{CONTROLLER_NAMES}.');
-						else :
-							JHtml::_('dropdown.publish', 'cb' . $i, '{CONTROLLER_NAMES}.');
-						endif;
+							else :
+								JHtml::_('dropdown.publish', 'cb' . $i, '{CONTROLLER_NAMES}.');
+							endif;
+							JHtml::_('dropdown.divider');
+						}
 						
-						JHtml::_('dropdown.divider');
 						
-						if ($item->a_checked_out) :
+						if ($item->a_checked_out && $canCheckin) :
 							JHtml::_('dropdown.checkin', 'cb' . $i, '{CONTROLLER_NAMES}.');
 						endif;
 						
-						
-						if ($trashed) :
-							JHtml::_('dropdown.untrash', 'cb' . $i, '{CONTROLLER_NAMES}.');
-						else :
-							JHtml::_('dropdown.trash', 'cb' . $i, '{CONTROLLER_NAMES}.');
-						endif;
-						
+						if($canChange || $canEditOwn) {
+							if ($trashed) :
+								JHtml::_('dropdown.untrash', 'cb' . $i, '{CONTROLLER_NAMES}.');
+							else :
+								JHtml::_('dropdown.trash', 'cb' . $i, '{CONTROLLER_NAMES}.');
+							endif;
+						}
 						
 						// Render dropdown list
 						echo JHtml::_('dropdown.render');

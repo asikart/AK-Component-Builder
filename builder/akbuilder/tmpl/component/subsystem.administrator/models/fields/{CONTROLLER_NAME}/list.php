@@ -11,13 +11,14 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JForm::addFieldPath( JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/class/form/fields');
+include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/includes/core.php' ;
+JForm::addFieldPath( AKPATH_FORM.'/fields');
 JFormHelper::loadFieldClass('itemlist');
 
 /**
  * Supports an HTML select list of categories
  */
-class JFormField{CONTROLLER_NAME_UCFIRST}_list extends JFormFieldItemlist
+class JFormField{CONTROLLER_NAME_UCFIRST}_List extends JFormFieldItemlist
 {
 	/**
 	 * The form field type.
@@ -25,7 +26,7 @@ class JFormField{CONTROLLER_NAME_UCFIRST}_list extends JFormFieldItemlist
 	 * @var		string
 	 * @since	1.6
 	 */
-	public $type = '{CONTROLLER_NAME_UCFIRST}_list';
+	public $type = '{CONTROLLER_NAME_UCFIRST}_List';
 	
 	public $value ;
 	

@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/class/component/viewitem.php' ;
+include_once AKPATH_COMPONENT.'/viewitem.php' ;
 
 /**
  * View to edit
@@ -45,7 +45,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		$this->item		= $this->get('Item');
 		$this->form		= $this->get('Form');
 		$this->fields	= $this->get('Fields');
-		$this->canDo	= AKComponentHelper::getActions($this->option);
+		$this->canDo	= AKHelper::getActions($this->option);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
