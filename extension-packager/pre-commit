@@ -1,36 +1,61 @@
 #!/bin/sh
 
-# admin
-cp -rf /var/www/{joomla}/administrator/components/{com_example}/* admin
+SITE="joomla301"
+COM="flower"
+MOD="flower"
+PLG="flower"
+GUP="system"
+
+
+rm ../com_$COM.zip
+
+#site
+rm -rf admin
+mkdir admin
+cp -rf /var/www/$SITE/administrator/components/com_$COM/ admin
 echo "Admin copied" ;
 
-# site
-cp -rf /var/www/{joomla}/administrator/components/{com_example}/* site
+# admin
+rm -rf site
+mkdir site
+cp -rf /var/www/$SITE/components/com_$COM/ site
 echo "Site copied" ;
 
+# library
+# rm -rf admin/windwalker
+# mkdir admin/windwalker
+# cp -rf /var/www/$SITE/library/windwalker/ admin/windwalker
+# echo "Lib copied" ;
 
 # xml and install script
-# cp -f /var/www/{joomla}/administrator/components/{com_example}/akquickicons.xml .
+# cp -f /var/www/$SITE/administrator/components/com_$COM/$COM.xml .
 # echo "Component XML copied" ;
 
-# cp -f /var/www/{joomla}/administrator/components/{com_example}/install.php .
+# cp -f /var/www/$SITE/administrator/components/com_$COM/install.php .
 # echo "Component install scrip copied" ;
 
 # modules site
-cp -rf /var/www/{joomla}/modules/{mod_example}/* module
-echo "Module copied" ;
+# rm -rf modules
+# mkdir modules
+# cp -rf /var/www/$SITE/modules/mod_$MOD/ modules/mod_$MOD
+# echo "Module copied" ;
 
-# modules admin
-# cp -rf /var/www/{joomla}/administrator/modules/{mod_example}/* module
-# echo "Module admin copied" ;
+# modules site
+# rm -rf modules
+# mkdir modules
+# cp -rf /var/www/$SITE/administrator/modules/mod_$MOD/ modules/mod_$MOD
+# echo "Module copied" ;
 
 # plugins
-cp -rf /var/www/{joomla}/plugins/{folder}/{example}/* plugin
-echo "Plugin copied" ;
+# rm -rf plugins
+# mkdir plugins
+# cp -rf /var/www/$SITE/plugins/$GUP/$PLG/ plugins/plg_$GUP\_$PLG
+# echo "Plugin copied" ;
 
-rm ../{example}.zip
-zip -rq ../{example}.zip *
+
+zip -rq ../com_$COM.zip *
 echo "Ziped files" ;
+
 
 git add .
 
