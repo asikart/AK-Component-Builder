@@ -54,6 +54,22 @@ class AKHelper extends AKProxy
 	{
 		echo '<pre>'.print_r($data, 1).'</pre>' ;
 	}
+	
+	
+	/*
+	 * function isHome
+	 * @param 
+	 */
+	
+	public static function isHome() {
+		$juri = JFactory::getURI();
+		$current_url = $juri->toString();
+		
+		if( $juri->base()==$current_url || $juri->base().'index.php' == $current_url ) 
+			return true;
+		else 
+			return false;
+	}
 }
 
 

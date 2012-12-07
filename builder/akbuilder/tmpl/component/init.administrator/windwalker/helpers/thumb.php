@@ -142,7 +142,7 @@ class AKHelperThumb
 		if($p > $oP) {
 			
 			$rW = $oW ;
-			$rH = $oW * $p ;
+			$rH = $oW / $p ;
 			
 			$y = ( $oH - $rH ) / 2 ;
 			

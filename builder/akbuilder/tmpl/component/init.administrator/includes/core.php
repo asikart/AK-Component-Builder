@@ -24,26 +24,31 @@ if( file_exists($old_akhelper_path) && class_exists('AKHelper') ) {
 
 // Include WindWalker from libraries or component self.
 // ===============================================================
-$inner_ww_path 	= JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAME}/windwalker" ;
-$lib_ww_path	= JPATH_LIBRARIES . '/windwalker' ;
-
-if(file_exists($lib_ww_path.'/init.php')) {
-	// From libraries
-	$ww_path = $lib_ww_path ;
+if( !defined('AKPATH_ROOT') ) {
+	$inner_ww_path 	= JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAME}/windwalker" ;
+	$lib_ww_path	= JPATH_LIBRARIES . '/windwalker' ;
+	
+	if(file_exists($lib_ww_path.'/init.php')) {
+		// From libraries
+		$ww_path = $lib_ww_path ;
+	}else{
+		// From Component folder
+		$ww_path = $inner_ww_path ;
+	}
+	
+	
+	
+	// Init WindWalker
+	// ===============================================================
+	if(!file_exists($ww_path.'/init.php')) {
+		$message = 'Please install WindWalker Framework libraries.' ;
+		throw new Exception($message, 500) ;
+	}
+	include_once $ww_path.'/init.php' ;
 }else{
-	// From Component folder
-	$ww_path = $inner_ww_path ;
+	include_once AKPATH_ROOT.'/init.php' ;
 }
 
-
-
-// Init WindWalker
-// ===============================================================
-if(!file_exists($ww_path.'/init.php')) {
-	$message = 'Please install WindWalker Framework libraries.' ;
-	throw new Exception($message, 500) ;
-}
-include_once $ww_path.'/init.php' ;
 include_once JPath::clean( JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAME}/helpers/{COMPONENT_NAME}.php" ) ;
 include_once JPath::clean( JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAME}/includes/loader.php" ) ;
 
