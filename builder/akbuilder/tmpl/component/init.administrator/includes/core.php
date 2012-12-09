@@ -54,11 +54,11 @@ include_once JPath::clean( JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAM
 
 
 // Set default option to path helper, then AKHelperPath will helpe us get admin path.
-{COMPONENT_NAME_UCFIRST}Helper::_('path.setOption', 'com_{COMPONENT_NAME}') ;
+AKHelper::_('path.setOption', 'com_{COMPONENT_NAME}') ;
 
 
 // Set Component helper prefix, and AKProxy can use component helper first.
 // If component helper and methods not exists, AKProxy will call AKHelper instead.
-{COMPONENT_NAME_UCFIRST}Helper::setPrefix('{COMPONENT_NAME_UCFIRST}Helper') ;
-{COMPONENT_NAME_UCFIRST}Helper::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/helpers');
+AKHelper::setPrefix('{COMPONENT_NAME_UCFIRST}Helper') ;
+AKHelper::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/helpers');
 

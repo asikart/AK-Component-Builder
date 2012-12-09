@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once JPath::clean( AKPATH_BASE . '/proxy.php' ) ;
+include_once dirname(__FILE__).'../includes/core.php' ;
 
 
 /**

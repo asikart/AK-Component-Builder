@@ -24,7 +24,7 @@ echo "Site copied" ;
 # library
 # rm -rf admin/windwalker
 # mkdir admin/windwalker
-# cp -rf /var/www/$SITE/library/windwalker/ admin/windwalker
+# cp -rf /var/www/$SITE/libraries/windwalker/ admin/windwalker
 # echo "Lib copied" ;
 
 # xml and install script
@@ -40,7 +40,7 @@ echo "Site copied" ;
 # cp -rf /var/www/$SITE/modules/mod_$MOD/ modules/mod_$MOD
 # echo "Module copied" ;
 
-# modules site
+# modules admin
 # rm -rf modules
 # mkdir modules
 # cp -rf /var/www/$SITE/administrator/modules/mod_$MOD/ modules/mod_$MOD
