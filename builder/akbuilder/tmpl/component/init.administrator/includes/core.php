@@ -14,10 +14,16 @@ defined('_JEXEC') or die;
 
 // Detect is AKHelper exists
 // ===============================================================
-$old_akhelper_path = JPATH_PLUGINS.'/system/asikart_easyset/lib/akhelper/akhelper.php' ;
-if( file_exists($old_akhelper_path) && class_exists('AKHelper') ) {
-	$message = 'The WindWalker Framework has updated, please disable Asikart Easyset plugin or update to 2.5.4 later.' ;
-	throw new Exception($message, 500) ;
+$old_akhelper_path = JPATH_PLUGINS.'/system/asikart_easyset/windwalker/init.php' ;
+if( !file_exists($old_akhelper_path) && class_exists('AKHelper') ) {
+	$message = 'Please disable Asikart Easyset plugin or upgrade to 2.6 later.' ;
+	if(JRequest::getVar('option') == 'com_cpanel'){
+		JError::raiseWarning(500, $message) ;
+		return false;
+	}else{
+		$app = JFactory::getApplication() ;
+		$app->redirect('index.php', $message);
+	}
 }
 
 
