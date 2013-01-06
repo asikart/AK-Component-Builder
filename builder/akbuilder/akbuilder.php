@@ -129,7 +129,7 @@ class AKBuilder
 		$tmpl = array();
 		
 		foreach( $files as $k => $v ){
-			$target_path = str_replace( $this->tmpl_path , $this->target_path , $v) ;
+			$target_path = str_replace( JPath::clean($this->tmpl_path) , JPath::clean($this->target_path) , JPath::clean($v)) ;
 			$tmpl[$k]['target'] 	= $this->replaceName( $target_path , $name );
 			$tmpl[$k]['content'] 	= $this->replaceName( JFile::read( $v ) , $name );
 		}
