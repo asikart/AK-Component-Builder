@@ -11,12 +11,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once AKPATH_COMPONENT.'/modeladmin.php' ;
+jimport('joomla.application.component.modeladmin');
 
 /**
  * {COMPONENT_NAME_UCFIRST} model.
  */
-class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmin
+class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -25,8 +25,33 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	protected 	$text_prefix = 'COM_{COMPONENT_NAME_UC}';
 	
 	public 		$component = '{COMPONENT_NAME}' ;
+	
 	public 		$item_name = '{CONTROLLER_NAME}' ;
+	
 	public 		$list_name = '{CONTROLLER_NAMES}' ;
+	
+	public 		$item ;
+	
+	public 		$category ;
+	
+	
+	
+	/**
+	 * Returns a reference to the a Table object, always creating it.
+	 *
+	 * @param	type	The table type to instantiate
+	 * @param	string	A prefix for the table class name. Optional.
+	 * @param	array	Configuration array for model. Optional.
+	 * @return	JTable	A database object
+	 * @since	1.6
+	 */
+	public function getTable($type = null, $prefix = null, $config = array())
+	{
+		$prefix = $prefix 	? $prefix 	: ucfirst($this->component).'Table' ;
+		$type 	= $type 	? $type 	: $this->item_name ;
+		
+		return parent::getTable( $type , $prefix , $config );
+	}
 	
 	
 
@@ -40,9 +65,16 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
-		$form = parent::getForm($data, $loadData) ;
+		// Initialise variables.
+		$app	= JFactory::getApplication();
+
+		// Get the form.
+		$form = $this->loadForm("{$this->option}.{$this->item_name}", $this->item_name, array('control' => 'jform', 'load_data' => $loadData));
+		if (empty($form)) {
+			return false;
+		}
 		
-		return $form ;
+		return $form;
 	}
 	
 	
@@ -53,9 +85,19 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	
 	public function getFields()
 	{
-		$fields = parent::getFields();
+		if(!empty($this->fields_name)) return $this->fields_name ;
 		
-		return $fields ;
+		$xml_file 		= AKHelper::_('path.get').'/models/forms/'.$this->item_name.'.xml' ;
+		$xml 			= JFactory::getXML( $xml_file );
+		$fields 		= $xml->xpath('/form/fields');
+		$fields_name 	= array();
+		
+		foreach( $fields as $field ):
+			if( (string) $field['name'] != 'other' )
+				$fields_name[] = (string) $field['name'] ;
+		endforeach;
+		
+		return $this->fields_name = $fields_name ;
 	}
 	
 	
@@ -68,9 +110,42 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 */
 	protected function loadFormData()
 	{
-		$data = parent::loadFormData();
+		// Check the session for previously entered form data.
+		$data = JFactory::getApplication()->getUserState("{$this->option}.edit.{$this->item_name}.data", array());
 		
-		return $data ;
+		if (empty($data)) 
+		{
+			$data = $this->getItem();
+		}else{
+			$data = new JObject($data);
+		}
+		
+		
+		
+		// Get params, convert $data->params['xxx'] to $data->param_xxx
+		// ==========================================================================================
+		if( isset($data->params) && is_array($data->params)){
+			foreach( $data->params as $key => $param ):
+				$key = 'param_'.$key ;
+				if(empty($data->$key)){
+					$data->$key = $param ;
+				}
+			endforeach;
+		}
+		
+		
+		
+		// This seeting is for Fields Group
+		// Convert data[field] to data[fields_group][field] then Jform can bind data into forms.
+		// ==========================================================================================
+		$fields = $this->getFields();
+		
+		foreach( $fields as $field ):
+			$data->$field = clone $data ;
+		endforeach;
+		
+		
+		return $data;
 	}
 
 	
@@ -94,6 +169,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 
 		return false;
 	}
+	
 	
 	
 	/**
@@ -129,7 +205,32 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	}
 	
 	
-
+	
+	/*
+	 * function getCategory
+	 * @param 
+	 */
+	
+	public function getCategory($pk = null)
+	{	
+		if(!empty($this->category)){
+			return $this->category ;
+		}
+		
+		$pk = $pk ? $pk : $this->getItem()->catid ;
+		
+		$this->category  = JTable::getInstance('Category');
+		
+		if(!$this->category->load($pk) ) {
+			$this->setError($this->category->getError());
+            return false;
+		}
+		
+		return $this->category ;
+	}
+	
+	
+	
 	/**
 	 * Prepare and sanitise the table prior to saving.
 	 *
@@ -137,8 +238,92 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 */
 	protected function prepareTable(&$table)
 	{
-		return parent::prepareTable($table);
+		jimport('joomla.filter.output');
+		
+		$date 	= JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
+		$user 	= JFactory::getUser() ;
+		$db 	= JFactory::getDbo();
+		
+		
+		// alias
+        if( isset($table->alias) ) {
+			
+			if(!$table->alias){
+				$table->alias = JFilterOutput::stringURLSafe( trim($table->title) ) ;
+			}else{
+				$table->alias = JFilterOutput::stringURLSafe( trim($table->alias) ) ;
+			}
+			
+			if(!$table->alias){
+				$table->alias = JFilterOutput::stringURLSafe( $date->toSql(true) ) ;
+			}
+		}
+		
+		// created date
+		if(isset($table->created) && !$table->created){
+			$table->created = $date->toSql(true);
+		}
+		
+		// modified date
+		if(isset($table->modified) && $table->id){
+			$table->modified = $date->toSql(true);
+		}
+		
+		// created user
+		if(isset($table->created_by) && !$table->created_by){
+			$table->created_by = $user->get('id');
+		}
+		
+		// modified user
+		if(isset($table->modified_by) && $table->id){
+			$table->modified_by = $user->get('id');
+		}
+		
+		
+		// Version
+		$table->version++ ;
+		
+		
+		
+		// Set Ordering 
+		if (!$table->id) {
+			// Set ordering to the last item if not set
+			if (!$table->ordering) {
+				$table->reorder('catid = '.(int) $table->catid.' AND published >= 0');
+			}
+		}
+		
 	}
 	
 	
+	
+	/**
+     * Method to test whether a record can be deleted.
+     *
+     * @param   object  $record  A record object.
+     *
+     * @return  boolean  True if allowed to delete the record. Defaults to the permission for the component.
+     *
+     * @since   12.2
+     */
+    protected function canDelete($record)
+    {
+        $user = JFactory::getUser();
+        return $user->authorise('core.delete', $this->option.'.'.$this->item_name.'.'.$record->id);
+    }
+ 
+    /**
+     * Method to test whether a record can be deleted.
+     *
+     * @param   object  $record  A record object.
+     *
+     * @return  boolean  True if allowed to change the state of the record. Defaults to the permission for the component.
+     *
+     * @since   12.2
+     */
+    protected function canEditState($record)
+    {
+        $user = JFactory::getUser();
+        return $user->authorise('core.edit.state', $this->option.'.'.$this->item_name.'.'.$record->id);
+	}
 }

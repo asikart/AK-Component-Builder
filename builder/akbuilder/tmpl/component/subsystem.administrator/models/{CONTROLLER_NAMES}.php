@@ -11,12 +11,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once AKPATH_COMPONENT.'/modellist.php' ;
+jimport('joomla.application.component.modellist');
 
 /**
  * Methods supporting a list of {COMPONENT_NAME_UCFIRST} records.
  */
-class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelList
+class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -78,14 +78,77 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	
 	
 	/**
+	 * Returns a reference to the a Table object, always creating it.
+	 *
+	 * @param	type	The table type to instantiate
+	 * @param	string	A prefix for the table class name. Optional.
+	 * @param	array	Configuration array for model. Optional.
+	 * @return	JTable	A database object
+	 * @since	1.6
+	 */
+	public function getTable($type = null, $prefix = null, $config = array())
+	{
+		$prefix = $prefix 	? $prefix 	: ucfirst($this->component).'Table' ;
+		$type 	= $type 	? $type 	: $this->item_name ;
+		
+		return parent::getTable( $type , $prefix , $config );
+	}
+	
+	
+	
+	/**
 	 * Method to auto-populate the model state.
 	 *
 	 * Note. Calling getState in this method will result in recursion.
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		parent::populateState($ordering, $direction);
+		// Initialise variables.
+		$app = JFactory::getApplication();
+		
+		// Load the parameters.
+		$params = JComponentHelper::getParams($this->option);
+		$this->setState('params', $params);
+		
+		// Fulltext search
+		if(isset($this->config['fulltext_search'])){
+			$this->setState( 'search.fulltext', $this->config['fulltext_search'] );
+		}
+		
+		// Core sidebar
+		if(isset($this->config['core_sidebar'])){
+			$this->setState( 'core_sidebar', $this->config['core_sidebar'] );
+		}
+		
+		
+		
+		// Set all filter fields
+		// ========================================================================
+		
+		// Set Filters
+		$filter = $app->getUserStateFromRequest($this->context.'.field.filter', 'filter');
+		$filter_fields = array();
+		foreach( $this->filter_fields as $field ){
+			$filter_fields[$field] = JArrayHelper::getValue($filter, $field, '') ;
+		}
+		$this->setState('filter', $filter_fields );
+		
+		// Set Searches
+		$search = $app->getUserStateFromRequest($this->context.'.field.search', 'search');
+		if(in_array(JArrayHelper::getValue($search, 'field'), $this->filter_fields) || $this->config['fulltext_search']){
+			$this->setState('search', $search );
+		}
+		
+		
+
+		// List state information.
+		if(!$ordering){
+			$ordering = 'a.ordering' ;
+		}
+		
+		parent::populateState($ordering, 'asc');
 	}
+	
 
 	
 	/**
@@ -101,6 +164,10 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	 */
 	protected function getStoreId($id = '')
 	{
+		// Compile the store id.
+		$id.= ':' . json_encode($this->getState('search'));
+		$id.= ':' . json_encode($this->getState('filter'));
+
 		return parent::getStoreId($id);
 	}
 	
@@ -114,9 +181,88 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	
 	public function getFilter()
 	{
-		$filter = parent::getFilter();
+		if(!empty($this->filter)){
+			return $this->filter ;
+		}
 		
-		return $filter ;
+		// Get filter inputs from from xml files in /models/form.
+		JForm::addFormPath(AKHelper::_('path.get').'/models/forms');
+        JForm::addFieldPath(AKHelper::_('path.get').'/models/fields');
+		
+		
+		// Generate sidebar filter by Joomla! core system.
+		if( JVERSION >=3 && $this->config['core_sidebar'] ) {
+			
+			// Get filter inputs from raw xml file.
+			$file 	= AKHelper::_('path.get').'/models/forms/'.$this->list_name.'_filter.xml' ;
+			$xml 	= simplexml_load_file($file);
+			
+			$filters 	= $xml->xpath('//fieldset[@name="filter_sidebar"]') ;
+			$filters	= $filters[0]->field;
+			
+			
+			$form['filter_sidebar'] 	= $filters ;
+		}
+		
+		
+		// load forms
+		$form['search'] = JForm::getInstance("{$this->option}.{$this->list_name}.search", $this->list_name.'_search', array( 'control' => 'search' ,'load_data'=>'true'));
+		$form['filter'] = JForm::getInstance("{$this->option}.{$this->list_name}.filter", $this->list_name.'_filter', array( 'control' => 'filter' ,'load_data'=>'true'));
+		
+		
+		// Get default data of this form. Any State key same as form key will auto match.
+		$form['search']->bind( $this->getState('search') );
+		$form['filter']->bind( $this->getState('filter') );
+		
+		
+		return $this->filter = $form;
+	}
+	
+	
+	
+	/*
+	 * function getCategory
+	 * @param 
+	 */
+	
+	public function getCategory()
+	{
+		if(!empty($this->category)){
+			return $this->category ;
+		}
+		
+		$pk = $this->getState('category.id') ;
+		
+		$this->category  = JTable::getInstance('Category');
+		$this->category->load($pk);
+		
+		return $this->category ;
+	}
+	
+	
+	
+	/*
+	 * function getFulltextSearch
+	 * @param 
+	 */
+	
+	public function getFullSearchFields()
+	{
+		$file = AKHelper::_('path.get').'/models/forms/'.$this->list_name.'_search.xml' ;
+		
+		$xml = simplexml_load_file($file);
+		$field = $xml->xpath('//field[@name="field"]') ;
+		$options = $field[0]->option ;
+		
+		$fields = array();
+		foreach( $options as $option ):
+			$attr = $option->attributes();
+			if(in_array($attr['value'], $this->filter_fields)){
+				$fields[] = $attr['value'];
+			}
+		endforeach;
+		
+		return $fields ;
 	}
 	
 	
@@ -143,25 +289,8 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		$search = $this->getState('search') ;
 		
 		$layout = JRequest::getVar('layout') ;
-		$nested = $this->getState('items.nested') ;
 		$avoid	= JRequest::getVar('avoid') ;
 		$show_root = JRequest::getVar('show_root') ;
-		
-		
-		
-		// Nested
-		// ========================================================================
-		if($nested && !$show_root){
-			$q->where("a.id != 1") ;
-		}
-		
-		if($avoid){
-			$table = $this->getTable();
-			$table->load( $avoid ) ;
-			
-			$q->where("a.lft < {$table->lft} OR a.rgt > {$table->rgt}") ;
-			$q->where("a.id != {$avoid}") ;
-		}
 		
 		
 		

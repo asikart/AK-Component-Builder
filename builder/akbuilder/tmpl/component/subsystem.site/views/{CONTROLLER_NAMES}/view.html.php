@@ -16,7 +16,7 @@ include_once AKPATH_COMPONENT.'/viewlist.php' ;
 /**
  * View class for a list of {COMPONENT_NAME_UCFIRST}.
  */
-class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKViewList
+class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.

@@ -47,17 +47,6 @@ $published = $this->state->get('filter.a_published');
 		</div>
 		<?php endif; ?>
 		
-		
-		<?php if( $this->state->get('items.nested') ): ?>
-		<div class="control-group">
-			<?php echo $this->filter['filter']->getField('parent_id')->label; ?>
-			<div class="controls">
-				<?php echo JHtml::_('select.genericlist', $this->filter['filter']->getField('parent_id')->getOptions(),
-						'batch[parent_id]'); ?>
-			</div>
-		</div>
-		<?php endif; ?>
-		
 	
 		<?php if ($published >= 0) : ?>
 		

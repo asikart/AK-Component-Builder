@@ -31,8 +31,7 @@ $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_{COMPONENT_NAME}');
 $saveOrder	= $listOrder == 'a.ordering' || ($listOrder == 'a.lft' && $listDirn == 'asc');
 $trashed	= $this->state->get('filter.published') == -2 ? true : false;
-$nested		= $this->state->get('items.nested') ;
-$orderCol 	= $nested ? 'a.lft' : 'a.ordering' ;
+$orderCol 	= 'a.ordering' ;
 $show_root	= JRequest::getVar('show_root') ;
 
 
@@ -41,9 +40,9 @@ $show_root	= JRequest::getVar('show_root') ;
 if( JVERSION >= 3 ) {
 	if ($saveOrder)
 	{
-		$method = $nested ? 'saveOrderNestedAjax' : 'saveOrderAjax' ;
+		$method = 'saveOrderAjax' ;
 		$saveOrderingUrl = 'index.php?option=com_{COMPONENT_NAME}&task={CONTROLLER_NAMES}.'.$method.'&tmpl=component';
-		JHtml::_('sortablelist.sortable', 'itemList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false, $nested);
+		JHtml::_('sortablelist.sortable', 'itemList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false, false);
 	}
 }
 ?>
@@ -132,54 +131,9 @@ if( JVERSION >= 3 ) {
 		$canCheckin	= $user->authorise('core.manage',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) || $item->a_checked_out == $userId || $item->a_checked_out == 0;
 		$canChange	= $user->authorise('core.edit.state',	'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $canCheckin;
 		$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $item->c_id == $userId;
-		
-		// Nested ordering
-		if($nested){
-			
-			if($item->a_id == 1) {
-				$item->a_title = JText::_('JGLOBAL_ROOT') ;
-				$canEdit 	= false ;
-				$canChange 	= false ;
-				$canEditOwn = false ;
-			}
-			
-			$orderkey = array_search($item->a_id, $this->ordering[$item->a_parent_id]);
-		
-			// Get the parents of item for sorting
-			if ($item->a_level > 1)
-			{
-				$parentsStr = "";
-				$_currentParentId = $item->a_parent_id;
-				$parentsStr = " ".$_currentParentId;
-				for ($n = 0; $n < $item->a_level; $n++)
-				{
-					foreach ($this->ordering as $k => $v)
-					{
-						$v = implode("-", $v);
-						$v = "-".$v."-";
-						if (strpos($v, "-" . $_currentParentId . "-") !== false)
-						{
-							$parentsStr .= " ".$k;
-							$_currentParentId = $k;
-							break;
-						}
-					}
-				}
-			}
-			else
-			{
-				$parentsStr = "";
-			}
-		}
 
 		?>
-		<tr class="row<?php echo $i % 2; ?>"
-			<?php if( $nested ): ?>
-				sortable-group-id="<?php echo $item->a_parent_id ;?>" item-id="<?php echo $item->a_id?>" parents="<?php echo $parentsStr?>" level="<?php echo $item->a_level?>"
-			<?php else: ?>
-				sortable-group-id="<?php echo $item->a_catid ;?>"
-			<?php endif; ?>
-		>
+		<tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->a_catid ;?>">
 		<?php if( JVERSION >= 3 ): ?>
 			<!-- Drag sort for Joomla!3.0 -->
 			<td class="order nowrap center hidden-phone">
@@ -194,7 +148,7 @@ if( JVERSION >= 3 ) {
 				<span class="sortable-handler hasTooltip <?php echo $disableClassName?>" title="<?php echo $disabledLabel?>">
 					<i class="icon-menu"></i>
 				</span>
-				<input type="text" style="display:none" name="order[]" size="5" value="<?php echo $nested ? $orderkey + 1 : $item->a_ordering;?>" class="width-20 text-area-order " />
+				<input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->a_ordering;?>" class="width-20 text-area-order " />
 			<?php else : ?>
 				<span class="sortable-handler inactive" >
 					<i class="icon-menu"></i>
@@ -208,13 +162,6 @@ if( JVERSION >= 3 ) {
 			</td>
 			
 			<td class="n/owrap has-context">
-				<!-- Nested dashs -->
-				<?php if( $nested ): ?>
-				<div class="pull-left fltlft">
-					<?php $offset = $show_root ? 0 : 1 ; ?>
-					<?php echo str_repeat('<span class="gi">&mdash;</span>', $item->a_level - $offset) ; ?>
-				</div>
-				<?php endif; ?>
 				
 				<div class="pull-left fltlft">
 				
@@ -305,9 +252,9 @@ if( JVERSION >= 3 ) {
 						<?php endif; ?>
 					<?php endif; ?>
 					<?php $disabled = $saveOrder ?  '' : 'disabled="disabled"'; ?>
-					<input type="text" name="order[]" size="5" value="<?php echo $nested ? $orderkey + 1 : $item->get('a_ordering');?>" <?php echo $disabled ?> class="text-area-order input-mini" />
+					<input type="text" name="order[]" size="5" value="<?php echo $item->get('a_ordering');?>" <?php echo $disabled ?> class="text-area-order input-mini" />
 				<?php else : ?>
-					<?php echo $nested ? $orderkey + 1 : $item->get('a_ordering');?>
+					<?php echo $item->get('a_ordering');?>
 				<?php endif; ?>
 			</td>
 			<?php endif; ?>
@@ -337,11 +284,7 @@ if( JVERSION >= 3 ) {
 			</td>
 
 			<td class="center">
-				<span
-					<?php if( $nested ): ?>
-					class="hasTip" title="<?php echo $item->a_lft.'-'.$item->a_rgt; ?>"
-					<?php endif; ?>
-				><?php echo (int) $item->get('a_id'); ?></span>
+				<span><?php echo (int) $item->get('a_id'); ?></span>
 			</td>
 
 		</tr>

@@ -11,7 +11,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.database.tablenested');
+jimport('joomla.database.table');
 
 /**
  * {CONTROLLER_NAME} Table class
@@ -118,46 +118,4 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME_UCFIRST} extends JTable
 	}
 	
 	
-	
-	/*
-	 * Setting Nested table, and rebuild.
-	 */
-	
-	public function rebuild($parentId = null, $leftId = 0, $level = 0, $path = '')
-	{
-		if(!$parentId){
-			// If root not exists, create one.
-			$table = JTable::getInstance('{CONTROLLER_NAME_UCFIRST}', '{COMPONENT_NAME_UCFIRST}Table') ;
-			if( !$table->load(1) ){
-				$k = $this->_tbl_key;
-				
-				$table->reset();
-				$table->$k = 1 ;
-				$table->title = 'ROOT' ;
-				$table->alias = 'root' ;
-				$table->catid = 1 ;
-				
-				$table->_db->insertObject( $this->_tbl, $table ) ;
-				
-				$table->reset() ;
-				$table->$k = null ;
-			}
-			
-			
-			// If cloumn ordering exists, we need clear it, or nested sorting can't work.
-			if(property_exists($this, 'ordering')){
-				$db = JFactory::getDbo();
-				$q = $db->getQuery(true) ;
-				
-				$q->update($this->_tbl)
-					->set('ordering = 0')
-					;
-				
-				$db->setQuery($q);
-				$db->query();
-			}
-		}
-		
-		return parent::rebuild($parentId, $leftId, $level, $path);
-	}
 }

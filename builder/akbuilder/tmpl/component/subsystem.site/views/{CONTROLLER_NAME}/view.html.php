@@ -157,6 +157,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		// Otherwise, {CONTROLLER_NAME} params override menu item params
 		$active	= $app->getMenu()->getActive();
 		$temp	= clone ($this->params);
+		$item->params = new JRegistry($item->params);
 		
 		
 		// Check to see which parameters should take priority
@@ -215,7 +216,16 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 	{
 		AKToolBarHelper::title( '{CONTROLLER_NAME_UCFIRST}' . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_ITEM_EDIT'), 'article-add.png');
 
-		parent::addToolbar();
+		JRequest::setVar('hidemainmenu', true);
+
+		$user		= JFactory::getUser();
+		$isNew		= ($this->item->id == 0);
+
+		JToolBarHelper::apply($this->item_name.'.apply');
+		JToolBarHelper::save($this->item_name.'.save');
+		JToolBarHelper::custom($this->item_name.'.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+		JToolBarHelper::custom($this->item_name.'.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+		JToolBarHelper::cancel($this->item_name.'.cancel');
 	}
 	
 	
@@ -229,7 +239,6 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 	{
 		$form = $this->form ;
 		
-		parent::handleFields();
 		
 		// for Joomla! 3.0
 		if(JVERSION >= 3) {
