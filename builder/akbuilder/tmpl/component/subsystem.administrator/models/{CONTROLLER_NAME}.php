@@ -286,7 +286,13 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
 		if (!$table->id) {
 			// Set ordering to the last item if not set
 			if (!$table->ordering) {
+<<<<<<< HEAD
 				$table->reorder('catid = '.(int) $table->catid.' AND published >= 0');
+=======
+				$db->setQuery('SELECT MAX(ordering) FROM #__{COMPONENT_NAME}_{CONTROLLER_NAMES}');
+				$max = $db->loadResult();
+				$table->ordering = $max+1;
+>>>>>>> 75ba50dcd5f9403f8c73973a92bfea55df7cfc9f
 			}
 		}
 		
