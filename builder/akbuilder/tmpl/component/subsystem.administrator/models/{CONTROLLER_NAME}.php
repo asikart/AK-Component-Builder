@@ -171,7 +171,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME} extends JModelAdmin
 		if (!$table->id) {
 			// Set ordering to the last item if not set
 			if (!$table->ordering) {
-				$db->setQuery('SELECT MAX(ordering) FROM #__fbimporter_formats');
+				$db->setQuery('SELECT MAX(ordering) FROM #__{COMPONENT_NAME}_{CONTROLLER_NAMES}');
 				$max = $db->loadResult();
 				$table->ordering = $max+1;
 			}
