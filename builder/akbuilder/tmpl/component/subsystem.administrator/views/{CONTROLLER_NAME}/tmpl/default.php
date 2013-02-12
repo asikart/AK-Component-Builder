@@ -18,15 +18,12 @@ JHtml::_('behavior.keepalive');
 
 
 $app = JFactory::getApplication() ;
-if( JVERSION >= 3){
-	JHtml::_('formbehavior.chosen', 'select');
-	if($app->isSite()){
-		//{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
-	}
-}else{
-	{COMPONENT_NAME_UCFIRST}Helper::_('include.bluestork');
-	// {COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
+
+JHtml::_('formbehavior.chosen', 'select');
+if($app->isSite()){
+	//{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
 }
+
 
 
 

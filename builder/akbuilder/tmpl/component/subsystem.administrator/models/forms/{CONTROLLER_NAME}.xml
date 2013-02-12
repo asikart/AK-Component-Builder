@@ -21,7 +21,7 @@
 				labelclass="control-label"
 			/>
 			
-			<field name="parent_id"
+			<!--<field name="parent_id"
 				type="{CONTROLLER_NAME}_modal"
 				label="COM_{COMPONENT_NAME_UC}_PARENT_ITEM"
 				description="COM_{COMPONENT_NAME_UC}_PARENT_ITEM_DESC"
@@ -29,7 +29,7 @@
 				show_root="true"
 				class="input-xlarge"
 				access="true"
-			/>
+			/>-->
 			
 			<field name="catid"
 				type="category"

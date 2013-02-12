@@ -11,12 +11,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once AKPATH_COMPONENT.'/modellist.php' ;
+jimport('joomla.application.component.modellist');
 
 /**
  * Methods supporting a list of {COMPONENT_NAME_UCFIRST} records.
  */
-class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelList
+class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -66,6 +66,21 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 
         parent::__construct($config);
     }
+	
+	
+	/**
+	 * Returns a reference to the a Table object, always creating it.
+	 *
+	 * @param	type	The table type to instantiate
+	 * @param	string	A prefix for the table class name. Optional.
+	 * @param	array	Configuration array for model. Optional.
+	 * @return	JTable	A database object
+	 * @since	1.6
+	 */
+	public function getTable($type = '{CONTROLLER_NAME_UCFIRST}', $prefix = '{COMPONENT_NAME_UCFIRST}Table', $config = array())
+	{	
+		return parent::getTable( $type , $prefix , $config );
+	}
 
 
 	/**
@@ -202,6 +217,27 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 
 		return parent::getStoreId($id);
 	}
+	
+	
+	/*
+	 * function getCategory
+	 * @param 
+	 */
+	
+	public function getCategory()
+	{
+		if(!empty($this->category)){
+			return $this->category ;
+		}
+		
+		$pk = $this->getState('category.id') ;
+		
+		$this->category  = JTable::getInstance('Category');
+		$this->category->load($pk);
+		
+		return $this->category ;
+	}
+	
 	
 	
 	/**

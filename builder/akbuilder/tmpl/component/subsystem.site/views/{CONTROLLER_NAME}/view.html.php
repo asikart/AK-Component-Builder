@@ -157,6 +157,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		// Otherwise, {CONTROLLER_NAME} params override menu item params
 		$active	= $app->getMenu()->getActive();
 		$temp	= clone ($this->params);
+		$item->params = new JRegistry($item->params);
 		
 		
 		// Check to see which parameters should take priority
@@ -215,7 +216,16 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 	{
 		AKToolBarHelper::title( '{CONTROLLER_NAME_UCFIRST}' . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_ITEM_EDIT'), 'article-add.png');
 
-		parent::addToolbar();
+		JRequest::setVar('hidemainmenu', true);
+
+		$user		= JFactory::getUser();
+		$isNew		= ($this->item->id == 0);
+
+		JToolBarHelper::apply('{CONTROLLER_NAME}.apply');
+		JToolBarHelper::save('{CONTROLLER_NAME}.save');
+		JToolBarHelper::custom('{CONTROLLER_NAME}.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+		JToolBarHelper::custom('{CONTROLLER_NAME}.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+		JToolBarHelper::cancel('{CONTROLLER_NAME}.cancel');
 	}
 	
 	
@@ -229,18 +239,45 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 	{
 		$form = $this->form ;
 		
-		parent::handleFields();
 		
-		// for Joomla! 3.0
-		if(JVERSION >= 3) {
-			
-			// $form->removeField('name', 'fields');
-			
-		}else{
-			
-			// $form->removeField('name', 'fields');
-			
+	}
+	
+	
+	
+	/*
+	 * function showInfo
+	 * @param $key
+	 */
+	
+	public function showInfo( $item, $key = null, $label = null, $strip = true, $link = null ,$class = null)
+	{
+		if(empty($item->$key)){
+			return false ;
 		}
 		
+		$lang  = $strip ? substr($key, 2) : $key ;
+		
+		if(!$label){
+			$label = JText::_('COM_{COMPONENT_NAME_UC}_'.strtoupper($lang)) ;
+		}else{
+			$label = JText::_(strtoupper($label)) ;
+		}
+		
+		$value = $item->$key ;
+		
+		if($link){
+			$value = JHtml::_('link', $link, $value);
+		}
+		
+		$lang = str_replace( '_', '-', $lang );
+		
+		$info =
+<<<INFO
+		<div class="{$lang} {$class}" fltlft">
+			<span class="label">{$label}:</span>
+			<span class="valur">{$value}</span>
+		</div>
+INFO;
+		return $info ;
 	}
 }

@@ -27,47 +27,24 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 		jimport('joomla.filesystem.folder');
 		jimport('joomla.filesystem.file');
 		
-		if(JVERSION >= 3):
+			
+		JSubMenuHelper::addEntry(
+			JText::_('JCATEGORY'),
+			'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
+			$vName == 'categories'
+		);
 		
-			JHtmlSidebar::addEntry(
-				JText::_('JCATEGORY'),
-				'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
-				$vName == 'categories'
-			);
-			
-			$folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
-			
-			foreach( $folders as $folder ){
-				if( substr($folder, -2) == 'is' || substr($folder, -1) == 's'){
-					JHtmlSidebar::addEntry(
-						ucfirst($folder) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST'),
-						'index.php?option=com_{COMPONENT_NAME}&view='.$folder,
-						$vName == $folder
-					);
-				}
-			}
+		$folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
 		
-		else:
-			
-			JSubMenuHelper::addEntry(
-				JText::_('JCATEGORY'),
-				'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
-				$vName == 'categories'
-			);
-			
-			$folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
-			
-			foreach( $folders as $folder ){
-				if( substr($folder, -2) == 'is' || substr($folder, -1) == 's'){
-					JSubMenuHelper::addEntry(
-						ucfirst($folder) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST'),
-						'index.php?option=com_{COMPONENT_NAME}&view='.$folder,
-						$vName == $folder
-					);
-				}
+		foreach( $folders as $folder ){
+			if( substr($folder, -2) == 'is' || substr($folder, -1) == 's'){
+				JSubMenuHelper::addEntry(
+					ucfirst($folder) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST'),
+					'index.php?option=com_{COMPONENT_NAME}&view='.$folder,
+					$vName == $folder
+				);
 			}
-			
-		endif;
+		}
 		
 	}
 	

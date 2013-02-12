@@ -11,12 +11,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
-include_once AKPATH_COMPONENT.'/modellist.php' ;
+jimport('joomla.application.component.modellist');
 
 /**
  * Methods supporting a list of {COMPONENT_NAME_UCFIRST} records.
  */
-class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelList
+class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -67,7 +67,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// ========================================================================
 		$config['fulltext_search'] 	= true ;
 		
-		$config['core_sidebar'] 	= false ;
+		//$config['core_sidebar'] 	= false ; // For 3.0 only
 		
 		
 		$this->config = $config ;
@@ -78,14 +78,68 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	
 	
 	/**
+	 * Returns a reference to the a Table object, always creating it.
+	 *
+	 * @param	type	The table type to instantiate
+	 * @param	string	A prefix for the table class name. Optional.
+	 * @param	array	Configuration array for model. Optional.
+	 * @return	JTable	A database object
+	 * @since	1.6
+	 */
+	public function getTable($type = '{CONTROLLER_NAME_UCFIRST}', $prefix = '{COMPONENT_NAME_UCFIRST}Table', $config = array())
+	{	
+		return parent::getTable( $type , $prefix , $config );
+	}
+	
+	
+	
+	/**
 	 * Method to auto-populate the model state.
 	 *
 	 * Note. Calling getState in this method will result in recursion.
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		parent::populateState($ordering, $direction);
+		// Initialise variables.
+		$app = JFactory::getApplication();
+		
+		// Load the parameters.
+		$params = JComponentHelper::getParams($this->option);
+		$this->setState('params', $params);
+		
+		// Fulltext search
+		if(isset($this->config['fulltext_search'])){
+			$this->setState( 'search.fulltext', $this->config['fulltext_search'] );
+		}
+		
+		// Core sidebar
+		if(isset($this->config['core_sidebar'])){
+			$this->setState( 'core_sidebar', $this->config['core_sidebar'] );
+		}
+		
+		
+		
+		// Set all filter fields
+		// ========================================================================
+		
+		// Set Filters
+		$filter = $app->getUserStateFromRequest($this->context.'.field.filter', 'filter');
+		$filter_fields = array();
+		foreach( $this->filter_fields as $field ){
+			$filter_fields[$field] = JArrayHelper::getValue($filter, $field, '') ;
+		}
+		$this->setState('filter', $filter_fields );
+		
+		// Set Searches
+		$search = $app->getUserStateFromRequest($this->context.'.field.search', 'search');
+		if(in_array(JArrayHelper::getValue($search, 'field'), $this->filter_fields) || $this->config['fulltext_search']){
+			$this->setState('search', $search );
+		}
+		
+		
+		parent::populateState('a.ordering', 'asc');
 	}
+	
 
 	
 	/**
@@ -101,6 +155,10 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	 */
 	protected function getStoreId($id = '')
 	{
+		// Compile the store id.
+		$id.= ':' . json_encode($this->getState('search'));
+		$id.= ':' . json_encode($this->getState('filter'));
+
 		return parent::getStoreId($id);
 	}
 	
@@ -114,9 +172,73 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	
 	public function getFilter()
 	{
-		$filter = parent::getFilter();
+		if(!empty($this->filter)){
+			return $this->filter ;
+		}
 		
-		return $filter ;
+		// Get filter inputs from from xml files in /models/form.
+		JForm::addFormPath(JPATH_COMPONENT.'/models/forms');
+        JForm::addFieldPath(JPATH_COMPONENT.'/models/fields');
+		
+		
+		// load forms
+		$form['search'] = JForm::getInstance("com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.search", '{CONTROLLER_NAMES}_search', array( 'control' => 'search' ,'load_data'=>'true'));
+		$form['filter'] = JForm::getInstance("com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.filter", '{CONTROLLER_NAMES}_filter', array( 'control' => 'filter' ,'load_data'=>'true'));
+		
+		
+		// Get default data of this form. Any State key same as form key will auto match.
+		$form['search']->bind( $this->getState('search') );
+		$form['filter']->bind( $this->getState('filter') );
+		
+		
+		return $this->filter = $form;
+	}
+	
+	
+	
+	/*
+	 * function getCategory
+	 * @param 
+	 */
+	
+	public function getCategory()
+	{
+		if(!empty($this->category)){
+			return $this->category ;
+		}
+		
+		$pk = $this->getState('category.id') ;
+		
+		$this->category  = JTable::getInstance('Category');
+		$this->category->load($pk);
+		
+		return $this->category ;
+	}
+	
+	
+	
+	/*
+	 * function getFulltextSearch
+	 * @param 
+	 */
+	
+	public function getFullSearchFields()
+	{
+		$file = AKHelper::_('path.get').'/models/forms/{CONTROLLER_NAMES}_search.xml' ;
+		
+		$xml = simplexml_load_file($file);
+		$field = $xml->xpath('//field[@name="field"]') ;
+		$options = $field[0]->option ;
+		
+		$fields = array();
+		foreach( $options as $option ):
+			$attr = $option->attributes();
+			if(in_array($attr['value'], $this->filter_fields)){
+				$fields[] = $attr['value'];
+			}
+		endforeach;
+		
+		return $fields ;
 	}
 	
 	
@@ -143,25 +265,8 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		$search = $this->getState('search') ;
 		
 		$layout = JRequest::getVar('layout') ;
-		$nested = $this->getState('items.nested') ;
 		$avoid	= JRequest::getVar('avoid') ;
 		$show_root = JRequest::getVar('show_root') ;
-		
-		
-		
-		// Nested
-		// ========================================================================
-		if($nested && !$show_root){
-			$q->where("a.id != 1") ;
-		}
-		
-		if($avoid){
-			$table = $this->getTable();
-			$table->load( $avoid ) ;
-			
-			$q->where("a.lft < {$table->lft} OR a.rgt > {$table->rgt}") ;
-			$q->where("a.id != {$avoid}") ;
-		}
 		
 		
 		

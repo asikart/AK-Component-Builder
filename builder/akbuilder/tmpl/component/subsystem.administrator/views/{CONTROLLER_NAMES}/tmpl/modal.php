@@ -22,12 +22,8 @@ $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 $canOrder	= $user->authorise('core.edit.state', 'com_{COMPONENT_NAME}');
 $saveOrder	= $listOrder == 'a.ordering';
-$nested		= $this->state->get('items.nested') ;
 $show_root	= JRequest::getVar('show_root') ;
 
-if( JVERSION >= 3 ) {
-	JHtml::_('formbehavior.chosen', 'select');
-}
 
 ?>
 
@@ -90,20 +86,10 @@ if( JVERSION >= 3 ) {
 			$canChange	= $user->authorise('core.edit.state',	'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $canCheckin;
 			$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $item->created_user_id == $userId;
 			
-			if($nested && $item->a_id == 1){
-				$item->a_title = JText::_('JGLOBAL_ROOT') ;
-			}
 			?>
 			<tr class="row<?php echo $i % 2; ?>">
 				
 				<td>
-					<!-- Nested dashs -->
-					<?php if( $nested ): ?>
-					<div class="pull-left fltlft">
-						<?php $offset = $show_root ? 0 : 1 ; ?>
-						<?php echo str_repeat('<span class="gi">&mdash;</span>', $item->a_level - $offset) ; ?>
-					</div>
-					<?php endif; ?>
 					
 					<!-- Title -->
 					<?php if( $canEdit): ?>
@@ -141,11 +127,7 @@ if( JVERSION >= 3 ) {
 				</td>
 
 				<td class="center">
-					<span
-						<?php if( $nested ): ?>
-						class="hasTip hasTooltip" title="<?php echo $item->a_lft.'-'.$item->a_rgt; ?>"
-						<?php endif; ?>
-					><?php echo (int) $item->get('a_id'); ?></span>	
+					<span><?php echo (int) $item->get('a_id'); ?></span>	
 				</td>
    
 			</tr>

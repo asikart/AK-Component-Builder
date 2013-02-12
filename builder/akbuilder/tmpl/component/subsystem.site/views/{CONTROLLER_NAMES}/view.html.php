@@ -16,7 +16,7 @@ include_once AKPATH_COMPONENT.'/viewlist.php' ;
 /**
  * View class for a list of {COMPONENT_NAME_UCFIRST}.
  */
-class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKViewList
+class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends JView
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -150,4 +150,42 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKViewList
 		parent::display($tpl);
 	}
 	
+	
+	
+	/*
+	 * function showInfo
+	 * @param $key
+	 */
+	
+	public function showInfo( $item, $key = null, $label = null, $strip = true, $link = null ,$class = null)
+	{
+		if(empty($item->$key)){
+			return false ;
+		}
+		
+		$lang  = $strip ? substr($key, 2) : $key ;
+		
+		if(!$label){
+			$label = JText::_('COM_{COMPONENT_NAME_UC}_'.strtoupper($lang)) ;
+		}else{
+			$label = JText::_(strtoupper($label)) ;
+		}
+		
+		$value = $item->$key ;
+		
+		if($link){
+			$value = JHtml::_('link', $link, $value);
+		}
+		
+		$lang = str_replace( '_', '-', $lang );
+		
+		$info =
+<<<INFO
+		<div class="{$lang} {$class}" fltlft">
+			<span class="label">{$label}:</span>
+			<span class="valur">{$value}</span>
+		</div>
+INFO;
+		return $info ;
+	}
 }

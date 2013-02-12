@@ -15,10 +15,6 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 
-if( JVERSION >= 3){
-	JHtml::_('formbehavior.chosen', 'select');
-}
-
 
 
 // Init some API objects
