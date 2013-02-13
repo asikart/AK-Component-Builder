@@ -21,6 +21,7 @@ $app = JFactory::getApplication() ;
 
 if($app->isSite()){
 	//{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
+	{COMPONENT_NAME_UCFIRST}Helper::_('include.bluestork');
 }
 
 
