@@ -19,7 +19,6 @@ JHtml::_('behavior.keepalive');
 
 $app = JFactory::getApplication() ;
 
-JHtml::_('formbehavior.chosen', 'select');
 if($app->isSite()){
 	//{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
 }
