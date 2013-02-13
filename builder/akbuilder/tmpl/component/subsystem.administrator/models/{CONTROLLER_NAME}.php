@@ -66,7 +66,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
 		$app	= JFactory::getApplication();
 
 		// Get the form.
-		$form = $this->loadForm("com_{COMPONENT_NAME}.{CONTROLLER_NAME}", '{CONTROLLER_NAME}', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm("{$this->option}.{$this->item_name}", $this->item_name, array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
 			return false;
 		}
@@ -84,7 +84,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
 	{
 		if(!empty($this->fields_name)) return $this->fields_name ;
 		
-		$xml_file 		= JPATH_COMPONENT.'/models/forms/{CONTROLLER_NAME}.xml' ;
+		$xml_file 		= AKHelper::_('path.get').'/models/forms/'.$this->item_name.'.xml' ;
 		$xml 			= JFactory::getXML( $xml_file );
 		$fields 		= $xml->xpath('/form/fields');
 		$fields_name 	= array();
@@ -108,7 +108,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState("com_{COMPONENT_NAME}.edit.{CONTROLLER_NAME}.data", array());
+		$data = JFactory::getApplication()->getUserState("{$this->option}.edit.{$this->item_name}.data", array());
 		
 		if (empty($data)) 
 		{

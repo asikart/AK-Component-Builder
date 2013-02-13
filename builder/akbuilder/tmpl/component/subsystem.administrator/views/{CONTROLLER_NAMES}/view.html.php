@@ -11,12 +11,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.view');
+include_once AKPATH_COMPONENT.'/viewlist.php' ;
 
 /**
  * View class for a list of {COMPONENT_NAME_UCFIRST}.
  */
-class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends JView
+class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKView
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -58,6 +58,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends JView
 		if ($this->getLayout() !== 'modal') {
 			$this->addToolbar();
 			
+			$this->sidebar = JHtmlSidebar::render();
 		}
 		
 		
@@ -95,36 +96,71 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends JView
 		// Toolbar Buttons
 		// ========================================================================
 		if ($canDo->get('core.create') || (count($user->getAuthorisedCategories($this->option, 'core.create'))) > 0 ) {
-			JToolBarHelper::addNew( '{CONTROLLER_NAME}.add');
+			JToolBarHelper::addNew( $this->item_name.'.add');
 		}
 
 		if ($canDo->get('core.edit')) {
-			JToolBarHelper::editList( '{CONTROLLER_NAME}.edit');
+			JToolBarHelper::editList( $this->item_name.'.edit');
 		}
 
 		if ($canDo->get('core.edit.state')) {
 			JToolBarHelper::divider();
-			JToolBarHelper::publish( '{CONTROLLER_NAMES}.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolBarHelper::unpublish( '{CONTROLLER_NAMES}.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-			JToolbarHelper::checkin('{CONTROLLER_NAMES}.checkin');
+			JToolBarHelper::publish( $this->list_name.'.publish', 'JTOOLBAR_PUBLISH', true);
+			JToolBarHelper::unpublish( $this->list_name.'.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			JToolbarHelper::checkin($this->list_name.'.checkin');
 			
 			if($this->state->get('items.nested')){
-				JToolBarHelper::custom('{CONTROLLER_NAMES}.rebuild', 'refresh.png', 'refresh_f2.png', 'JTOOLBAR_REBUILD', false);
+				JToolBarHelper::custom($this->list_name.'.rebuild', 'refresh.png', 'refresh_f2.png', 'JTOOLBAR_REBUILD', false);
 			}
 			
 			JToolBarHelper::divider();
 		}
 		
 		if ($filter_state['a.published'] == -2 && $canDo->get('core.delete')) {
-			JToolbarHelper::deleteList('Are you sure?', '{CONTROLLER_NAMES}.delete');
+			JToolbarHelper::deleteList('Are you sure?', $this->list_name.'.delete');
 		}
 		elseif ($canDo->get('core.edit.state')) {
-			JToolbarHelper::trash('{CONTROLLER_NAMES}.trash');
+			JToolbarHelper::trash($this->list_name.'.trash');
 		}
 		
+		// Add a batch modal button
+		if ($user->authorise('core.edit') )
+		{
+			AKToolbarHelper::modal( 'JTOOLBAR_BATCH', 'batchModal');
+		}
 		
 		if ($canDo->get('core.admin')) {
 			AKToolBarHelper::preferences($this->option);
+		}
+		
+		
+		// Sidebar Filters
+		// ========================================================================
+		
+		if($this->state->get('core_sidebar') ){
+			
+			JHtmlSidebar::setAction('index.php?option='.$this->option.'&view='.$this->getName());
+			
+			$filters = $this->filter['filter_sidebar'] ;
+			
+			foreach( $filters as $filter ):
+				
+				$options = array();
+				$i = 0 ;
+				foreach( $filter->option as $option ):
+					$options[$i]['value'] 	= (string) $option['value'] ;
+					$options[$i]['text'] 	= (string) $option ;
+					$i++ ;
+				endforeach;
+				
+				
+				JHtmlSidebar::addFilter(
+					(string) $filter['title'],
+					(string) 'filter['.$filter['name'].']',
+					JHtml::_('select.options', $options, 'value', 'text', $filter_state[(string)$filter['name']], true)
+				);
+			endforeach;
+			
 		}
 	}
 	

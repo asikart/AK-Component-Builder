@@ -15,6 +15,10 @@
 	margin: 10px;
 }
 
+.adminform input.required {
+	background-color: #d5eeff;
+}
+
 
 /* BATCH */
 #joomla25 .control-group label#batch-language-lbl,

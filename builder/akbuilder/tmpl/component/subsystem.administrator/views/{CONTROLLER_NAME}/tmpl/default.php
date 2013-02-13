@@ -26,7 +26,6 @@ if($app->isSite()){
 
 
 
-
 // Init some API objects
 // ================================================================================
 $date 	= JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
@@ -79,12 +78,11 @@ if($app->isAdmin()) {
 	}
 </script>
 
-<div id="<?php echo (JVERSION >= 3) ? 'joomla30' : 'joomla25' ?>">
+<div id="{COMPONENT_NAME}-{CONTROLLER_NAME}-edit">
 
 <form action="<?php echo JRoute::_( JFactory::getURI()->toString() ); ?>" method="post" name="adminForm" id="{CONTROLLER_NAME}-form" class="form-validate">
 	
 	
-	<?php if( JVERSION >= 3 ): ?>
 	<!-- Tab Buttons -->
 	<ul class="nav nav-tabs">
 		<?php foreach( $this->fields as $key => $group): ?>
@@ -93,7 +91,6 @@ if($app->isAdmin()) {
 		</li>
 		<?php endforeach; ?>
 	</ul>
-	<?php endif; ?>
 	
 	
 	<!-- Tab Bodys -->
@@ -107,7 +104,7 @@ if($app->isAdmin()) {
 			
 				
 				<!-- Left Bar -->
-				<div class="span<?php echo $span_left; ?><?php echo JVERSION < 3 ? ' width-'.$width_left : '' ;?> fltlft">
+				<div class="span<?php echo $span_left; ?>">
 					
 					<?php foreach( $fieldsets as  $k => $fieldset ): ?>
 						
@@ -124,7 +121,7 @@ if($app->isAdmin()) {
 				
 				
 				<!-- Right Bar -->
-				<div class="span<?php echo $span_right; ?><?php echo JVERSION < 3 ? ' width-'.$width_right : '' ;?> fltlft">
+				<div class="span<?php echo $span_right; ?>">
 					
 					<?php foreach( $fieldsets as  $k => $fieldset ): ?>
 						

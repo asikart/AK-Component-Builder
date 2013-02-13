@@ -45,8 +45,11 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = '{CONTROLLER_NAME_UCFIRST}', $prefix = '{COMPONENT_NAME_UCFIRST}Table', $config = array())
-	{	
+	public function getTable($type = null, $prefix = null, $config = array())
+	{
+		$prefix = $prefix 	? $prefix 	: ucfirst($this->component).'Table' ;
+		$type 	= $type 	? $type 	: $this->item_name ;
+		
 		return parent::getTable( $type , $prefix , $config );
 	}
 	
@@ -66,7 +69,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
 		$app	= JFactory::getApplication();
 
 		// Get the form.
-		$form = $this->loadForm("com_{COMPONENT_NAME}.{CONTROLLER_NAME}", $this->item_name, array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm("{$this->option}.{$this->item_name}", $this->item_name, array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
 			return false;
 		}
@@ -84,7 +87,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
 	{
 		if(!empty($this->fields_name)) return $this->fields_name ;
 		
-		$xml_file 		= AKHelper::_('path.get').'/models/forms/{CONTROLLER_NAME}.xml' ;
+		$xml_file 		= AKHelper::_('path.get').'/models/forms/'.$this->item_name.'.xml' ;
 		$xml 			= JFactory::getXML( $xml_file );
 		$fields 		= $xml->xpath('/form/fields');
 		$fields_name 	= array();
@@ -108,7 +111,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState("com_{COMPONENT_NAME}.edit.{CONTROLLER_NAME}.data", array());
+		$data = JFactory::getApplication()->getUserState("{$this->option}.edit.{$this->item_name}.data", array());
 		
 		if (empty($data)) 
 		{
@@ -306,7 +309,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
     protected function canDelete($record)
     {
         $user = JFactory::getUser();
-        return $user->authorise('core.delete', $this->option.'.'.'{CONTROLLER_NAME}.'.$record->id);
+        return $user->authorise('core.delete', $this->option.'.'.$this->item_name.'.'.$record->id);
     }
  
     /**
@@ -321,6 +324,6 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends JModelAdmin
     protected function canEditState($record)
     {
         $user = JFactory::getUser();
-        return $user->authorise('core.edit.state', $this->option.'.'.'{CONTROLLER_NAME}.'.$record->id);
+        return $user->authorise('core.edit.state', $this->option.'.'.$this->item_name.'.'.$record->id);
 	}
 }

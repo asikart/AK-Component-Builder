@@ -19,14 +19,14 @@ window.addEvent( 'domready', function(){
 var {COMPONENT_NAME_UCFIRST} = {
 	fixToolbar: function(top, duration){
 		
-		top = top || 40 ;
+		top = top || 0 ;
 		duration = duration || 300 ;
 		
 		// fix sub nav on scroll	
 		jQuery(document).ready(function($) {
 			var $win = $(window)
 			, $nav = $('.subhead')
-			, navTop = $('.subhead').length && $('.subhead').offset().top - 40
+			, navTop = $('.subhead').length && $('.subhead').offset().top - top
 			, isFixed = 0
 			
 			processScroll();
@@ -44,7 +44,7 @@ var {COMPONENT_NAME_UCFIRST} = {
 				  isFixed = 1
 				  $nav.addClass('subhead-fixed')
 				  $nav.css('left', 0) ;
-				  $nav.css('top', 0) ;
+				  $nav.css('top', top - $nav.height()) ;
 				  $nav.animate({top: top}, duration);
 			  } else if (scrollTop <= navTop && isFixed) {
 				  isFixed = 0

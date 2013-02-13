@@ -67,7 +67,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 		// ========================================================================
 		$config['fulltext_search'] 	= true ;
 		
-		//$config['core_sidebar'] 	= false ; // For 3.0 only
+		$config['core_sidebar'] 	= false ;
 		
 		
 		$this->config = $config ;
@@ -137,7 +137,13 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 		}
 		
 		
-		parent::populateState('a.ordering', 'asc');
+
+		// List state information.
+		if(!$ordering){
+			$ordering = 'a.ordering' ;
+		}
+		
+		parent::populateState($ordering, 'asc');
 	}
 	
 
@@ -181,9 +187,24 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
         JForm::addFieldPath(JPATH_COMPONENT.'/models/fields');
 		
 		
+		// Generate sidebar filter by Joomla! core system.
+		if( $this->config['core_sidebar'] ) {
+			
+			// Get filter inputs from raw xml file.
+			$file 	= AKHelper::_('path.get').'/models/forms/'.$this->list_name.'_filter.xml' ;
+			$xml 	= simplexml_load_file($file);
+			
+			$filters 	= $xml->xpath('//fieldset[@name="filter_sidebar"]') ;
+			$filters	= $filters[0]->field;
+			
+			
+			$form['filter_sidebar'] 	= $filters ;
+		}
+		
+		
 		// load forms
-		$form['search'] = JForm::getInstance("com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.search", '{CONTROLLER_NAMES}_search', array( 'control' => 'search' ,'load_data'=>'true'));
-		$form['filter'] = JForm::getInstance("com_{COMPONENT_NAME}.{CONTROLLER_NAMES}.filter", '{CONTROLLER_NAMES}_filter', array( 'control' => 'filter' ,'load_data'=>'true'));
+		$form['search'] = JForm::getInstance("{$this->option}.{$this->list_name}.search", $this->list_name.'_search', array( 'control' => 'search' ,'load_data'=>'true'));
+		$form['filter'] = JForm::getInstance("{$this->option}.{$this->list_name}.filter", $this->list_name.'_filter', array( 'control' => 'filter' ,'load_data'=>'true'));
 		
 		
 		// Get default data of this form. Any State key same as form key will auto match.
@@ -224,7 +245,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends JModelList
 	
 	public function getFullSearchFields()
 	{
-		$file = AKHelper::_('path.get').'/models/forms/{CONTROLLER_NAMES}_search.xml' ;
+		$file = JPATH_COMPONENT.'/models/forms/'.$this->list_name.'_search.xml' ;
 		
 		$xml = simplexml_load_file($file);
 		$field = $xml->xpath('//field[@name="field"]') ;

@@ -27,8 +27,7 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 		jimport('joomla.filesystem.folder');
 		jimport('joomla.filesystem.file');
 		
-			
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 			JText::_('JCATEGORY'),
 			'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
 			$vName == 'categories'
@@ -38,7 +37,7 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 		
 		foreach( $folders as $folder ){
 			if( substr($folder, -2) == 'is' || substr($folder, -1) == 's'){
-				JSubMenuHelper::addEntry(
+				JHtmlSidebar::addEntry(
 					ucfirst($folder) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST'),
 					'index.php?option=com_{COMPONENT_NAME}&view='.$folder,
 					$vName == $folder

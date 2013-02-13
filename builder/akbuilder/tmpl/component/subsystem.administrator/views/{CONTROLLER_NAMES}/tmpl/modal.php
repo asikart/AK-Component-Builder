@@ -25,6 +25,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 $show_root	= JRequest::getVar('show_root') ;
 
 
+JHtml::_('formbehavior.chosen', 'select');
 ?>
 
 <form action="<?php echo $uri = JFactory::getURI()->toString() ; ?>" method="post" name="adminForm" id="adminForm">

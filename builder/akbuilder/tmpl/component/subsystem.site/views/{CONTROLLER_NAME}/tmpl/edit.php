@@ -19,9 +19,9 @@ JHtml::_('behavior.keepalive');
 
 $app = JFactory::getApplication() ;
 
+JHtml::_('formbehavior.chosen', 'select');
 if($app->isSite()){
-	//{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
-	{COMPONENT_NAME_UCFIRST}Helper::_('include.bluestork');
+	{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
 }
 
 
@@ -65,7 +65,7 @@ if($app->isAdmin()) {
 ?>
 <script type="text/javascript">
 	<?php if( $app->isSite() ): ?>
-	{COMPONENT_NAME_UCFIRST}.fixToolbar(40, 300) ;
+	{COMPONENT_NAME_UCFIRST}.fixToolbar(0, 300) ;
 	<?php endif; ?>
 	
 	Joomla.submitbutton = function(task)
@@ -79,9 +79,17 @@ if($app->isAdmin()) {
 	}
 </script>
 
-<div id="{COMPONENT_NAME}-{CONTROLLER_NAME}-edit">
-
 <form action="<?php echo JRoute::_( JFactory::getURI()->toString() ); ?>" method="post" name="adminForm" id="{CONTROLLER_NAME}-form" class="form-validate">
+	
+	
+	<!-- Tab Buttons -->
+	<ul class="nav nav-tabs">
+		<?php foreach( $this->fields as $key => $group): ?>
+		<li class="<?php echo $key == 0 ? 'active' : ''; ?>">
+			<a href="#<?php echo $group; ?>" data-toggle="tab"><?php echo JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDS_'.$group); ?></a>
+		</li>
+		<?php endforeach; ?>
+	</ul>
 	
 	
 	<!-- Tab Bodys -->
@@ -95,7 +103,7 @@ if($app->isAdmin()) {
 			
 				
 				<!-- Left Bar -->
-				<div class="span<?php echo $span_left; ?><?php echo ' width-'.$width_left ;?> fltlft">
+				<div class="span<?php echo $span_left; ?>">
 					
 					<?php foreach( $fieldsets as  $k => $fieldset ): ?>
 						
@@ -112,7 +120,7 @@ if($app->isAdmin()) {
 				
 				
 				<!-- Right Bar -->
-				<div class="span<?php echo $span_right; ?><?php echo ' width-'.$width_right ;?> fltlft">
+				<div class="span<?php echo $span_right; ?>">
 					
 					<?php foreach( $fieldsets as  $k => $fieldset ): ?>
 						
@@ -146,5 +154,3 @@ if($app->isAdmin()) {
 	</div>
 	<div class="clr"></div>
 </form>
-
-</div>

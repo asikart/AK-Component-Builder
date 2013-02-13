@@ -11,12 +11,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.view');
+include_once AKPATH_COMPONENT.'/viewitem.php' ;
 
 /**
  * View to edit
  */
-class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends JView
+class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKView
 {
 	/**
 	 * @var		string	The prefix to use with controller messages.
@@ -56,9 +56,14 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends JView
 		$app = JFactory::getApplication() ;
 		
 		$this->addToolbar();
+		$this->handleFields();
 		
 		// if is frontend, show toolbar
-		parent::display($tpl);
+		if($app->isAdmin())	{
+			parent::display($tpl);
+		}else{
+			parent::displayWithPanel($tpl);
+		}
 	}
 
 	
@@ -75,12 +80,24 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends JView
 		$user		= JFactory::getUser();
 		$isNew		= ($this->item->id == 0);
 
-		JToolBarHelper::apply('{CONTROLLER_NAME}.apply');
-		JToolBarHelper::save('{CONTROLLER_NAME}.save');
-		JToolBarHelper::custom('{CONTROLLER_NAME}.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-		JToolBarHelper::custom('{CONTROLLER_NAME}.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
-		JToolBarHelper::cancel('{CONTROLLER_NAME}.cancel');
+		JToolBarHelper::apply($this->item_name.'.apply');
+		JToolBarHelper::save($this->item_name.'.save');
+		JToolBarHelper::custom($this->item_name.'.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+		JToolBarHelper::custom($this->item_name.'.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+		JToolBarHelper::cancel($this->item_name.'.cancel');
 	}
 	
 	
+	
+	/*
+	 * function handleFields
+	 * @param 
+	 */
+	
+	public function handleFields()
+	{
+		$form = $this->form ;
+		
+		
+	}
 }
