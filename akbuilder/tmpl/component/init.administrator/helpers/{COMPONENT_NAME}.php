@@ -26,14 +26,18 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 	{		
 		jimport('joomla.filesystem.folder');
 		jimport('joomla.filesystem.file');
+		$app = JFactory::getApplication() ;
 		
 		if(JVERSION >= 3):
 		
-			JHtmlSidebar::addEntry(
-				JText::_('JCATEGORY'),
-				'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
-				$vName == 'categories'
-			);
+			if($app->isAdmin()) {
+				JHtmlSidebar::addEntry(
+					JText::_('JCATEGORY'),
+					'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
+					$vName == 'categories'
+				);
+			}
+			
 			
 			$folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
 			
@@ -49,11 +53,13 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 		
 		else:
 			
-			JSubMenuHelper::addEntry(
-				JText::_('JCATEGORY'),
-				'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
-				$vName == 'categories'
-			);
+			if($app->isAdmin()) {
+				JSubMenuHelper::addEntry(
+					JText::_('JCATEGORY'),
+					'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
+					$vName == 'categories'
+				);
+			}
 			
 			$folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
 			
