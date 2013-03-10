@@ -66,6 +66,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKViewList
 		foreach( $this->items as &$item ):
 			
 			$item = new JObject($item);
+			$item->params = $item->a_params = new JRegistry( $item->a_params );
 			
 			// Link
 			// =====================================================================================
@@ -78,8 +79,8 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKViewList
 			
 			// Publish Date
 			// =====================================================================================
-			$pup = JFactory::getDate( $item->a_publish_up , JFactory::getConfig()->get('offset') )->toUnix(true) ;
-			$pdw = JFactory::getDate( $item->a_publish_down , JFactory::getConfig()->get('offset') )->toUnix(true) ;
+			$pup = JFactory::getDate( $item->get('a_publish_up') , JFactory::getConfig()->get('offset') )->toUnix(true) ;
+			$pdw = JFactory::getDate( $item->get('a_publish_down') , JFactory::getConfig()->get('offset') )->toUnix(true) ;
 			$now = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') )->toUnix(true) ;
 			$null= JFactory::getDate( '0000-00-00 00:00:00' , JFactory::getConfig()->get('offset') )->toUnix(true) ;
 			
@@ -113,11 +114,28 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKViewList
 		
 		
 		
-		// Params
+		// Category Params
 		// =====================================================================================
 		$registry = new JRegistry ;
 		$registry->loadString($this->category->params) ;
 		$this->category->params = $registry ;
+		
+		
+		
+		// Set title
+		// =====================================================================================
+		$active	= $app->getMenu()->getActive();
+		if ($active) {
+			$currentLink = $active->link;
+			
+			if (!strpos($currentLink, 'view={CONTROLLER_NAMES}') || !(strpos($currentLink, 'id='.(string) $this->category->id))) {
+				// If not Active, set Title
+				$this->setTitle($this->category->title);
+			}else{
+			}
+		}else{
+			$this->setTitle($this->category->title);
+		}
 		
 		
 		

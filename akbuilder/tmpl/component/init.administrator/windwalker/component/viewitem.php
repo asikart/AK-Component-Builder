@@ -28,7 +28,7 @@ class AKViewItem extends AKView
 	/**
 	 * Display the view
 	 */
-	public function displayWithPanel($tpl = null)
+	public function displayWithPanel($tpl = null, $path = null)
 	{
 		$app = JFactory::getApplication() ;
 		
@@ -39,7 +39,7 @@ class AKViewItem extends AKView
 		if($app->isAdmin())	{
 			parent::display($tpl);
 		}else{
-			parent::displayWithPanel($tpl);
+			parent::displayWithPanel($tpl, $path);
 		}
 	}
 

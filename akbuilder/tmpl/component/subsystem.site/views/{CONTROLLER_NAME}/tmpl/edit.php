@@ -21,7 +21,7 @@ $app = JFactory::getApplication() ;
 if( JVERSION >= 3){
 	JHtml::_('formbehavior.chosen', 'select');
 	if($app->isSite()){
-		{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
+		//{COMPONENT_NAME_UCFIRST}Helper::_('include.fixBootstrapToJoomla');
 	}
 }else{
 	{COMPONENT_NAME_UCFIRST}Helper::_('include.bluestork');
@@ -84,15 +84,14 @@ if($app->isAdmin()) {
 
 <div id="{COMPONENT_NAME}-{CONTROLLER_NAME}-edit" class="<?php echo (JVERSION >= 3) ? 'joomla30' : 'joomla25' ?>">
 
-<form action="<?php echo JRoute::_( JFactory::getURI()->toString() ); ?>" method="post" name="adminForm" id="{CONTROLLER_NAME}-form" class="form-validate" enctype="multipart/form-data">
-	
+<form action="<?php echo JRoute::_( JFactory::getURI()->toString() ); ?>" method="post" name="adminForm" id="{CONTROLLER_NAME}-form" class="form-validate" enctype="multipart/form-data">	
 	
 	<!-- Tab Bodys -->
 	<?php echo $tabs ? {COMPONENT_NAME_UCFIRST}Helper::_('panel.startTabs', '{CONTROLLER_NAME}Tab', array( 'active' => $this->fields[0] ) ) : null ; ?>
 		<?php foreach( $this->fields as $key => $group ): 
 				$fieldsets = $this->form->getFieldsets($group) ;
 				
-				echo $tabs ? {COMPONENT_NAME_UCFIRST}Helper::_('panel.addPanel' , '{CONTROLLER_NAME}Tab', JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDS_'.$group) , $group ) : null ;
+				echo $tabs ? {COMPONENT_NAME_UCFIRST}Helper::_('panel.addPanel' , '{CONTROLLER_NAME}Tab', $this->fields_group[$key]['label'] ? $this->fields_group[$key]['label'] : JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDS_'.$group) , $group ) : null ;
 		?>
 			<div class="row-fluid">
 			

@@ -52,6 +52,55 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	}
 	
 	
+	
+	// system Events
+	// ======================================================================================
+	
+	/*
+	 * function onAfterInitialise
+	 */
+	
+	public function onAfterInitialise()
+	{
+		
+	}
+	
+	
+	
+	/*
+	 * function onAfterRoute
+	 */
+	
+	public function onAfterRoute()
+	{
+		
+	}
+	
+	
+	
+	/*
+	 * function onAfterDispatch
+	 */
+	
+	public function onAfterDispatch()
+	{
+		
+	}
+	
+	
+	
+	/*
+	 * function onAfterRender
+	 */
+	
+	public function onAfterRender()
+	{
+		
+	}
+	
+	
+	
+	
 	// Content Events
 	// ======================================================================================
 	
@@ -432,7 +481,7 @@ class plg{GROUP_NAME_UCFIRST}{EXTENSION_NAME_UCFIRST} extends JPlugin
 	 * @return	boolean
 	 * @since	1.6
 	 */
-	public function onUserAfterDelete($user, $succes, $msg)
+	public function onUserAfterDelete($user, $success, $msg)
 	{
 		$result = array() ;
 		

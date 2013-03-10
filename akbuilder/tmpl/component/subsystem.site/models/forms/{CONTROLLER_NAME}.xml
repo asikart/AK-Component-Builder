@@ -21,6 +21,16 @@
 				labelclass="control-label"
 			/>
 			
+			<field name="parent_id"
+				type="{CONTROLLER_NAME}_modal"
+				label="COM_{COMPONENT_NAME_UC}_PARENT_ITEM"
+				description="COM_{COMPONENT_NAME_UC}_PARENT_ITEM_DESC"
+				labelclass="control-label"
+				show_root="true"
+				class="input-xlarge"
+				access="true"
+			/>
+			
 			<field name="catid"
 				type="category"
 				label="JCATEGORY"
@@ -31,7 +41,7 @@
 				<option value="0">COM_{COMPONENT_NAME_UC}_TITLE_UNCATEGORISED</option>
 			</field>
 			
-			<field name="param_images"
+			<field name="images"
 				type="media"
 				label="COM_{COMPONENT_NAME_UC}_IMAGES"
 				description="COM_{COMPONENT_NAME_UC}_IMAGES_DESC"
@@ -70,8 +80,6 @@
 				description="JGLOBAL_FIELD_ID_DESC"
 				labelclass="control-label"
 			/>
-			
-			<field name="asset_id" type="hidden" filter="unset" />
 			
 			<field name="created_by"
 				type="user"
@@ -150,7 +158,6 @@
 			</field>
 		</fieldset>
 	</fields>
-	
 	
 	
 	<!-- Need this field br child of root node for access setting. -->

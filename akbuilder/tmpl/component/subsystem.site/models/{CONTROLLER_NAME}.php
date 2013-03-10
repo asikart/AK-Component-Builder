@@ -40,7 +40,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 * @since	1.6
 	 */
 	public function getTable($type = null, $prefix = null, $config = array())
-	{
+	{	
 		return parent::getTable( $type , $prefix , $config );
 	}
 	
@@ -84,6 +84,9 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 */
 	protected function loadFormData()
 	{
+		// Set data in session, and parent loadFormData can load it.
+		// JFactory::getApplication()->setUserState("com_{COMPONENT_NAME}.edit.{CONTROLLER_NAME}.data", array());
+		
 		$data = parent::loadFormData();
 		
 		return $data ;
@@ -158,11 +161,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 */
 	protected function getReorderConditions($table)
 	{
-		if(property_exists($table, 'catid')){
-			$condition = array();
-			$condition[] = 'catid = '.(int) $table->catid;
-			return $condition;
-		}
+		return parent::getReorderConditions($table) ;
 	}
 	
 	
@@ -172,7 +171,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 *
 	 * @since	1.6
 	 */
-	protected function prepareTable($table)
+	protected function prepareTable(&$table)
 	{
 		return parent::prepareTable($table);
 	}
@@ -188,5 +187,16 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	{
 		// "first" or "last"
 		parent::setOrderPosition($table, 'last') ;
+	}
+	
+	
+	/*
+	 * function postSaveHook
+	 * @param $data
+	 */
+	
+	public function postSaveHook($data = null)
+	{
+		return true ;
 	}
 }

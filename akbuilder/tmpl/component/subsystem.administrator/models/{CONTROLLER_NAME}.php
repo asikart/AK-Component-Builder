@@ -84,6 +84,9 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 */
 	protected function loadFormData()
 	{
+		// Set data in session, and parent loadFormData can load it.
+		// JFactory::getApplication()->setUserState("com_{COMPONENT_NAME}.edit.{CONTROLLER_NAME}.data", array());
+		
 		$data = parent::loadFormData();
 		
 		return $data ;
@@ -184,5 +187,16 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	{
 		// "first" or "last"
 		parent::setOrderPosition($table, 'last') ;
+	}
+	
+	
+	/*
+	 * function postSaveHook
+	 * @param $data
+	 */
+	
+	public function postSaveHook($data = null)
+	{
+		return true ;
 	}
 }

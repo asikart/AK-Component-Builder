@@ -100,6 +100,9 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
+		// Set First order field
+		$this->setState('list.orderingPrefix', array('a.catid')) ;
+		
 		parent::populateState($ordering, $direction);
 	}
 
@@ -149,14 +152,17 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// ========================================================================
 		
 		// Create a new query object.
-		$db		= $this->getDbo();
-		$q		= $db->getQuery(true);
-		$order 	= $this->getState('list.ordering' , 'a.id');
-		$dir	= $this->getState('list.direction', 'asc');
+		$db			= $this->getDbo();
+		$q			= $db->getQuery(true);
+		$order 		= $this->getState('list.ordering' , 'a.id');
+		$dir		= $this->getState('list.direction', 'asc');
+		$prefix 	= $this->getState('list.orderingPrefix', array()) ;
+		$orderCol	=$this->getState('list.orderCol','a.ordering') ;
 
 		// Filter and Search
 		$filter = $this->getState('filter',array()) ;
 		$search = $this->getState('search') ;
+		$wheres = $this->getState('query.where', array()) ;
 		
 		$layout = JRequest::getVar('layout') ;
 		$nested = $this->getState('items.nested') ;
@@ -207,6 +213,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// ========================================================================
 		foreach($filter as $k => $v ){
 			if($v !== '' && $v != '*'){
+				$k = $db->qn($k);
 				$q->where("{$k}='{$v}'") ;
 			}
 		}
@@ -215,6 +222,27 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		if(empty($filter['a.published'])){
 			$q->where("a.published >= 0") ;
 		}
+		
+		
+		
+		// Ordering
+		// ========================================================================
+		if( $orderCol == $order ){
+			$prefix = count($prefix) ? implode(', ', $db->qn($prefix)) . ', ' : '' ;
+		}else{
+			$prefix = '' ;
+		}
+		
+		$order = $db->qn($order);
+		
+		
+		
+		// Custom Where
+		// ========================================================================
+		foreach($wheres as $k => $v ){
+			$q->where($v) ;
+		}
+		
 		
 		
 		// Build query
@@ -231,7 +259,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 			->leftJoin('#__viewlevels 	AS d ON a.access = d.id')
 			->leftJoin('#__languages 	AS e ON a.language = e.lang_code')
 			//->where("")
-			->order( " {$order} {$dir}" ) ;
+			->order( "{$prefix}{$order} {$dir}" ) ;
 		
 		return $q;
 	}

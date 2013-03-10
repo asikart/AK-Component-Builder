@@ -19,6 +19,12 @@
 	float: none;
 }
 
+.wf_editor_toggle,
+.mceEditor {
+	float: left;
+	width: 100%;
+}
+
 
 /* Fix Bluestork and Bootstrap Conflict */
 #ak-panel-wrap {

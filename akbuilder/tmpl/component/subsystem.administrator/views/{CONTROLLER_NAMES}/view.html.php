@@ -27,9 +27,11 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAMES_UCFIRST} extends AKViewList
 	protected 	$pagination;
 	protected 	$state;
 	
+	
 	public		$option 	= 'com_{COMPONENT_NAME}' ;
 	public		$list_name 	= '{CONTROLLER_NAMES}' ;
 	public		$item_name 	= '{CONTROLLER_NAME}' ;
+	public	 	$no_trash 	= false ;
 	public		$sort_fields ;
 
 	

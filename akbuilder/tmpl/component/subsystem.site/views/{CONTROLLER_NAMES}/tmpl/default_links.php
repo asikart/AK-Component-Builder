@@ -22,7 +22,7 @@ $item = $this->link_items ;
 	foreach ($this->link_items as &$item) :
 ?>
 	<li>
-		<a href="<?php echo $item->a_link; ?>">
+		<a href="<?php echo $item->link; ?>">
 			<?php echo $item->a_title; ?></a>
 	</li>
 <?php endforeach; ?>

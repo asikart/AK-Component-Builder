@@ -68,7 +68,7 @@ if($app->isAdmin()) {
 ?>
 <script type="text/javascript">
 	<?php if( $app->isSite() ): ?>
-	{COMPONENT_NAME_UCFIRST}.fixToolbar(40, 300) ;
+	WindWalker.fixToolbar(0, 300) ;
 	<?php endif; ?>
 	
 	Joomla.submitbutton = function(task)
@@ -91,7 +91,7 @@ if($app->isAdmin()) {
 		<?php foreach( $this->fields as $key => $group ): 
 				$fieldsets = $this->form->getFieldsets($group) ;
 				
-				echo $tabs ? {COMPONENT_NAME_UCFIRST}Helper::_('panel.addPanel' , '{CONTROLLER_NAME}Tab', JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDS_'.$group) , $group ) : null ;
+				echo $tabs ? {COMPONENT_NAME_UCFIRST}Helper::_('panel.addPanel' , '{CONTROLLER_NAME}Tab', $this->fields_group[$key]['label'] ? $this->fields_group[$key]['label'] : JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDS_'.$group) , $group ) : null ;
 		?>
 			<div class="row-fluid">
 			

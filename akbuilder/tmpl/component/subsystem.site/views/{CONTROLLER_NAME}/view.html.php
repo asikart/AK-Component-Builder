@@ -45,7 +45,6 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		$this->state	= $this->get('State');
 		$this->params	= $this->state->get('params');
 		$this->item		= $this->get('Item');
-		$this->fields	= $this->get('Fields');
 		$this->category	= $this->get('Category');
 		$this->canDo	= {COMPONENT_NAME_UCFIRST}Helper::getActions();
 		
@@ -58,7 +57,9 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		}
 		
 		if( $layout == 'edit' ) {
-			$this->form	= $this->get('Form');
+			$this->form			= $this->get('Form');
+			$this->fields_group = $this->get('FieldsGroup');
+			$this->fields		= $this->get('FieldsName');
 			
 			parent::displayWithPanel($tpl);
 			return true ; 
@@ -66,8 +67,9 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		
 		
 		// Prepare setting data
+		$this->item = new JObject( get_object_vars($this->item) );
 		$item = $this->item ;
-		
+
 		
 		
 		// Link
@@ -82,7 +84,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		// Dsplay Data
 		// =====================================================================================
 		$item->created_user = JFactory::getUser($item->created_by)->get('name') ;
-		$item->cat_title = $this->category->title ;
+		$item->cat_title = isset($this->category) ? $this->category->title : null ;
 		if($item->modified == '0000-00-00 00:00:00') {
 			$item->modified = '' ;
 		}
@@ -121,8 +123,8 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 			$user = JFactory::getUser();
 			$groups = $user->getAuthorisedViewLevels();
 
-			if ($item->catid == 0 || $this->category->access === null) {
-				$this->params->set('access-view', in_array($item->access, $groups));
+			if ( !$item->get('catid') || empty($this->category->access)) {
+				$this->params->set('access-view', in_array($item->get('access'), $groups));
 			}
 			else {
 				$this->params->set('access-view', in_array($item->access, $groups) && in_array($this->category->access, $groups));
@@ -132,8 +134,8 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		
 		// Publish Date
 		// =====================================================================================
-		$pup = JFactory::getDate( $item->publish_up , JFactory::getConfig()->get('offset') )->toUnix(true) ;
-		$pdw = JFactory::getDate( $item->publish_down , JFactory::getConfig()->get('offset') )->toUnix(true) ;
+		$pup = JFactory::getDate( $item->get('publish_up '), JFactory::getConfig()->get('offset') )->toUnix(true) ;
+		$pdw = JFactory::getDate( $item->get('publish_down') , JFactory::getConfig()->get('offset') )->toUnix(true) ;
 		$now = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') )->toUnix(true) ;
 		$null= JFactory::getDate( '0000-00-00 00:00:00' , JFactory::getConfig()->get('offset') )->toUnix(true) ;
 		
@@ -187,6 +189,8 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 				if (isset($active->query['layout'])) {
 					$this->setLayout($active->query['layout']);
 				}
+				
+				
 			}else {
 				// Current view is not a single {CONTROLLER_NAME}, so the {CONTROLLER_NAME} params take priority here
 				// Merge the menu item params with the {CONTROLLER_NAME} params so that the {CONTROLLER_NAME} params take priority
@@ -198,6 +202,9 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 				if ($layout = $this->params->get('{CONTROLLER_NAME}_layout')) {
 					$this->setLayout($layout);
 				}
+				
+				// If not Active, set Title
+				$this->setTitle($item->get('title'));
 			}
 			
 		}
@@ -211,6 +218,9 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 			if ($layout = $this->params->get('{CONTROLLER_NAME}_layout')) {
 				$this->setLayout($layout);
 			}
+			
+			// If not Active, set Title
+			$this->setTitle($item->get('title'));
 		}
 		
 		$item->params = $this->params ;
@@ -229,6 +239,17 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		AKToolBarHelper::title( '{CONTROLLER_NAME_UCFIRST}' . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_ITEM_EDIT'), 'article-add.png');
 
 		parent::addToolbar();
+	}
+	
+	
+	/*
+	 * function settitle
+	 * @param 
+	 */
+	
+	public function setTitle($title = '')
+	{
+		parent::setTitle($title) ;
 	}
 	
 	

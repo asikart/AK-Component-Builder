@@ -26,13 +26,13 @@ $userId	= $user->get('id');
 
 // List Control
 // ================================================================================
+$nested		= $this->state->get('items.nested') ;
 $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
-$orderCol 	= $this->state->get('ordering.orderCol', 'a.ordering') ;
+$orderCol 	= $this->state->get('list.orderCol', 'a.ordering') ;
 $canOrder	= $user->authorise('core.edit.state', 'com_{COMPONENT_NAME}');
 $saveOrder	= $listOrder == $orderCol || ($listOrder == 'a.lft' && $listDirn == 'asc');
 $trashed	= $this->state->get('filter.published') == -2 ? true : false;
-$nested		= $this->state->get('items.nested') ;
 $show_root	= JRequest::getVar('show_root') ;
 
 
@@ -194,9 +194,9 @@ if( JVERSION >= 3 ) {
 
 		?>
 		<tr class="row<?php echo $i % 2; ?>"
-			<?php if( $nested ): ?>
+			<?php if( $nested && JVERSION >= 3 ): ?>
 				sortable-group-id="<?php echo $item->a_parent_id ;?>" item-id="<?php echo $item->a_id?>" parents="<?php echo $parentsStr?>" level="<?php echo $item->a_level?>"
-			<?php else: ?>
+			<?php elseif( JVERSION >= 3 ): ?>
 				sortable-group-id="<?php echo $item->a_catid ;?>"
 			<?php endif; ?>
 		>
@@ -312,7 +312,7 @@ if( JVERSION >= 3 ) {
 			
 			<!--PUBLISHED-->
 			<td class="center">
-				<?php echo JHtml::_('jgrid.published', $item->a_published, $i, '{CONTROLLER_NAMES}.', $canChange, 'cb', $item->a_publish_up, $item->a_publish_down); ?>
+				<?php echo JHtml::_('jgrid.published', $item->a_published, $i, '{CONTROLLER_NAMES}.', $canChange, 'cb', $item->get('a_publish_up'), $item->get('a_publish_down')); ?>
 			</td>
 			
 			<!--J25 ORDERING-->

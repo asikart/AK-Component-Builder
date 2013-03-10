@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension>
+	<name>akbuilder</name>
+	<author>Asika</author>
+	<creationDate>2012-11-12</creationDate>
+	<copyright>Copyright (C) 2012 Asikart.com</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>asika@asikart.com</authorEmail>
+	<authorUrl>http://asikart.com</authorUrl>
+	<version>3.2.3</version>
+	<description>Asikart Extension Scaffolding</description>
+</extension>

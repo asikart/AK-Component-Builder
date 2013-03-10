@@ -25,7 +25,7 @@ $uri 		= JFactory::getURI() ;
 <script type="text/javascript">
 	jQuery('.dropdown-toggle').dropdown();
 </script>
-<form action="<?php echo JRoute::_('index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAME}'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAME}'); ?>" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
 
 	<div id="{COMPONENT_NAME}-wrap" class="container-fluid {CONTROLLER_NAME}<?php echo $this->get('pageclass_sfx');?>">
 		<div id="{COMPONENT_NAME}-wrap-inner">
@@ -91,7 +91,7 @@ $uri 		= JFactory::getURI() ;
 					<!-- ============================================================================= -->
 					<div class="info">
 						<div class="info-inner">
-							<?php echo $this->showInfo($item, 'cat_title', 	'jcategory', null, JRoute::_('index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAMES}&id='.$item->catid)); ?>
+							<?php echo $this->showInfo($item, 'cat_title', 	'jcategory', null, JRoute::_('index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAMES}&id='.$item->get('catid'))); ?>
 							<?php echo $this->showInfo($item, 'created', 	'com_{COMPONENT_NAME}_created', null); ?>
 							<?php echo $this->showInfo($item, 'modified', 	'com_{COMPONENT_NAME}_modified', null); ?>
 							<?php echo $this->showInfo($item, 'created_user', 'com_{COMPONENT_NAME}_created_by', null); ?>

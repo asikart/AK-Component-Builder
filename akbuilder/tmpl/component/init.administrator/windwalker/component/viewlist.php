@@ -29,7 +29,7 @@ class AKViewList extends AKView
 	/**
 	 * Display the view
 	 */
-	public function displayWithPanel($tpl = null)
+	public function displayWithPanel($tpl = null, $path = null)
 	{
 		$app = JFactory::getApplication() ;
 		
@@ -56,7 +56,7 @@ class AKViewList extends AKView
 		if($app->isAdmin())	{
 			parent::display($tpl);
 		}else{
-			parent::displayWithPanel($tpl);
+			parent::displayWithPanel($tpl, $path);
 		}
 	}
 	
@@ -105,7 +105,7 @@ class AKViewList extends AKView
 			JToolBarHelper::divider();
 		}
 		
-		if ( JArrayHelper::getValue($filter_state, 'a.published') == -2 && $canDo->get('core.delete') ) {
+		if ( (JArrayHelper::getValue($filter_state, 'a.published') == -2 && $canDo->get('core.delete') ) || $this->get('no_trash') ) {
 			JToolbarHelper::deleteList('Are you sure?', $this->list_name.'.delete');
 		}
 		elseif ($canDo->get('core.edit.state')) {

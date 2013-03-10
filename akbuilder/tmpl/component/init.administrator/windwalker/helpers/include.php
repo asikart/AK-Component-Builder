@@ -170,6 +170,39 @@ JS;
 	
 	
 	/*
+	 * function addCSS
+	 * @param $path
+	 */
+	
+	public static function addCSS($path = null, $client = null)
+	{
+		$doc = JFactory::getDocument();
+		
+		if($client == 'windwalker' || $client == 'ww'){
+			$doc->addStylesheet( AKHelper::_('uri.windwalker').'/assets/css/'.$path ) ;
+		}else{
+			$doc->addStylesheet( AKHelper::_('uri.component', $client).'/includes/css/'.$path ) ;
+		}
+	}
+	
+	/*
+	 * function addJS
+	 * @param $path
+	 */
+	
+	public static function addJS($path = null, $client = null)
+	{
+		$doc = JFactory::getDocument();
+		
+		if($client == 'windwalker' || $client == 'ww'){
+			$doc->addScript( AKHelper::_('uri.windwalker').'/assets/js/'.$path ) ;
+		}else{
+			$doc->addScript( AKHelper::_('uri.component', $client).'/includes/js/'.$path ) ;
+		}
+	}
+	
+	
+	/*
 	 * function includeStyleByNumber
 	 * @param $path
 	 */

@@ -44,7 +44,8 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		$this->state	= $this->get('State');
 		$this->item		= $this->get('Item');
 		$this->form		= $this->get('Form');
-		$this->fields	= $this->get('Fields');
+		$this->fields_group = $this->get('FieldsGroup');
+		$this->fields	= $this->get('FieldsName');
 		$this->canDo	= AKHelper::getActions($this->option);
 
 		// Check for errors.

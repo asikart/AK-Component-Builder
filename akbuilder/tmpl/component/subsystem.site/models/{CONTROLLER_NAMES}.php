@@ -214,8 +214,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	protected function getStoreId($id = '')
 	{
 		// Compile the store id.
-		$id.= ':' . json_encode($this->getState('search'));
-		$id.= ':' . json_encode($this->getState('filter'));
+		$id.= ':' . json_encode($this->getState());
 
 		return parent::getStoreId($id);
 	}
@@ -252,6 +251,11 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		$dir	= $this->getState('list.direction', 'asc');
 		$date   = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
 		$user   = JFactory::getUser() ;
+		
+		// Filter and Search
+		$filter = $this->getState('filter',	array()) ;
+		$search = $this->getState('search', array()) ;
+		$wheres = $this->getState('query.where', array()) ;
 		
 		
 		
@@ -304,6 +308,35 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 			$lang_code = $db->quote( JFactory::getLanguage()->getTag() ) ;
 			$q->where("a.language IN ('{$lang_code}', '*')");
 		}
+		
+		
+		
+		// Filter
+		// ========================================================================
+		foreach($filter as $k => $v ){
+			if($v !== '' && $v != '*'){
+				$k = $db->qn($k);
+				$q->where("{$k}='{$v}'") ;
+			}
+		}
+		
+		
+		
+		// Search
+		// ========================================================================
+		foreach($search as $k => $v ){
+			$k = $db->qn($k);
+			$q->where("{$k} LIKE '{$v}'");
+		}
+		
+		
+		
+		// Custom Where
+		// ========================================================================
+		foreach($wheres as $k => $v ){
+			$q->where($v) ;
+		}
+		
 		
 		
 		// get select columns
