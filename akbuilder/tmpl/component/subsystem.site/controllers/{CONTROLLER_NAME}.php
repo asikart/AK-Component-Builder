@@ -63,7 +63,8 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKCont
 	
 	protected function postSaveHook( &$model, $validData = array())
     {
-		
+		$result = $model->postSaveHook($validData) ;
+		return $result ;
     }
 	
 }
