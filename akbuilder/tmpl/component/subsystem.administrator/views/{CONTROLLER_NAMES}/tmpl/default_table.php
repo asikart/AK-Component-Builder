@@ -11,6 +11,9 @@
 // no direct access
 defined('_JEXEC') or die;
 
+if( AKDEBUG ){
+	{COMPONENT_NAME_UCFIRST}Helper::_('include.quickedit');
+}
 
 
 // Init some API objects
@@ -146,7 +149,7 @@ if( JVERSION >= 3 ) {
 		$canEdit	= $user->authorise('core.edit',			'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id);
 		$canCheckin	= $user->authorise('core.manage',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) || $item->a_checked_out == $userId || $item->a_checked_out == 0;
 		$canChange	= $user->authorise('core.edit.state',	'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $canCheckin;
-		$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $item->c_id == $userId;
+		$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $item->get('c_id') == $userId;
 		
 		
 		
@@ -229,7 +232,11 @@ if( JVERSION >= 3 ) {
 			</td>
 			
 			<!--TITLE-->
-			<td class="n/owrap has-context">
+			<td class="n/owrap has-context quick-edit-wrap"
+				quick-edit-id="<?php echo $item->get('a_id'); ?>"
+				quick-edit-field="title"
+			>
+				
 				<!-- Nested dashs -->
 				<?php if( $nested ): ?>
 				<div class="pull-left fltlft">
@@ -249,9 +256,11 @@ if( JVERSION >= 3 ) {
 				
 				<!-- Title -->
 				<?php if ($canEdit || $canEditOwn) : ?>
-					<a href="<?php echo JRoute::_('index.php?option=com_{COMPONENT_NAME}&task={CONTROLLER_NAME}.edit&id='.$item->a_id); ?>">
-						<?php echo $item->get('a_title'); ?>
-					</a>
+					<div class="" >
+						<a class="quick-edit-content" href="<?php echo JRoute::_('index.php?option=com_{COMPONENT_NAME}&task={CONTROLLER_NAME}.edit&id='.$item->a_id); ?>">
+							<?php echo $item->get('a_title'); ?>
+						</a>
+					</div>
 				<?php else: ?>
 					<?php echo $item->get('a_title'); ?>
 				<?php endif; ?>

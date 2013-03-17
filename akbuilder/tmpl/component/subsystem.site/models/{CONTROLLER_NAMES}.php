@@ -57,7 +57,9 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
             $config['filter_fields'] = array(
                 'filter_order_Dir', 'filter_order', 
 				'search' , 'filter'
-            );    
+            );
+			
+			$config['filter_fields'] = {COMPONENT_NAME_UCFIRST}Helper::_('db.mergeFilterFields', $config['filter_fields'] , $config['tables'] );
         }
 		
 		
@@ -252,18 +254,21 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		$date   = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
 		$user   = JFactory::getUser() ;
 		
+		
 		// Filter and Search
 		$filter = $this->getState('filter',	array()) ;
 		$search = $this->getState('search', array()) ;
 		$wheres = $this->getState('query.where', array()) ;
+		$having = $this->getState('query.having', array()) ;
 		
 		
 		
 		// Category
 		// =====================================================================================
 		$category = $this->getCategory() ;
-		
-		$q->where("( b.lft >= {$category->lft} AND b.rgt <= {$category->rgt} )") ;
+		if( in_array('b.lft', $this->filter_fields) && in_array('b.rgt', $this->filter_fields) ){
+			$q->where("( b.lft >= {$category->lft} AND b.rgt <= {$category->rgt} )") ;
+		}
 		
 		
 		
@@ -286,16 +291,18 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 			
 			$nullDate = $db->Quote($db->getNullDate());
 			$nowDate = $db->Quote($date->toSQL(true));
-
-			$q->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
-			$q->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
+			
+			if( in_array('a.publish_up', $this->filter_fields) && in_array('a.publish_down', $this->filter_fields) ){
+				$q->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
+				$q->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
+			}
 		}
 		
 		
 		
 		// View Level
 		// =====================================================================================
-		if ($access = $this->getState('filter.access')) {
+		if ($access = $this->getState('filter.access') && in_array('a.access', $this->filter_fields)) {
 			$groups	= implode(',', $user->getAuthorisedViewLevels());
 			$q->where('a.access IN ('.$groups.')');
 		}
@@ -304,7 +311,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		
 		// Language
 		// =====================================================================================
-		if ($this->getState('filter.language')) {
+		if ($this->getState('filter.language') && in_array('a.language', $this->filter_fields)) {
 			$lang_code = $db->quote( JFactory::getLanguage()->getTag() ) ;
 			$q->where("a.language IN ('{$lang_code}', '*')");
 		}
@@ -314,7 +321,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// Filter
 		// ========================================================================
 		foreach($filter as $k => $v ){
-			if($v !== '' && $v != '*'){
+			if($v !== '' && $v != '*' && in_array($k, $this->filter_fields)){
 				$k = $db->qn($k);
 				$q->where("{$k}='{$v}'") ;
 			}
@@ -325,8 +332,10 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// Search
 		// ========================================================================
 		foreach($search as $k => $v ){
-			$k = $db->qn($k);
-			$q->where("{$k} LIKE '{$v}'");
+			if(in_array($k, $this->filter_fields)){
+				$k = $db->qn($k);
+				$q->where("{$k} LIKE '{$v}'");
+			}
 		}
 		
 		
@@ -339,8 +348,16 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		
 		
 		
+		// Custom Having
+		// ========================================================================
+		foreach($having as $k => $v ){
+			$q->having($v) ;
+		}
+		
+		
+		
 		// get select columns
-		$select = {COMPONENT_NAME_UCFIRST}Helper::_( 'db.getSelectList', $this->config['tables'] );	
+		$select = {COMPONENT_NAME_UCFIRST}Helper::_( 'db.getSelectList', $this->config['tables'] );
 		
 		//build query
 		$q->select($select)

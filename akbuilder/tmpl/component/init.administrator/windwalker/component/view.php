@@ -16,8 +16,10 @@ jimport('joomla.application.component.view');
 
 class AKView extends JViewLegacy
 {
-	public function displayWithPanel($tpl=null, $path = AKPATH_LAYOUTS)
+	public function displayWithPanel($tpl=null, $path = null)
 	{
+		$path = $path ? $path : AKPATH_LAYOUTS ;
+		
 		$this->innerLayout = JRequest::getVar('layout','default');
 		$this->setLayout('panel');
 		

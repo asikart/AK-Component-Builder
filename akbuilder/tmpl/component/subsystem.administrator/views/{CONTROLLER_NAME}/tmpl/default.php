@@ -49,7 +49,8 @@ if($app->isSite()) {
 
 // Edit setting
 // ================================================================================
-$tabs = count( $this->fields ) > 1 ? true : false;
+$tabs 	= count( $this->fields ) > 1 ? true : false;
+
 
 if($app->isAdmin()) {
 	$span_left 	= 8 ;
@@ -68,7 +69,7 @@ if($app->isAdmin()) {
 ?>
 <script type="text/javascript">
 	<?php if( $app->isSite() ): ?>
-	{COMPONENT_NAME_UCFIRST}.fixToolbar(40, 300) ;
+	WindWalker.fixToolbar(0, 300) ;
 	<?php endif; ?>
 	
 	Joomla.submitbutton = function(task)
@@ -82,44 +83,45 @@ if($app->isAdmin()) {
 	}
 </script>
 
-<div id="<?php echo (JVERSION >= 3) ? 'joomla30' : 'joomla25' ?>">
+<div id="{COMPONENT_NAME}-{CONTROLLER_NAME}-edit" class="<?php echo (JVERSION >= 3) ? 'joomla30' : 'joomla25' ?>">
 
-<form action="<?php echo JRoute::_( JFactory::getURI()->toString() ); ?>" method="post" name="adminForm" id="{CONTROLLER_NAME}-form" class="form-validate">
-	
-	
-	<?php if( JVERSION >= 3 ): ?>
-	<!-- Tab Buttons -->
-	<ul class="nav nav-tabs">
-		<?php foreach( $this->fields as $key => $group): ?>
-		<li class="<?php echo $key == 0 ? 'active' : ''; ?>">
-			<a href="#<?php echo $group; ?>" data-toggle="tab"><?php echo JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDS_'.$group); ?></a>
-		</li>
-		<?php endforeach; ?>
-	</ul>
-	<?php endif; ?>
-	
+<form action="<?php echo JRoute::_( JFactory::getURI()->toString() ); ?>" method="post" name="adminForm" id="{CONTROLLER_NAME}-form" class="form-validate" enctype="multipart/form-data">	
 	
 	<!-- Tab Bodys -->
 	<?php echo $tabs ? {COMPONENT_NAME_UCFIRST}Helper::_('panel.startTabs', '{CONTROLLER_NAME}Tab', array( 'active' => $this->fields[0] ) ) : null ; ?>
 		<?php foreach( $this->fields as $key => $group ): 
 				$fieldsets = $this->form->getFieldsets($group) ;
 				
-				echo $tabs ? {COMPONENT_NAME_UCFIRST}Helper::_('panel.addPanel' , '{CONTROLLER_NAME}Tab', JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDS_'.$group) , $group ) : null ;
+				echo $tabs ? {COMPONENT_NAME_UCFIRST}Helper::_('panel.addPanel' , '{CONTROLLER_NAME}Tab', $this->fields_group[$key]['label'] ? $this->fields_group[$key]['label'] : JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDS_'.$group) , $group ) : null ;
 		?>
 			<div class="row-fluid">
 			
 				
 				<!-- Left Bar -->
-				<div class="span<?php echo $span_left; ?><?php echo JVERSION < 3 ? ' width-'.$width_left : '' ;?> fltlft">
+				<div class="<?php echo 'group-'.$group; ?>-left span<?php echo $span_left; ?><?php echo JVERSION < 3 ? ' width-'.$width_left : '' ;?> fltlft">
 					
 					<?php foreach( $fieldsets as  $k => $fieldset ): ?>
 						
 						<?php if( empty($fieldset->align) ) $fieldset->align = 'left' ; ?>
 						<?php if( $fieldset->align == 'right' ) continue; ?>
 						
-						<!-- Fieldset -->
-						<?php $this->current_fieldset = $fieldset; ?>
-						<?php echo $this->loadTemplate('fieldset'); ?>
+						<?php
+						// Tabs & Slides
+						$this->startEditFieldsetPanel($fieldset, $fieldsets) ;
+						?>
+						
+						
+						
+							<!-- Fieldset -->
+							<?php $this->current_fieldset = $fieldset; ?>
+							<?php echo $this->loadTemplate('fieldset'); ?>
+						
+						
+						
+						<?php
+						// Tabs & Slides End
+						$this->endEditFieldsetPanel($fieldset) ;
+						?>
 						
 					<?php endforeach; ?>
 					
@@ -127,16 +129,31 @@ if($app->isAdmin()) {
 				
 				
 				<!-- Right Bar -->
-				<div class="span<?php echo $span_right; ?><?php echo JVERSION < 3 ? ' width-'.$width_right : '' ;?> fltlft">
+				<div class="<?php echo 'group-'.$group; ?>-right span<?php echo $span_right; ?><?php echo JVERSION < 3 ? ' width-'.$width_right : '' ;?> fltlft">
+					
 					
 					<?php foreach( $fieldsets as  $k => $fieldset ): ?>
 						
 						<?php if( empty($fieldset->align) ) $fieldset->align = 'left' ; ?>
 						<?php if( $fieldset->align == 'left' ) continue; ?>
 						
-						<!-- Fieldset -->
-						<?php $this->current_fieldset = $fieldset; ?>
-						<?php echo $this->loadTemplate('fieldset'); ?>
+						<?php
+						// Tabs & Slides
+						$this->startEditFieldsetPanel($fieldset, $fieldsets) ;
+						?>
+						
+						
+						
+							<!-- Fieldset -->
+							<?php $this->current_fieldset = $fieldset; ?>
+							<?php echo $this->loadTemplate('fieldset'); ?>
+						
+						
+						
+						<?php
+						// Tabs & Slides End
+						$this->endEditFieldsetPanel($fieldset) ;
+						?>
 						
 					<?php endforeach; ?>
 					

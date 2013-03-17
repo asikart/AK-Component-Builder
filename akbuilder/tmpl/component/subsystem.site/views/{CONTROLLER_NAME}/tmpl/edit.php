@@ -49,7 +49,8 @@ if($app->isSite()) {
 
 // Edit setting
 // ================================================================================
-$tabs = count( $this->fields ) > 1 ? true : false;
+$tabs 	= count( $this->fields ) > 1 ? true : false;
+
 
 if($app->isAdmin()) {
 	$span_left 	= 8 ;
@@ -97,16 +98,30 @@ if($app->isAdmin()) {
 			
 				
 				<!-- Left Bar -->
-				<div class="span<?php echo $span_left; ?><?php echo JVERSION < 3 ? ' width-'.$width_left : '' ;?> fltlft">
+				<div class="<?php echo 'group-'.$group; ?>-left span<?php echo $span_left; ?><?php echo JVERSION < 3 ? ' width-'.$width_left : '' ;?> fltlft">
 					
 					<?php foreach( $fieldsets as  $k => $fieldset ): ?>
 						
 						<?php if( empty($fieldset->align) ) $fieldset->align = 'left' ; ?>
 						<?php if( $fieldset->align == 'right' ) continue; ?>
 						
-						<!-- Fieldset -->
-						<?php $this->current_fieldset = $fieldset; ?>
-						<?php echo $this->loadTemplate('fieldset'); ?>
+						<?php
+						// Tabs & Slides
+						$this->startEditFieldsetPanel($fieldset, $fieldsets) ;
+						?>
+						
+						
+						
+							<!-- Fieldset -->
+							<?php $this->current_fieldset = $fieldset; ?>
+							<?php echo $this->loadTemplate('fieldset'); ?>
+						
+						
+						
+						<?php
+						// Tabs & Slides End
+						$this->endEditFieldsetPanel($fieldset) ;
+						?>
 						
 					<?php endforeach; ?>
 					
@@ -114,16 +129,31 @@ if($app->isAdmin()) {
 				
 				
 				<!-- Right Bar -->
-				<div class="span<?php echo $span_right; ?><?php echo JVERSION < 3 ? ' width-'.$width_right : '' ;?> fltlft">
+				<div class="<?php echo 'group-'.$group; ?>-right span<?php echo $span_right; ?><?php echo JVERSION < 3 ? ' width-'.$width_right : '' ;?> fltlft">
+					
 					
 					<?php foreach( $fieldsets as  $k => $fieldset ): ?>
 						
 						<?php if( empty($fieldset->align) ) $fieldset->align = 'left' ; ?>
 						<?php if( $fieldset->align == 'left' ) continue; ?>
 						
-						<!-- Fieldset -->
-						<?php $this->current_fieldset = $fieldset; ?>
-						<?php echo $this->loadTemplate('fieldset'); ?>
+						<?php
+						// Tabs & Slides
+						$this->startEditFieldsetPanel($fieldset, $fieldsets) ;
+						?>
+						
+						
+						
+							<!-- Fieldset -->
+							<?php $this->current_fieldset = $fieldset; ?>
+							<?php echo $this->loadTemplate('fieldset'); ?>
+						
+						
+						
+						<?php
+						// Tabs & Slides End
+						$this->endEditFieldsetPanel($fieldset) ;
+						?>
 						
 					<?php endforeach; ?>
 					

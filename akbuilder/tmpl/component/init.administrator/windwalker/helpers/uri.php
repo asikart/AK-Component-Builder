@@ -105,7 +105,7 @@ class AKHelperUri {
 	 * @param $client
 	 */
 	
-	public static function windwalker()
+	public static function windwalker($absoulte = false)
 	{
 		$root 	= $absoulte ? JURI::base() : '' ;
 		$option = JRequest::getVar('option') ;

@@ -179,7 +179,7 @@ JS;
 		$doc = JFactory::getDocument();
 		
 		if($client == 'windwalker' || $client == 'ww'){
-			$doc->addStylesheet( AKHelper::_('uri.windwalker').'/assets/css/'.$path ) ;
+			$doc->addStylesheet( JURI::root(true) . '/' .  AKHelper::_('uri.windwalker').'/assets/css/'.$path ) ;
 		}else{
 			$doc->addStylesheet( AKHelper::_('uri.component', $client).'/includes/css/'.$path ) ;
 		}
@@ -194,8 +194,10 @@ JS;
 	{
 		$doc = JFactory::getDocument();
 		
+		
+		
 		if($client == 'windwalker' || $client == 'ww'){
-			$doc->addScript( AKHelper::_('uri.windwalker').'/assets/js/'.$path ) ;
+			$doc->addScript( JURI::root(true) . '/' .  AKHelper::_('uri.windwalker').'/assets/js/'.$path ) ;
 		}else{
 			$doc->addScript( AKHelper::_('uri.component', $client).'/includes/js/'.$path ) ;
 		}
@@ -229,4 +231,15 @@ JS;
 		endforeach;
 	}
 	
+	
+	/*
+	 * function quickedit
+	 * @param 
+	 */
+	
+	public static function quickedit()
+	{
+		JHtml::_('behavior.framework', true);
+		self::addJS('quickedit.js', 'ww') ;
+	}
 }

@@ -57,3 +57,6 @@ if( $app->isSite() ){
 // Detect version
 {COMPONENT_NAME_UCFIRST}Helper::_('plugin.attachPlugins');
 
+// Debug
+define('AKDEBUG', {COMPONENT_NAME_UCFIRST}Helper::_('system.getConfig', 'system.debug')) ;
+

@@ -103,7 +103,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// Set First order field
 		$this->setState('list.orderingPrefix', array('a.catid')) ;
 		
-		parent::populateState($ordering, $direction);
+		parent::populateState($ordering, 'asc');
 	}
 
 	
@@ -163,6 +163,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		$filter = $this->getState('filter',array()) ;
 		$search = $this->getState('search') ;
 		$wheres = $this->getState('query.where', array()) ;
+		$having = $this->getState('query.having', array()) ;
 		
 		$layout = JRequest::getVar('layout') ;
 		$nested = $this->getState('items.nested') ;
@@ -241,6 +242,14 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// ========================================================================
 		foreach($wheres as $k => $v ){
 			$q->where($v) ;
+		}
+		
+		
+		
+		// Custom Having
+		// ========================================================================
+		foreach($having as $k => $v ){
+			$q->having($v) ;
 		}
 		
 		
