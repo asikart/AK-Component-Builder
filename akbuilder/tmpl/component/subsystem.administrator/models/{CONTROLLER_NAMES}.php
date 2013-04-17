@@ -55,7 +55,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// ========================================================================
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'filter_order_Dir', 'filter_order'
+                'filter_order_Dir', 'filter_order', '*'
             );
 			
             $config['filter_fields'] = {COMPONENT_NAME_UCFIRST}Helper::_('db.mergeFilterFields', $config['filter_fields'] , $config['tables'] );
@@ -157,7 +157,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		$order 		= $this->getState('list.ordering' , 'a.id');
 		$dir		= $this->getState('list.direction', 'asc');
 		$prefix 	= $this->getState('list.orderingPrefix', array()) ;
-		$orderCol	=$this->getState('list.orderCol','a.ordering') ;
+		$orderCol	= $this->getState('list.orderCol','a.ordering') ;
 
 		// Filter and Search
 		$filter = $this->getState('filter',array()) ;
@@ -190,38 +190,19 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		
 		// Search
 		// ========================================================================
-		if($search['index']){
-			
-			if($this->getState( 'search.fulltext' )){
-				$fields = $this->getFullSearchFields();
-				
-				foreach( $fields as &$field ):
-					$field = "{$field} LIKE '%{$search['index']}%'" ;
-				endforeach;
-				
-				if(count($fields))
-				$q->where( "( ".implode(' OR ', $fields )." )" );
-				
-			}else{
-				$q->where("{$search['field']} LIKE '%{$search['index']}%'");
-			}
-			
-		}
+		$q = $this->searchCondition( $search, $q ) ;
 		
 		
 		
 		// Filter
 		// ========================================================================
-		foreach($filter as $k => $v ){
-			if($v !== '' && $v != '*'){
-				$k = $db->qn($k);
-				$q->where("{$k}='{$v}'") ;
-			}
-		}
+		$q = $this->filterCondition( $filter, $q ) ;
+		
+		
 		
 		// published
 		if(empty($filter['a.published'])){
-			$q->where("a.published >= 0") ;
+			$q->where("{$db->qn('a.published')} >= 0") ;
 		}
 		
 		
@@ -271,5 +252,57 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 			->order( "{$prefix}{$order} {$dir}" ) ;
 		
 		return $q;
+	}
+	
+	
+	
+	/*
+	 * function searchCondition
+	 * @param $q
+	 */
+	
+	public function searchCondition($search, $q = null, $ignore = array())
+	{
+		// Set ignore fields, and you can set yourself search later.
+		if(!$ignore) {
+			$ignore = array(
+				// 'a.title',
+				// 'b.title'
+			);
+		}
+		
+		$q = parent::searchCondition($search, $q, $ignore);
+		
+		// Do some another filter here
+		
+		
+		
+		return $q ;
+	}
+	
+	
+	
+	/*
+	 * function filterCondition
+	 * @param $filter
+	 */
+	
+	public function filterCondition($filter, $q = null, $ignore = array())
+	{
+		// Set ignore fields, and you can set yourself filter later.
+		if(!$ignore) {
+			$ignore = array(
+				// 'a.published',
+				// 'b.id'
+			);
+		}
+		
+		$q = parent::filterCondition($filter, $q, $ignore);
+		
+		// Do some another filter here
+		
+		
+		
+		return $q ;
 	}
 }

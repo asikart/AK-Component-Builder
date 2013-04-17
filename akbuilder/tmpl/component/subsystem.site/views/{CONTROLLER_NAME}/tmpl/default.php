@@ -27,7 +27,7 @@ $uri 		= JFactory::getURI() ;
 </script>
 <form action="<?php echo JRoute::_('index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAME}'); ?>" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
 
-	<div id="{COMPONENT_NAME}-wrap" class="container-fluid {CONTROLLER_NAME}<?php echo $this->get('pageclass_sfx');?>">
+	<div id="{COMPONENT_NAME_UCFIRST}" class="windwalker item container-fluid {CONTROLLER_NAME}<?php echo $this->get('pageclass_sfx');?>">
 		<div id="{COMPONENT_NAME}-wrap-inner">
 			
 			<div class="{CONTROLLER_NAME}-item item<?php if($item->published == 0) echo ' well well-small'; ?>">

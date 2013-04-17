@@ -15,6 +15,8 @@ defined('_JEXEC') or die;
 
 class AKHelperCurl
 {
+	public static $errors = array();
+	
 	/*
 	 * function getPageHTML
 	 * @param $url
@@ -24,30 +26,45 @@ class AKHelperCurl
 	{
 		if(!$url) return ;
 		
+		if( (!function_exists('curl_init') || !is_callable('curl_init') ) && ini_get('allow_url_fopen')) {
+			return file_get_contents($url) ;
+		}	
+		
+		
 		$ch = curl_init();
 		 
 		
 		$options = array(
-			CURLOPT_URL 			=> $url,
+			CURLOPT_URL 			=> AKHelper::_('uri.safe' ,$url),
 			CURLOPT_RETURNTRANSFER 	=> true,
 			CURLOPT_USERAGENT 		=> "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1",
 			CURLOPT_FOLLOWLOCATION 	=> true ,
 		);
 		
 		if($method == 'post') {
-			$option[CURLOPT_POST] = true ;
+			$options[CURLOPT_POST] = true ;
 			if(is_array($query)) {
 				$query = http_build_query($query) ;
 			}
-			$option[CURLOPT_POSTFIELDS] = $query ;
+			$options[CURLOPT_POSTFIELDS] = $query ;
 		}
 		
+
 		curl_setopt_array($ch, $options);
 		$output = curl_exec($ch);
+		
+		$errno 	= curl_errno($ch);
+		$errmsg = curl_error($ch);
+		
 		curl_close($ch);
 		
 		if($output){
 			return $output ;
+		}elseif($errno) {
+			self::$errors[] = $errno . ' - ' . $errmsg  ;
+			return false ;
+		}else{
+			return false ;
 		}
 	}
 	
@@ -80,7 +97,7 @@ class AKHelperCurl
 		$ch = curl_init(  );
 		
 		$options = array(
-			CURLOPT_URL 			=> $url,
+			CURLOPT_URL 			=> AKHelper::_('uri.safe' ,$url),
 			CURLOPT_RETURNTRANSFER 	=> true,
 			CURLOPT_USERAGENT 		=> "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1",
 			CURLOPT_FOLLOWLOCATION 	=> true ,
@@ -96,11 +113,38 @@ class AKHelperCurl
 		curl_close($ch);
 		fclose($fp);
 		
-		if($errno){
-			return $errno.' - '.$errmsg ;
-		}else {
+		if( $errno ) {
+			self::$errors[] = $errno . ' - ' . $errmsg  ;
+			return false ;
+		}else{
 			return true ;
 		}
 		
+	}
+	
+	
+	/*
+	 * function getError
+	 * @param 
+	 */
+	
+	public static function getError($i = null)
+	{
+		if( $i ) {
+			return JArrayHelper::getValue(self::$errors, $i) ;
+		}else{
+			return end(self::$errors) ;
+		}
+	}
+	
+	
+	/*
+	 * function getErrors
+	 * @param 
+	 */
+	
+	public static function getErrors()
+	{
+		return self::$errors ;
 	}
 }

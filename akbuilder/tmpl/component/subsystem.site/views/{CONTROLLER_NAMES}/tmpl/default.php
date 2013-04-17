@@ -24,7 +24,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_{COMPONENT_NAME}&view={CONTROLLER_NAMES}'); ?>" method="post" name="adminForm" id="adminForm">
 	
-	<div id="{COMPONENT_NAME}-wrap" class="container-fluid {CONTROLLER_NAMES}<?php echo $this->get('pageclass_sfx');?>">
+	<div id="{COMPONENT_NAME}-wrap" class="windwalker list container-fluid {CONTROLLER_NAMES}<?php echo $this->get('pageclass_sfx');?>">
 		<div id="{COMPONENT_NAME}-wrap-inner">
 			
 			<!-- Heading -->

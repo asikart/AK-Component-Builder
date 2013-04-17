@@ -165,17 +165,17 @@ class AKModelList extends JModelList
 		}
 		
 		// Get filter inputs from from xml files in /models/form.
-		JForm::addFormPath(AKHelper::_('path.get').'/models/forms');
-		JForm::addFormPath(AKHelper::_('path.get').'/models/forms/'.$this->list_name);
-        JForm::addFieldPath(AKHelper::_('path.get').'/models/fields');
+		JForm::addFormPath(AKHelper::_('path.get', null, $this->option).'/models/forms');
+		JForm::addFormPath(AKHelper::_('path.get', null, $this->option).'/models/forms/'.$this->list_name);
+        JForm::addFieldPath(AKHelper::_('path.get', null, $this->option).'/models/fields');
 		
 		
 		// Generate sidebar filter by Joomla! core system.
 		if( JVERSION >=3 && $this->config['core_sidebar'] ) {
 			
 			// Get filter inputs from raw xml file.
-			$file 	= AKHelper::_('path.get').'/models/forms/'.$this->list_name.'_filter.xml' ;
-			$file 	= JFile::exists($file) ? $file : AKHelper::_('path.get').'/models/forms/'.$this->list_name.'/filter.xml' ;
+			$file 	= AKHelper::_('path.get', null, $this->option).'/models/forms/'.$this->list_name.'_filter.xml' ;
+			$file 	= JFile::exists($file) ? $file : AKHelper::_('path.get', null, $this->option).'/models/forms/'.$this->list_name.'/filter.xml' ;
 			$xml 	= simplexml_load_file($file);
 			
 			$filters 	= $xml->xpath('//fieldset[@name="filter_sidebar"]') ;
@@ -187,7 +187,7 @@ class AKModelList extends JModelList
 		
 		
 		// load forms
-		$form_path = AKHelper::_('path.get').'/models/forms/' ;
+		$form_path = AKHelper::_('path.get', null, $this->option).'/models/forms/' ;
 		
 		// Search
 		if( JFile::exists($form_path . $this->list_name . '/search.xml') ) {
@@ -249,8 +249,8 @@ class AKModelList extends JModelList
 	
 	public function getFullSearchFields()
 	{
-		$file = AKHelper::_('path.get').'/models/forms/'.$this->list_name.'/search.xml' ;
-		$file = JFile::exists($file) ? $file : AKHelper::_('path.get').'/models/forms/'.$this->list_name.'_search.xml' ;
+		$file = AKHelper::_('path.get', null, $this->option).'/models/forms/'.$this->list_name.'/search.xml' ;
+		$file = JFile::exists($file) ? $file : AKHelper::_('path.get', null, $this->option).'/models/forms/'.$this->list_name.'_search.xml' ;
 		
 		$xml = simplexml_load_file($file);
 		$field = $xml->xpath('//field[@name="field"]') ;
@@ -267,4 +267,118 @@ class AKModelList extends JModelList
 		return $fields ;
 	}
 	
+	
+	/*
+	 * function searchCondition
+	 * @param $q
+	 */
+	
+	public function searchCondition($search, $q = null, $ignore = array())
+	{
+		$db = JFactory::getDbo();
+		
+		if(!$q) {
+			$q = $db->getQuery() ;
+		}
+		
+		$search_where = array() ;
+		
+		
+		
+		// One Search Input
+		// ========================================================================
+		if(JArrayHelper::getValue($search, 'index')){
+			
+			// Fulltext Search
+			if($this->getState( 'search.fulltext' ) || $search['field'] == '*' ){
+				$fields = $this->getFullSearchFields();
+				array_shift($fields);
+				
+				foreach( $fields as &$field ):
+					$field = (string) $field;
+					
+					// Ignore fields
+					if( in_array($field, $ignore) ) continue ;
+				
+					$field = $db->qn($field) ;
+					$field = "{$field} LIKE '%{$search['index']}%'" ;
+				endforeach;
+				
+				if(count($fields)){
+					$search_where[] = "( ".implode(' OR ', $fields )." )" ;
+				}
+				
+			}else{
+				
+				// Serach one field
+				if( !in_array($search['field'], $ignore) ){
+					$search_where[] = "{$db->qn($search['field'])} LIKE '%{$search['index']}%'";
+				}
+			}
+			
+		}
+		
+		
+		
+		// Multiple Search Input
+		// ========================================================================
+		unset($search['index']) ; // Remove One search input first
+		unset($search['field']) ;
+		$condition = array();
+		
+		foreach( (array)$search as $key => $val ):
+			
+			// Ignore fields
+			if( in_array($key, $ignore) ) continue ;
+			
+			if($val){
+				$condition[] = "{$db->qn($key)} LIKE '%{$val}%'" ;
+			}
+		endforeach;
+		
+		if(count($condition)) {
+			$search_where[] = "( ".implode(' OR ', $condition )." )";
+		}
+		
+		
+		// Build All Query
+		// ========================================================================
+		if(count($search_where)){
+			$q->where( implode(' OR ', $search_where) ) ;
+		}
+		
+		
+		return $q ;
+	}
+	
+	
+	
+	/*
+	 * function filterCondition
+	 * @param $filter
+	 */
+	
+	public function filterCondition($filter, $q = null, $ignore = array())
+	{
+		$db = JFactory::getDbo();
+		
+		if(!$q) {
+			$q = $db->getQuery() ;
+		}
+		
+		// Start Filter
+		// ========================================================================
+		foreach($filter as $k => $v ){
+			// If this field in ignore, jump.
+			if( in_array($k , $ignore) ) continue ;
+			
+			// Filter Condition
+			if($v !== '' && $v != '*'){
+				$k = $db->qn($k);
+				$q->where("{$k}='{$v}'") ;
+			}
+		}
+		
+		return $q ;
+	}
 }

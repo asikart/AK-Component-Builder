@@ -30,6 +30,17 @@
 }
 
 
+
+
+/* MODAL */
+.admin div.modal,
+.admin div.modal-body,
+.windwalker div.modal,
+.windwalker div.modal-body{
+	overflow: visible;
+}
+
+
 /* TABLE LIST */
 .quick-edit-hover:hover {
 	background-color: yellow ;
@@ -40,6 +51,18 @@
 	m/argin: -1px;
 }
 
+#search-bar label {
+	margin-top: 4px;
+	display: inline-block;
+	margin-left: 7px;
+}
+
+.joomla25 #search-bar button {
+	margin-top: 1px;
+	display: inline-block;
+}
+
+
 
 /* BATCH */
 .joomla25 .control-group label#batch-language-lbl,
@@ -47,6 +70,8 @@
 .joomla25 .control-group select#batch-language-id {
 	margin-top: 5px;
 }
+
+
 
 
 /* Joomla! 3.0 */

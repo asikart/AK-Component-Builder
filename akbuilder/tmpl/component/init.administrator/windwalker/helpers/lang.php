@@ -65,7 +65,7 @@ class AKHelperLang {
 		
 		$url->setQuery( $query );
 		$url->toString() ;
-		$response =  file_get_contents( $url->toString() );
+		$response =  AKHelper::_('curl.getPage', $url->toString() );
 		
 		$json = new JRegistry();
 		$json->loadString( $response );

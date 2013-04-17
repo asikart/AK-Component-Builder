@@ -23,5 +23,5 @@ include_once JPATH_COMPONENT_ADMINISTRATOR.'/includes/init.php';
 jimport('joomla.application.component.controller');
 
 $controller	= JControllerLegacy::getInstance('{COMPONENT_NAME_UCFIRST}');
-$controller->execute(JRequest::getCmd('task'));
+$controller->execute( JFactory::getApplication()->input->get('task') );
 $controller->redirect();

@@ -27,42 +27,55 @@ if( JVERSION >= 3 ) {
 <div id="filter-bar" class="btn-toolbar">
 	<!-- Search Input -->
 	
-	<div class="btn-group pull-left fltlft">
-		<?php
-			$field = $this->filter['search']->getField('field') ;
-			echo $field->label . ' ' ;
-		?>
+	<div id="search-bar" class="pull-left fltlft">
+		<div class="btn-group pull-left fltlft">
+			<?php
+				$field = $this->filter['search']->getField('field') ;
+				echo $field->label . ' ' ;
+			?>
+		</div>
+		
+		<div class="btn-group pull-left fltlft">
+			<?php
+				if( !$this->state->get('search.fulltext') ){
+					echo $field->input ;
+				}
+			?>
+		</div>
+		
+		<div class="btn-group pull-left fltlft">
+			<?php 
+				$index = $this->filter['search']->getField('index') ;
+				echo $index->input ;
+				
+				$this->filter['search']->removeField('field');
+				$this->filter['search']->removeField('index');
+			?>
+		</div>
+		
+		<?php foreach( $this->filter['search']->getFieldset('search') as $field ): ?>
+			<div class="btn-group pull-left fltlft">
+				<?php echo $field->label ; ?>
+			</div>
+			<div class="btn-group pull-left fltlft">
+				<?php echo $field->input ; ?>
+			</div>
+		<?php endforeach; ?>
+		
+		
+		<!-- Search Button -->
+		<?php if( JVERSION >= 3 ): ?>
+		<div class="btn-group pull-left hidden-phone">
+			<button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+			<button class="btn tip hasTooltip" type="button" onclick="$$('#search-bar input').set('value', '');this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+		</div>
+		<?php else: ?>
+		
+			<button type="btn submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+			<button type="btn button" onclick="$$('#search-bar input').set('value', '');this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+		
+		<?php endif; ?>	
 	</div>
-	
-	<div class="btn-group pull-left fltlft">
-		<?php
-			if( !$this->state->get('search.fulltext') ){
-				echo $field->input ;
-			}
-		?>
-	</div>
-	
-	<div class="btn-group pull-left fltlft">
-		<?php 
-			$index = $this->filter['search']->getField('index') ;
-			echo $index->input ;
-		?>
-	</div>
-	
-	
-	<!-- Search Button -->
-	<?php if( JVERSION >= 3 ): ?>
-	<div class="btn-group pull-left hidden-phone">
-		<button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-		<button class="btn tip hasTooltip" type="button" onclick="document.id('search_index').value='';this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-	</div>
-	<?php else: ?>
-	
-		<button type="btn submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-		<button type="btn button" onclick="document.id('search_index').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-	
-	<?php endif; ?>
-	
 	
 	<?php if( $layout != 'modal' && JVERSION >= 3 && $app->isAdmin() ): ?>
 	

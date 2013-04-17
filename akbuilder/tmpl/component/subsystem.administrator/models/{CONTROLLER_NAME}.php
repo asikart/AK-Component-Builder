@@ -173,7 +173,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 */
 	protected function prepareTable(&$table)
 	{
-		return parent::prepareTable($table);
+		parent::prepareTable($table);
 	}
 	
 	

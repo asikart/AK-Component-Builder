@@ -91,7 +91,7 @@ class AKModelAdmin extends JModelAdmin
 	{
 		if(!empty($this->fields_group)) return $this->fields_group ;
 		
-		$xml_file 		= AKHelper::_('path.get').'/models/forms/'.$this->item_name.'.xml' ;
+		$xml_file 		= AKHelper::_('path.get', null, $this->option).'/models/forms/'.$this->item_name.'.xml' ;
 		$xml 			= JFactory::getXML( $xml_file );
 		$fields 		= $xml->xpath('/form/fields');
 		$fields_name 	= array();
@@ -406,9 +406,9 @@ class AKModelAdmin extends JModelAdmin
 		
 		// Handle Save as copy
 		if( $task == 'save2copy' ) {
-			$table->id = null ;
-			$table->title = $table->title . ' (2)' ;
-			$table->alias = $table->alias . ' 2' ;
+			if(property_exists($table ,'id')) 		$table->id = null ;
+			if(property_exists($table ,'title')) 	$table->title = $table->title . ' (2)' ;
+			if(property_exists($table ,'alias')) 	$table->alias = $table->alias . ' 2' ;
 		}
 		
 		
@@ -429,6 +429,11 @@ class AKModelAdmin extends JModelAdmin
 		// created date
 		if(property_exists($table ,'created') && !$table->created){
 			$table->created = $date->toSql(true);
+		}
+		
+		// publish_up date
+		if(property_exists($table ,'publish_up') && !$table->publish_up){
+			$table->publish_up = $date->toSql(true);
 		}
 		
 		// modified date
