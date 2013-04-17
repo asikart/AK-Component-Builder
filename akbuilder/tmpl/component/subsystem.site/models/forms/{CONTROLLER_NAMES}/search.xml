@@ -8,7 +8,7 @@
 			labelclass="pull-left"
 			class="input-small" 
 		>
-			<!--<option value="0">Select Column</option>-->
+			<option value="*">JALL</option>
 			<option value="a.title">JGLOBAL_TITLE</option>
 			<option value="b.title">JCATEGORY</option>
 		</field>
@@ -18,5 +18,22 @@
 			placeholder="JSEARCH_FILTER_LABEL"
 			label=""
 		/>
+		
+		
+		<!-- For Multiple Search
+		
+		<field name="a.title"
+			type="text"
+			placeholder="JSEARCH_FILTER_LABEL"
+			label="Title"
+		/>
+		
+		<field name="b.title"
+			type="text"
+			placeholder="JSEARCH_FILTER_LABEL"
+			label="Cat Title"
+		/>
+		
+		-->
 	</fieldset>
 </form>

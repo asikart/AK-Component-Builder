@@ -39,9 +39,12 @@ if(!empty($fieldset->horz) && $fieldset->horz !== 'false'){
 }else{
 	$form_class = '' ;
 }
+
+// Fieldset
+$class = !empty($fieldset->class) ? ' ' . $fieldset->class : '' ;
 ?>
 	
-<fieldset class="adminform <?php echo $form_class; ?>">
+<fieldset id="fildset-<?php echo $fieldset->name; ?>" class="adminform <?php echo $form_class; ?><?php echo $class; ?>">
 	<legend><?php echo $fieldset->label ? JText::_($fieldset->label) : JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDSET_'.$fieldset->name); ?></legend>
 	
 	<?php foreach($this->form->getFieldset($fieldset->name) as $field ): ?>

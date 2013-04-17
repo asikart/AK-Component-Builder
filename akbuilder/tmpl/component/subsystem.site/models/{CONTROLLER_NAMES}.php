@@ -42,12 +42,12 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// Set query tables
 		// ========================================================================
 		$config['tables'] = array(
-				'a' => '#__{COMPONENT_NAME}_{CONTROLLER_NAMES}',
-				'b' => '#__categories',
-				'c' => '#__users',
-				'd' => '#__viewlevels',
-				'e' => '#__languages'
-			);
+			'a' => '#__{COMPONENT_NAME}_{CONTROLLER_NAMES}',
+			'b' => '#__categories',
+			'c' => '#__users',
+			'd' => '#__viewlevels',
+			'e' => '#__languages'
+		);
 		
 		
 		
@@ -55,17 +55,23 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// ========================================================================
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'filter_order_Dir', 'filter_order', 
-				'search' , 'filter'
+                'filter_order_Dir', 'filter_order', '*'
             );
 			
-			$config['filter_fields'] = {COMPONENT_NAME_UCFIRST}Helper::_('db.mergeFilterFields', $config['filter_fields'] , $config['tables'] );
+            $config['filter_fields'] = {COMPONENT_NAME_UCFIRST}Helper::_('db.mergeFilterFields', $config['filter_fields'] , $config['tables'] );
         }
 		
 		
 		
+		// Other settings
+		// ========================================================================
+		$config['fulltext_search'] 	= true ;
+		
+		$config['core_sidebar'] 	= false ;
+		
+		
 		$this->config = $config ;
-
+		
         parent::__construct($config);
     }
 	
@@ -84,9 +90,9 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	{
 		return parent::getTable( $type , $prefix , $config );
 	}
+
 	
-
-
+	
 	/**
 	 * Method to auto-populate the model state.
 	 *
@@ -94,114 +100,13 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		// Initialise variables.
-		$app 	= JFactory::getApplication();
-		$user 	= JFactory::getUser() ;
-		$pk		= JRequest::getInt('id');
-
-		$this->setState('category.id', $pk);
-
+		// Set First order field
+		$this->setState('list.orderingPrefix', array('a.catid')) ;
 		
-		
-		// Load the parameters. Merge Global and Menu Item params into new object
-		// =====================================================================================
-		$comParams = $app->getParams();
-		$menuParams = new JRegistry;
-
-		if ($menu = $app->getMenu()->getActive()) {
-			$menuParams->loadString($menu->params);
-		}
-		
-		$mergedParams = clone $menuParams;
-		$mergedParams->merge($comParams);
-
-		$this->setState('params', $mergedParams);
-		$params = $mergedParams ;
-		
-		// Set ViewLevel and user groups
-		$groups	= implode(',', $user->getAuthorisedViewLevels());
-		
-		$this->setState('access.group', $groups);
-		
-		
-		
-		// List state information.
-		// =====================================================================================
-		$itemid = JRequest::getInt('id', 0) . ':' . JRequest::getInt('Itemid', 0);
-		$this->setState('layout', JRequest::getCmd('layout'));
-		
-		
-		// Order
-		// =====================================================================================
-		$orderCol = $params->get('orderby', 'a.ordering');
-		$this->setState('list.ordering', $orderCol);
-		
-		
-		
-		// Order Dir
-		// =====================================================================================
-		$listOrder = $params->get('order_dir', 'asc');
-		$this->setState('list.direction', $listOrder);
-		
-		
-		
-		// Limitstart
-		// =====================================================================================
-		$this->setState('list.start', JRequest::getUInt('limitstart', 0));
-
-		
-		
-		// Limit
-		// =====================================================================================
-		$num_leading 	= $params->get('num_leading_articles', 1) ;
-		$num_intro		= $params->get('num_intro_articles', 4) ;
-		$num_links		= $params->get('num_links', 4);
-		$limit = $num_leading + $num_intro + $num_links ;
-		
-		$this->setState('list.num_leading', $num_leading);
-		$this->setState('list.num_intro', $num_intro);
-		$this->setState('list.num_links', $num_links);
-		$this->setState('list.links', $num_links);
-		$this->setState('list.limit', $limit);
-
-		
-		
-		// Max Level
-		// =====================================================================================
-		$maxLevel = $params->get('maxLevel');
-
-		if ($maxLevel) {
-			$this->setState('filter.max_category_levels', $maxLevel);
-		}
-		
-		
-		
-		// Edit Access
-		// =====================================================================================
-		if (($user->authorise('core.edit.state', 'com_{COMPONENT_NAME}')) ||  ($user->authorise('core.edit', 'com_{COMPONENT_NAME}'))){
-			// filter on published for those who do not have edit or edit.state rights.
-			$this->setState('filter.unpublished', 1);
-		}
-		
-		
-		
-		// View Level
-		// =====================================================================================
-		if (!$params->get('show_noauth')) {
-			$this->setState('filter.access', true);
-		}
-		else {
-			$this->setState('filter.access', false);
-		}
-		
-		
-		
-		// Language
-		// =====================================================================================
-		$this->setState('filter.language', $app->getLanguageFilter());
-		
+		parent::populateState($ordering, 'asc');
 	}
 
+	
 	/**
 	 * Method to get a store id based on model configuration state.
 	 *
@@ -215,9 +120,6 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	 */
 	protected function getStoreId($id = '')
 	{
-		// Compile the store id.
-		$id.= ':' . json_encode($this->getState());
-
 		return parent::getStoreId($id);
 	}
 	
@@ -231,9 +133,9 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	
 	public function getFilter()
 	{
-		//$filter = parent::getFilter();
+		$filter = parent::getFilter();
 		
-		//return $filter ;
+		return $filter ;
 	}
 	
 	
@@ -246,97 +148,74 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	 */
 	protected function getListQuery()
 	{
+		// Get some data
+		// ========================================================================
+		
 		// Create a new query object.
-		$db		= $this->getDbo();
-		$q		= $db->getQuery(true);
-		$order 	= $this->getState('list.ordering' , 'a.id');
-		$dir	= $this->getState('list.direction', 'asc');
-		$date   = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
-		$user   = JFactory::getUser() ;
-		
-		
+		$db			= $this->getDbo();
+		$q			= $db->getQuery(true);
+		$order 		= $this->getState('list.ordering' , 'a.id');
+		$dir		= $this->getState('list.direction', 'asc');
+		$prefix 	= $this->getState('list.orderingPrefix', array()) ;
+		$orderCol	= $this->getState('list.orderCol','a.ordering') ;
+
 		// Filter and Search
-		$filter = $this->getState('filter',	array()) ;
-		$search = $this->getState('search', array()) ;
+		$filter = $this->getState('filter',array()) ;
+		$search = $this->getState('search') ;
 		$wheres = $this->getState('query.where', array()) ;
 		$having = $this->getState('query.having', array()) ;
 		
-		
-		
-		// Category
-		// =====================================================================================
-		$category = $this->getCategory() ;
-		if( in_array('b.lft', $this->filter_fields) && in_array('b.rgt', $this->filter_fields) ){
-			$q->where("( b.lft >= {$category->lft} AND b.rgt <= {$category->rgt} )") ;
-		}
+		$layout = JRequest::getVar('layout') ;
+		$nested = $this->getState('items.nested') ;
+		$avoid	= JRequest::getVar('avoid') ;
+		$show_root = JRequest::getVar('show_root') ;
 		
 		
 		
-		// Max Level
-		// =====================================================================================
-		$maxLevel = $this->getState('filter.max_category_levels', -1);
-		
-		if($maxLevel > 0){
-			$q->where("b.level <= {$maxLevel}");
-		}
-		
-		
-		
-		// Edit Access
-		// =====================================================================================
-		if($this->getState('filter.unpublished')){
-			$q->where('a.published >= 0') ;
-		}else{
-			$q->where('a.published > 0') ;
-			
-			$nullDate = $db->Quote($db->getNullDate());
-			$nowDate = $db->Quote($date->toSQL(true));
-			
-			if( in_array('a.publish_up', $this->filter_fields) && in_array('a.publish_down', $this->filter_fields) ){
-				$q->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
-				$q->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
-			}
-		}
-		
-		
-		
-		// View Level
-		// =====================================================================================
-		if ($access = $this->getState('filter.access') && in_array('a.access', $this->filter_fields)) {
-			$groups	= implode(',', $user->getAuthorisedViewLevels());
-			$q->where('a.access IN ('.$groups.')');
-		}
-		
-		
-		
-		// Language
-		// =====================================================================================
-		if ($this->getState('filter.language') && in_array('a.language', $this->filter_fields)) {
-			$lang_code = $db->quote( JFactory::getLanguage()->getTag() ) ;
-			$q->where("a.language IN ('{$lang_code}', '*')");
-		}
-		
-		
-		
-		// Filter
+		// Nested
 		// ========================================================================
-		foreach($filter as $k => $v ){
-			if($v !== '' && $v != '*' && in_array($k, $this->filter_fields)){
-				$k = $db->qn($k);
-				$q->where("{$k}='{$v}'") ;
-			}
+		if($nested && !$show_root){
+			$q->where("a.id != 1") ;
+		}
+		
+		if($avoid){
+			$table = $this->getTable();
+			$table->load( $avoid ) ;
+			
+			$q->where("a.lft < {$table->lft} OR a.rgt > {$table->rgt}") ;
+			$q->where("a.id != {$avoid}") ;
 		}
 		
 		
 		
 		// Search
 		// ========================================================================
-		foreach($search as $k => $v ){
-			if(in_array($k, $this->filter_fields)){
-				$k = $db->qn($k);
-				$q->where("{$k} LIKE '{$v}'");
-			}
+		$q = $this->searchCondition( $search, $q ) ;
+		
+		
+		
+		// Filter
+		// ========================================================================
+		$q = $this->filterCondition( $filter, $q ) ;
+		
+		
+		
+		// published
+		if(empty($filter['a.published'])){
+			$q->where("{$db->qn('a.published')} >= 0") ;
 		}
+		
+		
+		
+		// Ordering
+		// ========================================================================
+		if( $orderCol == $order ){
+			$prefix = count($prefix) ? implode(', ', $db->qn($prefix)) . ', ' : '' ;
+		}else{
+			$prefix = '' ;
+		}
+		
+		$order = $db->qn($order);
 		
 		
 		
@@ -356,6 +235,9 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		
 		
 		
+		// Build query
+		// ========================================================================
+		
 		// get select columns
 		$select = {COMPONENT_NAME_UCFIRST}Helper::_( 'db.getSelectList', $this->config['tables'] );
 		
@@ -367,8 +249,60 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 			->leftJoin('#__viewlevels 	AS d ON a.access = d.id')
 			->leftJoin('#__languages 	AS e ON a.language = e.lang_code')
 			//->where("")
-			->order( " {$order} {$dir}" ) ;
+			->order( "{$prefix}{$order} {$dir}" ) ;
 		
 		return $q;
+	}
+	
+	
+	
+	/*
+	 * function searchCondition
+	 * @param $q
+	 */
+	
+	public function searchCondition($search, $q = null, $ignore = array())
+	{
+		// Set ignore fields, and you can set yourself search later.
+		if(!$ignore) {
+			$ignore = array(
+				// 'a.title',
+				// 'b.title'
+			);
+		}
+		
+		$q = parent::searchCondition($search, $q, $ignore);
+		
+		// Do some another filter here
+		
+		
+		
+		return $q ;
+	}
+	
+	
+	
+	/*
+	 * function filterCondition
+	 * @param $filter
+	 */
+	
+	public function filterCondition($filter, $q = null, $ignore = array())
+	{
+		// Set ignore fields, and you can set yourself filter later.
+		if(!$ignore) {
+			$ignore = array(
+				// 'a.published',
+				// 'b.id'
+			);
+		}
+		
+		$q = parent::filterCondition($filter, $q, $ignore);
+		
+		// Do some another filter here
+		
+		
+		
+		return $q ;
 	}
 }

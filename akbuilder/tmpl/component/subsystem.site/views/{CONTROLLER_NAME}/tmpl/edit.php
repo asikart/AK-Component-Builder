@@ -83,7 +83,7 @@ if($app->isAdmin()) {
 	}
 </script>
 
-<div id="{COMPONENT_NAME}-{CONTROLLER_NAME}-edit" class="<?php echo (JVERSION >= 3) ? 'joomla30' : 'joomla25' ?>">
+<div id="{COMPONENT_NAME_UCFIRST}" class="windwalker {CONTROLLER_NAME} editform <?php echo (JVERSION >= 3) ? 'joomla30' : 'joomla25' ?>">
 
 <form action="<?php echo JRoute::_( JFactory::getURI()->toString() ); ?>" method="post" name="adminForm" id="{CONTROLLER_NAME}-form" class="form-validate" enctype="multipart/form-data">	
 	
