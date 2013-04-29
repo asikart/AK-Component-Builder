@@ -62,14 +62,32 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	}
 	
 	
-	/*
-	 * function getFields
-	 * @param 
-	 */
-	
+	/**
+     * Get fields group. This Function is deprecated, use getFieldsGroup instead.
+     *
+     * @return      array   Fields groups.
+     * @deprecated  4.0
+     */
 	public function getFields()
 	{
+		// Deprecation warning.
+        JLog::add( __CLASS__.'::'.__FUNCTION__.'() is deprecated.', JLog::WARNING, 'deprecated');
+		
 		$fields = parent::getFields();
+		
+		return $fields ;
+	}
+	
+	
+	
+	/**
+     * Get fields group.
+     *
+     * @return    array   Fields groups.
+     */
+    public function getFieldsGroup()
+	{
+		$fields = parent::getFieldsGroup();
 		
 		return $fields ;
 	}
@@ -178,11 +196,14 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	
 	
 	
-	/*
-	 * function setOrderPosition
-	 * @param $table
-	 */
-	
+	/**
+     * Method to set new item ordering as first or last.
+     * 
+     * @param   JTable  $table      Item table to save.
+     * @param   string  $position   "first" to set first or other are set to last.
+     *
+     * @return  type    
+     */
 	public function setOrderPosition($table, $position = null)
 	{
 		// "first" or "last"
@@ -190,11 +211,13 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	}
 	
 	
-	/*
-	 * function postSaveHook
-	 * @param $data
-	 */
-	
+	/**
+     * Function that do something after save.
+     *
+     * @param   object  $data	The data object.
+     *
+     * @return  boolean	Save success or not. 
+     */
 	public function postSaveHook($data = null)
 	{
 		return true ;

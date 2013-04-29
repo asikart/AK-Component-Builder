@@ -58,7 +58,6 @@ if( JVERSION >= 3 ) {
 
 
 
-
 ?>
 
 <?php if( JVERSION >= 3 ): ?>

@@ -61,5 +61,6 @@ if( $app->isSite() ){
 {COMPONENT_NAME_UCFIRST}Helper::_('plugin.attachPlugins');
 
 // Debug
-define('AKDEBUG', {COMPONENT_NAME_UCFIRST}Helper::_('system.getConfig', 'system.debug')) ;
+define('AKDEBUG', {COMPONENT_NAME_UCFIRST}Helper::_('system.getConfig', 'system.debug', false, 'com_{COMPONENT_NAME}')) ;
+define('AKDEV', {COMPONENT_NAME_UCFIRST}Helper::_('system.getConfig', 'system.development_mode', true, 'com_{COMPONENT_NAME}')) ;
 

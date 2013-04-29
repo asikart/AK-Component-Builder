@@ -64,7 +64,12 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 	 */
 	protected function addToolbar()
 	{
-		AKToolBarHelper::title( '{CONTROLLER_NAME_UCFIRST}' . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_ITEM_EDIT'), 'article-add.png');
+		// Set title.
+		$title = AKDEV
+				? ucfirst($this->getName()) . ' ' . JText::_($this->text_prefix.'_TITLE_ITEM_EDIT')
+				: JText::_($this->text_prefix . '_' . strtoupper($this->getName()) . '_TITLE_ITEM_EDIT')
+				;
+		AKToolBarHelper::title( $title, 'article-add.png');
 		
 		parent::addToolbar();
 	}

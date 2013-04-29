@@ -26,56 +26,67 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 	{		
 		jimport('joomla.filesystem.folder');
 		jimport('joomla.filesystem.file');
-		$app = JFactory::getApplication() ;
+		$app 	= JFactory::getApplication() ;
 		
-		if(JVERSION >= 3):
+		$menus = array() ;
 		
-			if($app->isAdmin()) {
-				JHtmlSidebar::addEntry(
-					JText::_('JCATEGORY'),
-					'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
-					$vName == 'categories'
+		// Add Category Menu Item
+		if($app->isAdmin()) {
+			$menus['category'] = array(
+				'title' 	=> JText::_('JCATEGORY'),
+				'url' 		=> 'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
+				'active' 	=> ( $vName == 'categories' )
+			);
+		}
+		
+		
+		// Add View List Menu Items
+		$folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
+		
+		foreach( $folders as $folder ){
+			
+			// Only show ViewList
+			if( substr($folder, -2) == 'es' || substr($folder, -1) == 's'){
+				
+				$menus[$folder] = array(
+					'title' 	=> AKHelper::_('system.getConfig', 'system.development_mode', false, 'com_{COMPONENT_NAME}')
+									? ucfirst($folder) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST')
+									: JText::_('COM_{COMPONENT_NAME_UC}_' . strtoupper($folder) . '_TITLE' ),
+					'url' 		=> 'index.php?option=com_{COMPONENT_NAME}&view='.$folder,
+					'active' 	=> ( $vName == $folder )
 				);
+				
 			}
-			
-			
-			$folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
-			
-			foreach( $folders as $folder ){
-				if( substr($folder, -2) == 'is' || substr($folder, -1) == 's'){
-					JHtmlSidebar::addEntry(
-						ucfirst($folder) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST'),
-						'index.php?option=com_{COMPONENT_NAME}&view='.$folder,
-						$vName == $folder
-					);
-				}
-			}
+		}
 		
-		else:
-			
-			if($app->isAdmin()) {
-				JSubMenuHelper::addEntry(
-					JText::_('JCATEGORY'),
-					'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
-					$vName == 'categories'
-				);
-			}
-			
-			$folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
-			
-			foreach( $folders as $folder ){
-				if( substr($folder, -2) == 'is' || substr($folder, -1) == 's'){
-					JSubMenuHelper::addEntry(
-						ucfirst($folder) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST'),
-						'index.php?option=com_{COMPONENT_NAME}&view='.$folder,
-						$vName == $folder
-					);
-				}
-			}
-			
-		endif;
+		
+		// Trigger for plugin
+		$app->triggerEvent( 'onAddSubmenu' , array( 'com_{COMPONENT_NAME}.panel' , &$menus)) ;
+		
+		
+		// AddSubmenu
+		foreach( $menus as $menu ):
+			self::addSubmenuEntry( $menu['title'], $menu['url'], $menu['active'] );
+		endforeach;
 		
 	}
+	
+	
+	
+	/*
+	 * function addSubmenu
+	 * @param $menu
+	 */
+	
+	public static function addSubmenuEntry($title, $url = '#', $active = false)
+	{
+		if( JVERSION >= 3 ) {
+			JHtmlSidebar::addEntry( $title, $url, $active );
+		}else{
+			JSubMenuHelper::addEntry( $title, $url, $active );
+		}
+	}
+	
 	
 	
 	/**

@@ -255,12 +255,15 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	}
 	
 	
-	
-	/*
-	 * function searchCondition
-	 * @param $q
+	/**
+	 * Set search condition to support multiple search inputs.
+	 * 
+	 * @param   array			$search	Search fields and values.
+	 * @param   JDatabaseQuery	$q		The query object.
+	 * @param   array			$ignore	An array for ignore fields.
+	 *
+	 * @return  JDatabaseQuery    
 	 */
-	
 	public function searchCondition($search, $q = null, $ignore = array())
 	{
 		// Set ignore fields, and you can set yourself search later.
@@ -280,13 +283,15 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		return $q ;
 	}
 	
-	
-	
-	/*
-	 * function filterCondition
-	 * @param $filter
+	/**
+	 * Set query filter.
+	 * 
+	 * @param   array			$filter	Filter fields and values.
+	 * @param   JDatabaseQuery	$q		The query object.
+	 * @param   array			$ignore	An array for ignore fields.
+	 *
+	 * @return  type    
 	 */
-	
 	public function filterCondition($filter, $q = null, $ignore = array())
 	{
 		// Set ignore fields, and you can set yourself filter later.

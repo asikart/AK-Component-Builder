@@ -331,11 +331,15 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		
 		// Search
 		// ========================================================================
+		$searc_where = array();
 		foreach($search as $k => $v ){
 			if(in_array($k, $this->filter_fields)){
 				$k = $db->qn($k);
-				$q->where("{$k} LIKE '{$v}'");
+				$searc_where[] = "{$k} LIKE '{$v}'" ;
 			}
+		}
+		if(count($searc_where)){
+			$q->where( ' ( ' .implode(' OR ', $searc_where) . ' ) ');
 		}
 		
 		

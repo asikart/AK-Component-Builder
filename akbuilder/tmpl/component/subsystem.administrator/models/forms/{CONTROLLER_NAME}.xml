@@ -21,6 +21,14 @@
 				labelclass="control-label"
 			/>
 			
+			<field name="param_alias"
+				type="text"
+				label="JFIELD_ALIAS_LABEL"
+				description="JFIELD_ALIAS_DESC"
+				size="50"
+				labelclass="control-label"
+			/>
+			
 			<field name="parent_id"
 				type="{CONTROLLER_NAME}_modal"
 				label="COM_{COMPONENT_NAME_UC}_PARENT_ITEM"

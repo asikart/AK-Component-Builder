@@ -1,7 +1,8 @@
 {
 	
 	"system": {
-		"debug" : false
+		"debug" : true ,
+		"development_mode" : true
 	}
 	
 }

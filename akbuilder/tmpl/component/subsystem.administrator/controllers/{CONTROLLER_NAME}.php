@@ -33,7 +33,6 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKCont
      * @see     JController
      * @since   11.1
      */
-	
     function __construct() {
 		
 		$this->allow_url_params = array(
@@ -60,7 +59,6 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKCont
      *
      * @since   11.1
      */
-	
 	protected function postSaveHook( &$model, $validData = array())
     {
 		$result = $model->postSaveHook($validData) ;

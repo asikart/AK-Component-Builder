@@ -134,7 +134,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		
 		// Publish Date
 		// =====================================================================================
-		$pup = JFactory::getDate( $item->get('publish_up '), JFactory::getConfig()->get('offset') )->toUnix(true) ;
+		$pup = JFactory::getDate( $item->get('publish_up'), JFactory::getConfig()->get('offset') )->toUnix(true) ;
 		$pdw = JFactory::getDate( $item->get('publish_down') , JFactory::getConfig()->get('offset') )->toUnix(true) ;
 		$now = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') )->toUnix(true) ;
 		$null= JFactory::getDate( '0000-00-00 00:00:00' , JFactory::getConfig()->get('offset') )->toUnix(true) ;

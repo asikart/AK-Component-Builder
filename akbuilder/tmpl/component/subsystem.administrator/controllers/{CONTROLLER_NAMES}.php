@@ -33,7 +33,6 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends AKCon
      * @see     JController
      * @since   11.1
      */
-	
     function __construct() {
 		
 		$this->redirect_tasks = array(
