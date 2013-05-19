@@ -10,6 +10,7 @@
 			type="list"
 			default=""
 			onchange="this.form.submit();"
+			class="span12 small"
 		>
 			<option></option>
 			<option>JOPTION_SELECT_PUBLISHED</option>
@@ -21,11 +22,11 @@
 		
 		<field
 			name="a.catid"
-			type="category"
+			type="{CONTROLLER_NAME}_list"
 			default=""
 			extension="com_{COMPONENT_NAME}"
 			onchange="this.form.submit();"
-			class="" 
+			class="span12 small"
 		>
 			<option></option>
 			<option>JOPTION_SELECT_CATEGORY</option>

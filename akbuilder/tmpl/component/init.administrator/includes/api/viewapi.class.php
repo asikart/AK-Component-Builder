@@ -55,6 +55,12 @@ class AKViewApi extends JViewLegacy
 		// =================================================================
 		$ctrl 	= JControllerLegacy::getInstance('{COMPONENT_NAME_UCFIRST}');
 		$model 	= $ctrl->getModel($class) ;
+		
+		if( !is_callable( array($model, $method) ) ) {
+			ApiError::raiseError(500, "Method: {$class}::{$method} not exists.");
+			return false;
+		}
+
 		$data 	= $model->$method() ;
 		
 		

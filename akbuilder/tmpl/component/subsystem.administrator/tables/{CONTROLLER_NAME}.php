@@ -105,12 +105,83 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME_UCFIRST} extends JTable
 		return parent::bind($array, $ignore);
 	}
 	
+	/**
+     * Method to perform sanity checks on the JTable instance properties to ensure
+     * they are safe to store in the database.  Child classes should override this
+     * method to make sure the data they are storing in the database is safe and
+     * as expected before storage.
+     *
+     * @return  boolean  True if the instance is sane and able to be stored in the database.
+     *
+     * @link    http://docs.joomla.org/JTable/check
+     * @since   11.1
+     */
+    public function check()
+    {
+        return parent::check();
+    }
+ 
+    /**
+     * Method to store a row in the database from the JTable instance properties.
+     * If a primary key value is set the row with that primary key value will be
+     * updated with the instance property values.  If no primary key value is set
+     * a new row will be inserted into the database with the properties from the
+     * JTable instance.
+     *
+     * @param   boolean  $updateNulls  True to update fields even if they are null.
+     *
+     * @return  boolean  True on success.
+     *
+     * @link    http://docs.joomla.org/JTable/store
+     * @since   11.1
+     */
+    public function store($updateNulls = false)
+	{
+		return parent::store($updateNulls);
+	}
 	
+	/**
+     * Method to provide a shortcut to binding, checking and storing a JTable
+     * instance to the database table.  The method will check a row in once the
+     * data has been stored and if an ordering filter is present will attempt to
+     * reorder the table rows based on the filter.  The ordering filter is an instance
+     * property name.  The rows that will be reordered are those whose value matches
+     * the JTable instance for the property specified.
+     *
+     * @param   mixed   $src             An associative array or object to bind to the JTable instance.
+     * @param   string  $orderingFilter  Filter for the order updating
+     * @param   mixed   $ignore          An optional array or space separated list of properties
+     *                                    to ignore while binding.
+     *
+     * @return  boolean  True on success.
+     *
+     * @link    http://docs.joomla.org/JTable/save
+     * @since   11.1
+     */
+    public function save($src, $orderingFilter = '', $ignore = '')
+	{
+		return parent::save($src, $orderingFilter, $ignore);
+	}
+	
+	/**
+     * Method to delete a row from the database table by primary key value.
+     *
+     * @param   mixed  $pk  An optional primary key value to delete.  If not set the instance property value is used.
+     *
+     * @return  boolean  True on success.
+     *
+     * @link    http://docs.joomla.org/JTable/delete
+     * @since   11.1
+     * @throws  UnexpectedValueException
+     */
+    public function delete($pk = null)
+	{
+		return parent::delete($pk);
+	}
 	
 	/*
 	 * Setting Nested table, and rebuild.
 	 */
-	
 	public function rebuild($parentId = null, $leftId = 0, $level = 0, $path = '')
 	{
 		if(!$parentId){

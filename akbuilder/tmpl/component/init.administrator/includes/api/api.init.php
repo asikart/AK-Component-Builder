@@ -17,8 +17,8 @@ JRequest::setVar('format'	, 'json', 'method', true) ;
 
 JFactory::$document = JDocument::getInstance('json') ;
 
-include_once dirname(__FILE__).'/controllerapi.php' ;
-include_once dirname(__FILE__).'/viewapi.php' ;
-include_once dirname(__FILE__).'/errorapi.php' ;
+include_once dirname(__FILE__).'/controllerapi.class.php' ;
+include_once dirname(__FILE__).'/viewapi.class.php' ;
+include_once dirname(__FILE__).'/errorapi.class.php' ;
 
 ApiError::attachHandler();

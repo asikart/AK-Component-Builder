@@ -94,11 +94,11 @@ if($app->isAdmin()) {
 				
 				echo $tabs ? {COMPONENT_NAME_UCFIRST}Helper::_('panel.addPanel' , '{CONTROLLER_NAME}Tab', $this->fields_group[$key]['label'] ? $this->fields_group[$key]['label'] : JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDS_'.$group) , $group ) : null ;
 		?>
-			<div class="row-fluid">
+			<div id="group-<?php echo $group; ?>" class="row-fluid">
 			
 				
 				<!-- Left Bar -->
-				<div class="<?php echo 'group-'.$group; ?>-left span<?php echo $span_left; ?><?php echo JVERSION < 3 ? ' width-'.$width_left : '' ;?> fltlft">
+				<div id="group-<?php echo $group; ?>-left" class="span<?php echo $span_left; ?><?php echo JVERSION < 3 ? ' width-'.$width_left : '' ;?> fltlft">
 					
 					<?php foreach( $fieldsets as  $k => $fieldset ): ?>
 						
@@ -113,7 +113,8 @@ if($app->isAdmin()) {
 						
 						
 							<!-- Fieldset -->
-							<?php $this->current_fieldset = $fieldset; ?>
+							<?php $this->current_group		= $group ?>
+							<?php $this->current_fieldset 	= $fieldset; ?>
 							<?php echo $this->loadTemplate('fieldset'); ?>
 						
 						
@@ -129,7 +130,7 @@ if($app->isAdmin()) {
 				
 				
 				<!-- Right Bar -->
-				<div class="<?php echo 'group-'.$group; ?>-right span<?php echo $span_right; ?><?php echo JVERSION < 3 ? ' width-'.$width_right : '' ;?> fltlft">
+				<div id="group-<?php echo $group; ?>-right" class="span<?php echo $span_right; ?><?php echo JVERSION < 3 ? ' width-'.$width_right : '' ;?> fltlft">
 					
 					
 					<?php foreach( $fieldsets as  $k => $fieldset ): ?>
@@ -145,7 +146,8 @@ if($app->isAdmin()) {
 						
 						
 							<!-- Fieldset -->
-							<?php $this->current_fieldset = $fieldset; ?>
+							<?php $this->current_group		= $group ?>
+							<?php $this->current_fieldset 	= $fieldset; ?>
 							<?php echo $this->loadTemplate('fieldset'); ?>
 						
 						

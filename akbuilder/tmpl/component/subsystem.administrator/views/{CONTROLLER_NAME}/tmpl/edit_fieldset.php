@@ -44,11 +44,11 @@ if(!empty($fieldset->horz) && $fieldset->horz !== 'false'){
 $class = !empty($fieldset->class) ? ' ' . $fieldset->class : '' ;
 ?>
 	
-<fieldset id="fildset-<?php echo $fieldset->name; ?>" class="adminform <?php echo $form_class; ?><?php echo $class; ?>">
+<fieldset id="fildset-<?php echo $this->current_group . '-' . $fieldset->name; ?>" class="adminform <?php echo $form_class; ?><?php echo $class; ?>">
 	<legend><?php echo $fieldset->label ? JText::_($fieldset->label) : JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDSET_'.$fieldset->name); ?></legend>
 	
 	<?php foreach($this->form->getFieldset($fieldset->name) as $field ): ?>
-		<div class="control-group">
+		<div class="control-group" id="<?php echo $field->id; ?>-wrap">
 			<?php echo $field->label; ?>
 			<div class="controls">
 				<?php echo $field->input; ?>
