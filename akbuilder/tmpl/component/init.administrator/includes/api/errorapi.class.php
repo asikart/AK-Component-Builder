@@ -120,7 +120,11 @@ abstract class ApiError extends JError
 	
 	public static function raise($level, $code, $msg, $info = null, $backtrace = false)
 	{
-		$level = self::$levels[$level] ;
+		if( !empty(self::$levels[$level]) ){
+            $level = self::$levels[$level] ;
+        }else{
+            $level = self::$levels[E_NOTICE] ;
+        }
 		
 		return call_user_func_array( array('ApiError', 'raise'.$level), array($level, $code, $msg, $info) ) ;
 	}
