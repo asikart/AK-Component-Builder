@@ -17,14 +17,6 @@ $lang 	= JFactory::getLanguage();
 
 
 
-// Define
-// ========================================================================
-define('{COMPONENT_NAME_UC}_SITE' , JPATH_COMPONENT_SITE );
-define('{COMPONENT_NAME_UC}_ADMIN', JPATH_COMPONENT_ADMINISTRATOR);
-define('{COMPONENT_NAME_UC}_SELF' , JPATH_COMPONENT);
-
-
-
 // Include Helpers
 // ========================================================================
 

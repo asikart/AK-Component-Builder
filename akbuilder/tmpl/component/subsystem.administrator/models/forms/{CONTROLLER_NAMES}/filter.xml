@@ -22,7 +22,7 @@
 		
 		<field
 			name="a.catid"
-			type="{CONTROLLER_NAME}_list"
+			type="category"
 			default=""
 			extension="com_{COMPONENT_NAME}"
 			onchange="this.form.submit();"

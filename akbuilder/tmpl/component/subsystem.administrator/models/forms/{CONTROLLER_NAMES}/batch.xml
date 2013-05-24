@@ -28,7 +28,7 @@
 		
 		<field name="created_by"
 			type="user"
-			label="JLIB_HTML_BATCH_USER_LABEL"
+			label="JAUTHOR"
 			description="JLIB_HTML_BATCH_USER_LABEL_DESC"
 			labelclass="control-label"
 			class="input-xlarge inputbox"

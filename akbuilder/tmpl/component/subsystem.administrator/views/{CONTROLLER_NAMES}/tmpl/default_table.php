@@ -247,24 +247,22 @@ if( JVERSION >= 3 ) {
 				
 				<div class="pull-left fltlft">
 				
-				
-				<!-- Checkout -->
-				<?php if ($item->get('a_checked_out')) : ?>
-					<?php echo JHtml::_('jgrid.checkedout', $i, $item->get('a_checked_out'), $item->get('a_checked_out_time'), '{CONTROLLER_NAMES}.', $canCheckin); ?>
-				<?php endif; ?>
-				
-				
-				<!-- Title -->
-				<?php if ($canEdit || $canEditOwn) : ?>
-					<div class="" >
+				<div class="item-title" >
+					<!-- Checkout -->
+					<?php if ($item->get('a_checked_out')) : ?>
+						<?php echo JHtml::_('jgrid.checkedout', $i, $item->get('c_name'), $item->get('a_checked_out_time'), '{CONTROLLER_NAMES}.', $canCheckin); ?>
+					<?php endif; ?>
+					
+					
+					<!-- Title -->
+					<?php if ($canEdit || $canEditOwn) : ?>
 						<a class="quick-edit-content" href="<?php echo JRoute::_('index.php?option=com_{COMPONENT_NAME}&task={CONTROLLER_NAME}.edit&id='.$item->a_id); ?>">
 							<?php echo $item->get('a_title'); ?>
 						</a>
-					</div>
-				<?php else: ?>
-					<?php echo $item->get('a_title'); ?>
-				<?php endif; ?>
-				
+					<?php else: ?>
+						<?php echo $item->get('a_title'); ?>
+					<?php endif; ?>
+				</div>
 				
 				<!-- Sub Title -->
 				<?php if( JVERSION >= 3 ): ?>
