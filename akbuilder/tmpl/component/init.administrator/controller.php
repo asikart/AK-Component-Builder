@@ -11,7 +11,9 @@
 // no direct access
 defined('_JEXEC') or die;
 
-class {COMPONENT_NAME_UCFIRST}Controller extends JControllerLegacy
+include_once AKPATH_COMPONENT.'/controller.php' ;
+
+class {COMPONENT_NAME_UCFIRST}Controller extends AKController
 {
 	/**
 	 * Method to display a view.

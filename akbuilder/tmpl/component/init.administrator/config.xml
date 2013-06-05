@@ -8,24 +8,38 @@
 
         <field name="{CONTROLLER_NAME}_list"
              type="{CONTROLLER_NAME}_list"
-             default="1"
+             default="5"
 			 extension="com_{COMPONENT_NAME}"
 			 view_list="{CONTROLLER_NAMES}"
 			 view_item="{CONTROLLER_NAME}"
              label="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}"
              description="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
+			 quickadd="true"
 		>
             <option>JOPTION_DO_NOT_USE</option>
          </field>
 		
 		<field name="{CONTROLLER_NAME}_modal"
              type="{CONTROLLER_NAME}_modal"
-             default="1"
+             default="7"
 			 extension="com_{COMPONENT_NAME}"
 			 view_list="{CONTROLLER_NAMES}"
 			 view_item="{CONTROLLER_NAME}"
              label="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}"
              description="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
+			 quickadd="true"
+		/>
+		
+		<field name="finder"
+			type="finder"
+			default=""
+			extension="com_{COMPONENT_NAME}"
+			root="images"
+			start_path="banners"
+			label="Finder"
+			description="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
+			preview="true"
+
 		/>
 		
 		<field name="limit"

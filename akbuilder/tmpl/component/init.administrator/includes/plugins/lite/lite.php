@@ -35,7 +35,7 @@ class plg{COMPONENT_NAME_UCFIRST}Lite extends AKPlugin
 	 * @param	int		The 'page' number
 	 * @since	1.6
 	 */
-	public function onContentPrepare($context, &$article, &$params, $limitstart)
+	public function onContentPrepare($context, $article, $params, $limitstart)
 	{
 		$app = JFactory::getApplication();
 		
@@ -58,7 +58,7 @@ class plg{COMPONENT_NAME_UCFIRST}Lite extends AKPlugin
 	 * @return	string
 	 * @since	1.6
 	 */
-	public function onContentAfterTitle($context, &$article, &$params, $limitstart)
+	public function onContentAfterTitle($context, $article, $params, $limitstart)
 	{
 		$app 	= JFactory::getApplication();
 		$result = null ;
@@ -84,7 +84,7 @@ class plg{COMPONENT_NAME_UCFIRST}Lite extends AKPlugin
 	 * @return	string
 	 * @since	1.6
 	 */
-	public function onContentBeforeDisplay($context, &$article, &$params, $limitstart)
+	public function onContentBeforeDisplay($context, $article, $params, $limitstart)
 	{
 		$app 	= JFactory::getApplication();
 		$result = null ;
@@ -110,7 +110,7 @@ class plg{COMPONENT_NAME_UCFIRST}Lite extends AKPlugin
 	 * @return	string
 	 * @since	1.6
 	 */
-	public function onContentAfterDisplay($context, &$article, &$params, $limitstart)
+	public function onContentAfterDisplay($context, $article, $params, $limitstart)
 	{
 		$app 	= JFactory::getApplication();
 		$result = null ;
@@ -138,7 +138,7 @@ class plg{COMPONENT_NAME_UCFIRST}Lite extends AKPlugin
 	 * @return	bool		If false, abort the save
 	 * @since	1.6
 	 */
-	public function onContentBeforeSave($context, &$article, $isNew)
+	public function onContentBeforeSave($context, $article, $isNew)
 	{
 		$app 	= JFactory::getApplication();
 		$result = array() ;
@@ -162,7 +162,7 @@ class plg{COMPONENT_NAME_UCFIRST}Lite extends AKPlugin
 	 * @param	bool		If the content is just about to be created
 	 * @since	1.6
 	 */
-	public function onContentAfterSave($context, &$article, $isNew)
+	public function onContentAfterSave($context, $article, $isNew)
 	{
 		$app 	= JFactory::getApplication();
 		$result = array() ;
