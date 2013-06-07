@@ -90,7 +90,6 @@ class AKViewApi extends JViewLegacy
      * function setBuffer
      * @param $data
      */
-    
     public function setBuffer($data)
     {
         $this->_buffer = $data ;
@@ -150,4 +149,31 @@ class AKViewApi extends JViewLegacy
             ApiError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
         }
     }
+    
+    public function setLog() {
+		$db = JFactory::getDbo();
+		$q = $db->getQuery(true) ;
+		$uri = JFactory::getURI();
+		
+		// delete old
+		$date = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
+		$date = $date->toUnix(true);
+		$date = $date - ( 60 * 60 * 24 * 3 ) ;
+		$date = JFactory::getDate( $date )->toSQL(true) ;
+		
+		$q->delete('#__{COMPONENT_NAME}_request_logs')
+			->where(" created <  '{$date}'")
+			;
+		$db->setQuery($q);
+		$db->query();
+		
+		
+		// insert new
+		$i = new JObject();
+		$i->created = JFactory::getDate( JFactory::getConfig()->get('offset') )->toMySQL();
+		$i->uri = $uri->getPath();
+		$i->request = json_encode(array_merge( JRequest::get('get') , JRequest::get('post') ) );
+		
+		$db->insertObject( '#__{COMPONENT_NAME}_request_logs' , $i );
+	}
 }

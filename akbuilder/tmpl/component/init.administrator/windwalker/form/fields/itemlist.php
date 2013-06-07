@@ -127,7 +127,7 @@ class JFormFieldItemlist extends JFormFieldList
         foreach( $items as $item ):
             $item   = new JObject($item);
             $level  = !empty($item->level) ? $item->level - 1 : 0 ;
-            if( $item->level < 0 ) $item->level = 0 ;
+            if( $level < 0 ) $level = 0 ;
             $options[] = JHtml::_('select.option', $item->$key_field, str_repeat('- ', $level).$item->$value_field );
         endforeach;
         
@@ -281,12 +281,17 @@ class JFormFieldItemlist extends JFormFieldList
     public function quickadd()
     {
         // Prepare Element
+        $readonly   = $this->getElement('readonly'  , false);
+        $disabled   = $this->getElement('disabled'  , false);
+        
+        if( $readonly || $disabled ) return ;
+        
         $quickadd    = $this->getElement('quickadd'     , false);
         $table_name  = $this->getElement('table'        , '#__' . $this->component.'_'. $this->view_list);
         $key_field   = $this->getElement('key_field'    , 'id');
         $value_field = $this->getElement('value_field'  , 'title');
         $formpath    = $this->getElement('quickadd_formpath'  , "administrator/components/{$this->extension}/models/forms/{$this->view_item}.xml");
-        $quickadd_extension = $this->getElement('quickadd_extension'  , $this->extension);
+        $quickadd_handler = $this->getElement('quickadd_handler'  , $this->extension);
         $title       = $this->getElement('quickadd_label', 'LIB_WINDWALKER_QUICKADD_TITLE');
         
         $qid = $this->id.'_quickadd' ;
@@ -296,7 +301,7 @@ class JFormFieldItemlist extends JFormFieldList
         
         // Prepare Script & Styles
         $doc = JFactory::getDocument();
-        AKHelper::_('include.sortedStyle', 'includes/css', $quickadd_extension);
+        AKHelper::_('include.sortedStyle', 'includes/css', $quickadd_handler);
         AKHelper::_('include.addJS', 'quickadd.js', 'ww');
         if( JVERSION < 3 ){
             AKHelper::_('include.addCSS', 'buttons/delicious-buttons/delicious-buttons.css', 'ww');
@@ -304,7 +309,7 @@ class JFormFieldItemlist extends JFormFieldList
         }
         
         // Set AKQuickAddOption
-        $config['quickadd_extension']    = $quickadd_extension ;
+        $config['quickadd_handler']    = $quickadd_handler ;
         $config['extension']    = $this->extension ;
         $config['component']    = $this->component ;
         $config['table']        = $table_name ;

@@ -33,7 +33,13 @@ class {COMPONENT_NAME_UCFIRST}Controller extends AKController
         JRequest::setVar('view', $view);
 
 		parent::display();
-
+        
+        // Debug
+        if(AKDEBUG):
+            echo '<hr style="clear:both;" />';
+            echo AKHelper::_('system.renderProfiler', 'WindWalker') ;   
+        endif;
+        
 		return $this;
 	}
 }

@@ -28,6 +28,10 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	public 		$item_name = '{CONTROLLER_NAME}' ;
 	public 		$list_name = '{CONTROLLER_NAMES}' ;
 	
+	public      $request_item = '';
+    public      $request_list = '';
+	
+	public 		$default_method = 'getItems';
 	
     /**
      * Constructor.
@@ -101,7 +105,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// Set First order field
-		$this->setState('list.orderingPrefix', array('a.catid')) ;
+		$this->setState('list.orderingPrefix', array(/*'a.catid'*/)) ;
 		
 		parent::populateState($ordering, 'asc');
 	}
@@ -210,7 +214,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		// Ordering
 		// ========================================================================
 		if( $orderCol == $order ){
-			$prefix = count($prefix) ? implode(', ', $db->qn($prefix)) . ', ' : '' ;
+			$prefix = count($prefix) ? implode(', ', $prefix) . ', ' : '' ;
 		}else{
 			$prefix = '' ;
 		}

@@ -32,20 +32,22 @@
 			/>
 			
 			<field name="catid"
-				type="category"
+				type="categoryadd"
 				label="JCATEGORY"
 				description="JFIELD_CATEGORY_DESC"
 				extension="com_{COMPONENT_NAME}"
 				labelclass="control-label"
+				quickadd="true"
 			>
 				<option value="0">COM_{COMPONENT_NAME_UC}_TITLE_UNCATEGORISED</option>
 			</field>
 			
 			<field name="images"
-				type="media"
+				type="finder"
 				label="COM_{COMPONENT_NAME_UC}_IMAGES"
 				description="COM_{COMPONENT_NAME_UC}_IMAGES_DESC"
 				labelclass="control-label"
+				preview="true"
 			/>
 			
 			<field name="url"
@@ -177,5 +179,41 @@
 			/>
 		</fieldset>
 	</fields>
+	
+	
+	<!-- For Quick Ajax AddNew -->
+	<fieldset name="quickadd">
+		<field name="title"
+			type="text"
+			label="JGLOBAL_TITLE"
+			description="JFIELD_TITLE_DESC"
+			required="true"
+			size="50"
+			labelclass=""
+			class="input-xlarge"
+		/>
+		
+		<field name="catid"
+			type="category"
+			label="JCATEGORY"
+			description="JFIELD_CATEGORY_DESC"
+			extension="com_{COMPONENT_NAME}"
+			labelclass="control-label"
+		>
+			<option value="0">COM_{COMPONENT_NAME_UC}_TITLE_UNCATEGORISED</option>
+		</field>
+		
+		<!--<field name="parent_id"
+			type="{CONTROLLER_NAME}_list"
+			label="COM_{COMPONENT_NAME_UC}_PARENT_ITEM"
+			description="COM_{COMPONENT_NAME_UC}_PARENT_ITEM_DESC"
+			labelclass="control-label"
+			class="input-xlarge inputbox"
+			access="true"
+		>
+			<option>JSELECT</option>
+			<option value="1">JLIB_HTML_ADD_TO_ROOT</option>
+		</field>-->
+	</fieldset>
 	
 </form>

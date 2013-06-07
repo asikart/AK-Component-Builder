@@ -28,7 +28,10 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	public 		$item_name = '{CONTROLLER_NAME}' ;
 	public 		$list_name = '{CONTROLLER_NAMES}' ;
 	
+	public      $request_item = '';
+    public      $request_list = '';
 	
+	public 		$default_method = 'getItem';
 	
 	/**
 	 * Returns a reference to the a Table object, always creating it.

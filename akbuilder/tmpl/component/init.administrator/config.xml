@@ -33,13 +33,13 @@
 		<field name="finder"
 			type="finder"
 			default=""
-			extension="com_{COMPONENT_NAME}"
-			root="images"
-			start_path="banners"
+			handler="com_{COMPONENT_NAME}"
+			root="images/banners"
+			start_path=""
 			label="Finder"
 			description="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
 			preview="true"
-
+			onlyimage="true"
 		/>
 		
 		<field name="limit"

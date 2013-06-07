@@ -24,18 +24,41 @@ class JFormField{CONTROLLER_NAME_UCFIRST}_List extends JFormFieldItemlist
 	 * The form field type.
 	 *
 	 * @var		string
-	 * @since	1.6
 	 */
 	public $type = '{CONTROLLER_NAME_UCFIRST}_List';
 	
-	public $value ;
-	
-	public $name ;
-	
-	
+	/**
+     * List name.
+     *
+     * @var string 
+     */
 	protected $view_list = '{CONTROLLER_NAMES}' ;
 	
+    /**
+     * Item name.
+     *
+     * @var string 
+     */
 	protected $view_item = '{CONTROLLER_NAME}' ;
 	
+    /**
+     * Extension name, eg: com_content.
+     *
+     * @var string 
+     */
 	protected $extension = 'com_{COMPONENT_NAME}' ;
+    
+    /**
+     * Set the published column name in table.
+     *
+     * @var string
+     */
+    protected $published_field = 'published' ;
+    
+    /**
+     * Set the ordering column name in table.
+     *
+     * @var string
+     */
+    protected $ordering_field = null ;
 }

@@ -19,6 +19,13 @@ jimport('joomla.database.tablenested');
 class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME_UCFIRST} extends JTable
 {
 	/**
+	 * For API Request get SDK id
+	 *
+	 * @var string 
+	 */
+	protected $_option = 'com_{COMPONENT_NAME}' ;
+	
+	/**
 	 * Constructor
 	 *
 	 * @param JDatabase A database connector object
@@ -174,9 +181,9 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME_UCFIRST} extends JTable
      * @since   11.1
      * @throws  UnexpectedValueException
      */
-    public function delete($pk = null)
+    public function delete($pk = null, $children = true)
 	{
-		return parent::delete($pk);
+		return parent::delete($pk, $children);
 	}
 	
 	/*

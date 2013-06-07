@@ -56,3 +56,12 @@ if( $app->isSite() ){
 define('AKDEBUG', {COMPONENT_NAME_UCFIRST}Helper::_('system.getConfig', 'system.debug', false, 'com_{COMPONENT_NAME}')) ;
 define('AKDEV', {COMPONENT_NAME_UCFIRST}Helper::_('system.getConfig', 'system.development_mode', true, 'com_{COMPONENT_NAME}')) ;
 
+
+/* API Client init 
+AKHelper::_('api.initClient', null , array(
+	'username' 	=> 'username' ,
+	'password' 	=> 'password' ,
+	'host' 		=> '' ,
+	'component' => 'com_{COMPONENT_NAME}'
+) );
+*/

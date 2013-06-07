@@ -65,13 +65,14 @@ class JFormFieldModal extends JFormField
         // Load the modal behavior script.
         JHtml::_('behavior.modal', 'a.modal');
         $this->setElement();
-        
         $this->setScript();
 
         // Setup variables for display.
-        $html    = array();
-        $link    = $this->getLink();
-        $title   = $this->getTitle();
+        $readonly   = $this->getElement('readonly'  , false);
+        $disabled   = $this->getElement('disabled'  , false);
+        $html       = array();
+        $link       = $this->getLink();
+        $title      = $this->getTitle();
 
         if (empty($title)) {
             $title = $this->element['select_label']
@@ -83,8 +84,13 @@ class JFormFieldModal extends JFormField
         
         if( JVERSION >=3 ){
             // The current user display field.
-            $html[] = '<span class="input-append">';
-            $html[] = '<input type="text" class="input-medium" id="'.$this->id.'_name" value="'.$title.'" disabled="disabled" size="35" /><a class="modal btn" title="'.JText::_('COM_'.strtoupper($this->component).'_CHANGE_ITEM_BUTTON').'"  href="'.$link.'&amp;'.JSession::getFormToken().'=1" rel="{handler: \'iframe\', size: {x: 800, y: 450}}"><i class="icon-file"></i> '.JText::_('JSELECT').'</a>';
+            $html[] = '<span class="'.(!$disabled && !$readonly ? 'input-append' : '').'">';
+            $html[] = '<input type="text" class="'.(!$disabled && !$readonly ? 'input-medium '.$this->element['class'] : $this->element['class']).'" id="'.$this->id.'_name" value="'.$title.'" disabled="disabled" size="35" />';
+            
+            if (!$disabled && !$readonly) {
+                $html[] = '<a class="modal btn" title="'.JText::_('COM_'.strtoupper($this->component).'_CHANGE_ITEM_BUTTON').'"  href="'.$link.'&amp;'.JSession::getFormToken().'=1" rel="{handler: \'iframe\', size: {x: 800, y: 450}}"><i class="icon-file"></i> '.JText::_('JSELECT').'</a>';
+            }
+            
             $html[] = '</span>';
         }else{
             AKHelper::_('include.addCSS', 'buttons/delicious-buttons/delicious-buttons.css', 'ww');
@@ -95,11 +101,13 @@ class JFormFieldModal extends JFormField
             $html[] = '</div>';
     
             // The user select button.
-            $html[] = '<div class="fltlft">';
-            $html[] = '  <div class="">';
-            $html[] = '    <a class="modal delicious light blue" title="'.JText::_('COM_'.strtoupper($this->component).'_CHANGE_ITEM').'"  href="'.$link.'&amp;'.JSession::getFormToken().'=1" rel="{handler: \'iframe\', size: {x: 800, y: 450}}">'.JText::_('COM_'.strtoupper($this->component).'_CHANGE_ITEM_BUTTON').'</a>';
-            $html[] = '  </div>';
-            $html[] = '</div>';
+            if (!$disabled && !$readonly) :
+                $html[] = '<div class="fltlft">';
+                $html[] = '  <div class="">';
+                $html[] = '    <a class="modal delicious light blue" title="'.JText::_('COM_'.strtoupper($this->component).'_CHANGE_ITEM').'"  href="'.$link.'&amp;'.JSession::getFormToken().'=1" rel="{handler: \'iframe\', size: {x: 800, y: 450}}">'.JText::_('COM_'.strtoupper($this->component).'_CHANGE_ITEM_BUTTON').'</a>';
+                $html[] = '  </div>';
+                $html[] = '</div>';
+            endif;
         }
         
 
@@ -217,12 +225,17 @@ class JFormFieldModal extends JFormField
     public function quickadd()
     {
         // Prepare Element
+        $readonly   = $this->getElement('readonly'  , false);
+        $disabled   = $this->getElement('disabled'  , false);
+        
+        if( $readonly || $disabled ) return ;
+        
         $quickadd    = $this->getElement('quickadd'     , false);
         $table_name  = $this->getElement('table'        , '#__' . $this->component.'_'. $this->view_list);
         $key_field   = $this->getElement('key_field'    , 'id');
         $value_field = $this->getElement('value_field'  , 'title');
         $formpath    = $this->getElement('quickadd_formpath'  , "administrator/components/{$this->extension}/models/forms/{$this->view_item}.xml");
-        $quickadd_extension = $this->getElement('quickadd_extension'  , $this->extension);
+        $quickadd_handler = $this->getElement('quickadd_handler'  , $this->extension);
         $title       = $this->getElement('quickadd_label', 'LIB_WINDWALKER_QUICKADD_TITLE');
         
         $qid = $this->id.'_quickadd' ;
@@ -232,7 +245,7 @@ class JFormFieldModal extends JFormField
         
         // Prepare Script & Styles
         $doc = JFactory::getDocument();
-        AKHelper::_('include.sortedStyle', 'includes/css', $quickadd_extension);
+        AKHelper::_('include.sortedStyle', 'includes/css', $quickadd_handler);
         AKHelper::_('include.addJS', 'quickadd.js', 'ww');
         if( JVERSION < 3 ){
             AKHelper::_('include.addCSS', 'buttons/delicious-buttons/delicious-buttons.css', 'ww');
@@ -240,7 +253,7 @@ class JFormFieldModal extends JFormField
         }
         
         // Set AKQuickAddOption
-        $config['quickadd_extension']    = $quickadd_extension ;
+        $config['quickadd_handler']    = $quickadd_handler ;
         $config['extension']    = $this->extension ;
         $config['component']    = $this->component ;
         $config['table']        = $table_name ;

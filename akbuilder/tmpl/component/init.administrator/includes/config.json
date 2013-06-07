@@ -2,7 +2,10 @@
 	
 	"system": {
 		"debug" : true ,
-		"development_mode" : true
+		"development_mode" : true 
 	}
-	
+	,
+    "keyMap" : {
+        
+    }
 }

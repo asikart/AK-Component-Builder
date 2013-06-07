@@ -73,14 +73,16 @@ class AKHelperElfinder
 		$modal      = ( JRequest::getVar('tmpl') == 'component' ) ? true : false ;
         $root       = JRequest::getVar('root', '/') ;
         $start_path = JRequest::getVar('start_path', '/') ;
+        $site_root  = JURI::root(true).'/' ;
         
         
         // Set Script
         $getFileCallback = !$modal ? '' : "
-        ,
-        getFileCallback : function(file){
-            if (window.parent) window.parent.AKFinderSelect_{$finder_id}(AKFinderSelected, window.elFinder);
-        }"; 
+            ,
+            getFileCallback : function(file){
+                if (window.parent) window.parent.AKFinderSelect( '{$finder_id}',AKFinderSelected, window.elFinder, '{$site_root}');
+            }"; 
+        
         
         $script = <<<SCRIPT
 		var AKFinderSelected ;
@@ -114,40 +116,27 @@ SCRIPT;
         $doc->addScriptDeclaration($script);
         
         echo '<div class="row-fluid">
-                <div id="elfinder" class="span12 rm-finder">
-                        
-                </div>
+                <div id="elfinder" class="span12 rm-finder"></div>
             </div>' ;
     }
     
     /**
      * connector
      */
-    public static function connector($option = null)
+    public static function connector($option = null, $drivers = array('LocalFileSystem'))
     {
-        error_reporting(0); // Set E_ALL for debuging
+        //error_reporting(0); // Set E_ALL for debuging
 		
 		$elfinder_path = AKPATH_ASSETS.'/js/elfinder/php/' ;
 		
 		include_once $elfinder_path.'elFinderConnector.class.php';
 		include_once $elfinder_path.'elFinder.class.php';
 		include_once $elfinder_path.'elFinderVolumeDriver.class.php';
-		include_once $elfinder_path.'elFinderVolumeLocalFileSystem.class.php';
-		// Required for MySQL storage connector
-		// include_once $elfinder_path.'elFinderVolumeMySQL.class.php';
-		// Required for FTP connector support
-		// include_once $elfinder_path.'elFinderVolumeFTP.class.php';
-		// Required for Dropbox.com connector support
-		// include_once $elfinder_path.'elFinderVolumeDropbox.class.php';
-		// # Dropbox volume driver need "dropbox-php's Dropbox" and "PHP OAuth extension" or "PEAR's HTTP_OAUTH package"
-		// * dropbox-php: http://www.dropbox-php.com/
-		// * PHP OAuth extension: http://pecl.php.net/package/oauth
-		// * PEAR’s HTTP_OAUTH package: http://pear.php.net/package/http_oauth
-		//  * HTTP_OAUTH package require HTTP_Request2 and Net_URL2
-		// Dropbox driver need next two settings. You can get at https://www.dropbox.com/developers
-		// define('ELFINDER_DROPBOX_CONSUMERKEY',    '');
-		// define('ELFINDER_DROPBOX_CONSUMERSECRET', '');
-		
+        
+        foreach( $drivers as $driver ):
+            include_once $elfinder_path.'elFinderVolume'.$driver.'.class.php';
+        endforeach;
+
 		
 		/**
 		 * Simple function to demonstrate how to control file access using "accessControl" callback.
@@ -158,14 +147,11 @@ SCRIPT;
 		 * @return bool|null
 		 **/
 		function access($attr, $path, $data, $volume) {
-			return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
+            $r = array();
+			$r[] = strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
 				? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
 				:  null;                                    // else elFinder decide it itself
 		}
-		
-		
-		// Documentation for connector options:
-		// https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
 		
         
         // Get Some Request
@@ -178,10 +164,16 @@ SCRIPT;
 			'roots' => array(
 				array(
 					'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-					'path'          => JPath::clean(JPATH_ROOT.'/'.$root),         // path to files (REQUIRED)
-                    'startPath'     => JPath::clean(JPATH_ROOT.'/'.$root.'/'.$start_path) ,
-					'URL'           => JURI::root().trim($root, '/'), // URL to files (REQUIRED)
-					'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
+					'path'          => JPath::clean(JPATH_ROOT.'/'.$root, '/'),         // path to files (REQUIRED)
+                    'startPath'     => JPath::clean(JPATH_ROOT.'/'.$root.'/'.$start_path. '/') ,
+					'URL'           => JPath::clean(JURI::root(true).'/'.$root.'/'.$start_path, '/'), // URL to files (REQUIRED)
+                    'tmbPath'       => JPath::clean(JPATH_CACHE.'/AKFinderThumb'),
+                    'tmbURL'        => JURI::root() . 'cache/AKFinderThumb',
+                    'tmp'			=> JPath::clean(JPATH_CACHE.'/AKFinderTemp'),
+					'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
+                    //'uploadDeny'    =>  array('text/x-php')
+                    'uploadAllow' => array('image'),
+                    'dotFiles'     => false,  
 				)
 			)
 		);

@@ -237,17 +237,15 @@ if( JVERSION >= 3 ) {
 				quick-edit-field="title"
 			>
 				
-				<!-- Nested dashs -->
-				<?php if( $nested ): ?>
-				<div class="pull-left fltlft">
-					<?php $offset = $show_root ? 0 : 1 ; ?>
-					<?php echo str_repeat('<span class="gi">&mdash;</span>', $item->a_level - $offset) ; ?>
-				</div>
-				<?php endif; ?>
-				
 				<div class="pull-left fltlft">
 				
 				<div class="item-title" >
+					<!-- Nested dashs -->
+					<?php if( $nested ): ?>
+						<?php $offset = $show_root ? 0 : 1 ; ?>
+						<?php echo str_repeat('<span class="gi">&mdash;</span>', $item->a_level - $offset) ; ?>
+					<?php endif; ?>
+					
 					<!-- Checkout -->
 					<?php if ($item->get('a_checked_out')) : ?>
 						<?php echo JHtml::_('jgrid.checkedout', $i, $item->get('c_name'), $item->get('a_checked_out_time'), '{CONTROLLER_NAMES}.', $canCheckin); ?>
