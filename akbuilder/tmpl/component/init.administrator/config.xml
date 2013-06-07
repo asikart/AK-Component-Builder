@@ -34,7 +34,7 @@
 			type="finder"
 			default=""
 			handler="com_{COMPONENT_NAME}"
-			root="images/banners"
+			root="images"
 			start_path=""
 			label="Finder"
 			description="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
