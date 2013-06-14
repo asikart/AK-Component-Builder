@@ -79,7 +79,7 @@ class JFormFieldFinder extends JFormFieldText
             $html[] = '<input type="text" class="'.(!$disabled && !$readonly ? 'input-medium '.$this->element['class'] : $this->element['class']).'" id="'.$this->id.'_name" value="'.$title.'" disabled="disabled" size="35" />' ;
             
             if (!$disabled && !$readonly) :
-                $html[] = '<a class="modal btn btn-primary" title="'.JText::_('LIB_WINDWALKER_FORMFIELD_FINDER_BROWSE_FILES').'"  href="'.$link.'&amp;'.JSession::getFormToken().'=1" rel="{handler: \'iframe\', size: {x: 800, y: 450}}">
+                $html[] = '<a class="modal btn btn-primary" title="'.JText::_('LIB_WINDWALKER_FORMFIELD_FINDER_BROWSE_FILES').'"  href="'.$link.'&amp;'.JSession::getFormToken().'=1" rel="{handler: \'iframe\', size: {x: 920, y: 450}}">
                                 <i class="icon-picture"></i> '.JText::_('LIB_WINDWALKER_FORMFIELD_FINDER_BROWSE_FILES')
                             .'</a>';
             endif;
@@ -130,11 +130,12 @@ class JFormFieldFinder extends JFormFieldText
         
         // Clear Button
         // ================================================================
-        $clear_text = JVERSION < 3 ? JText::_('JLIB_FORM_BUTTON_CLEAR') : '';
+        $clear_text     = JVERSION < 3 ? JText::_('JLIB_FORM_BUTTON_CLEAR') : '';
+        $clear_title    = JText::_('LIB_WINDWALKER_FORMFIELD_FINDER_SELECT_FILE');
         
         if (!$disabled && !$readonly) :
             $html .= '<a class="btn btn-danger delicious light red fltlft hasTooltip" title="' . JText::_('JLIB_FORM_BUTTON_CLEAR') . '"' . ' href="#" onclick="';
-            $html .= "AKFinderClear('{$this->id}', '{$title}');";
+            $html .= "AKFinderClear('{$this->id}', '{$clear_title}');";
             $html .= 'return false;';
             $html .= '">';
             $html .= '<i class="icon-remove"></i>'.$clear_text.'</a>';
@@ -246,7 +247,7 @@ class JFormFieldFinder extends JFormFieldText
     {
         // Build Select script.
         $url_root = JURI::root() ;
-        $onlyimage = $this->element['onlyimage'] ? (string) $this->element['onlyimage'] : 0 ;
+        
         
         $script = <<<SCRIPT
         // Do Select
@@ -261,7 +262,7 @@ class JFormFieldFinder extends JFormFieldText
             link = link.replace( root, '' );
             
             // Detect is image
-            var onlyImage = {$onlyimage} ;
+            var onlyImage = false ;
             
             if( selected[0].mime.substring(0, 5) == 'image' ) {
                 $(id).set('image', 1);
@@ -354,8 +355,9 @@ SCRIPT;
         
         $root = $this->element['root'] ? (string) $this->element['root'] : '/' ;
         $start_path = $this->element['start_path'] ? (string) $this->element['start_path'] : '/' ;
+        $onlymimes = $this->element['onlymimes'] ? (string) $this->element['onlymimes'] : '' ;
         
-        $link = "index.php?option={$handler}&task=elfinderDisplay&tmpl=component&finder_id={$this->id}&root={$root}&start_path={$start_path}" ;
+        $link = "index.php?option={$handler}&task=elfinderDisplay&tmpl=component&finder_id={$this->id}&root={$root}&start_path={$start_path}&onlymimes={$onlymimes}" ;
         
         return $link ;
     }

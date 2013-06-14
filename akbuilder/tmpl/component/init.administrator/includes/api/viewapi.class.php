@@ -50,13 +50,13 @@ class AKViewApi extends JViewLegacy
             return false;
         }
         
+        if(!$method){
+            $method = $model->get('default_method', 'getItems') ;
+        }
+        
         if( !is_callable( array($model, $method) ) ) {
             ApiError::raiseError(404, "Method: {$class}::{$method} not exists.");
             return false;
-        }
-        
-        if(!$method){
-            $method = $model->get('default_method', 'getItems') ;
         }
         
         $data     = $model->$method() ;

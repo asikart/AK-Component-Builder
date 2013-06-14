@@ -23,18 +23,121 @@ class AKHelperElfinder
     /**
      * display
      */
-    public static function display($option = null)
+    public static function display($com_option = null, $option = array())
     {
         // Init some API objects
         // ================================================================================
         $date   = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
-        $doc    = JFactory::getDocument() ;
         $uri    = JFactory::getURI() ;
         $user   = JFactory::getUser() ;
         $app    = JFactory::getApplication() ;
-        $lang   = JFactory::getLanguage();
-        $lang_code = $lang->getTag();
-        $lang_code = str_replace('-', '_', $lang_code) ;    
+        $doc    = JFactory::getDocument() ;
+        
+        // Script
+        self::_displayScript($com_option, $option);
+        
+        // Base Toolbar
+        $toolbar_base = array(
+            array('back', 'forward'),
+            array('reload'),
+            //array('home', 'up'),
+            array('mkdir', 'mkfile', 'upload'),
+            //array('open', 'download', 'getfile'),
+            array('info'),
+            array('quicklook'),
+            array('copy', 'cut', 'paste'),
+            array('rm'),
+            array('duplicate', 'rename', 'edit', 'resize'),
+            //array('extract', 'archive'),
+            array('search'),
+            array('view'),
+            array('help')
+        );
+        
+        
+        // Get Request
+        $com_option = $com_option ? $com_option : JRequest::getVar('option') ;
+        $finder_id  = JRequest::getVar('finder_id') ;
+		$modal      = ( JRequest::getVar('tmpl') == 'component' ) ? true : false ;
+        $root       = JArrayHelper::getValue($option, 'root', JRequest::getVar('root', '/'));
+        $start_path = JArrayHelper::getValue($option, 'start_path', JRequest::getVar('start_path', '/'));
+        $site_root  = JURI::root(true).'/' ;
+        
+        $toolbar    = JArrayHelper::getValue($option, 'toolbar', $toolbar_base);
+        $toolbar    = $toolbar ? json_encode($toolbar) : json_encode($toolbar_base) ;
+        
+        $onlymimes  = JArrayHelper::getValue($option, 'onlymimes', JRequest::getVar('onlymimes', null));
+        $onlymimes  = is_array($onlymimes) ? implode(',', $onlymimes) : $onlymimes;
+        $onlymimes  = $onlymimes ? "'".str_replace(",", "','", $onlymimes)."'" : '';
+        
+        // Get INI setting
+        $upload_max = ini_get('upload_max_filesize') ;
+        $upload_num = ini_get('max_file_uploads') ;
+        
+        $upload_limit  = 'Max upload size: '.$upload_max ;
+        $upload_limit .= ' | Max upload files: '.$upload_num ;
+        
+        
+        // Set Script
+        $getFileCallback = !$modal ? '' : "
+            ,
+            getFileCallback : function(file){
+                if (window.parent) window.parent.AKFinderSelect( '{$finder_id}',AKFinderSelected, window.elFinder, '{$site_root}');
+            }"; 
+        
+        
+        $script = <<<SCRIPT
+		var AKFinderSelected ;
+		
+		// Init elFinder
+        jQuery(document).ready(function($) {
+            var elFinder = $('#elfinder').elfinder({
+                url         : 'index.php?option={$com_option}&task=elFinderConnector&root={$root}&start_path={$start_path}' ,
+                width       : '100%' ,
+                height      : 445 ,
+                onlyMimes   : [$onlymimes],
+                lang        : '{$lang_code}',
+                uiOptions   : {
+                    toolbar : {$toolbar}
+                },
+                handlers    : {
+                    select : function(event, elfinderInstance) {
+                        var selected = event.data.selected;
+
+                        if (selected.length) {
+                            AKFinderSelected = [];
+                            jQuery.each(selected, function(i, e){
+                                    AKFinderSelected[i] = elfinderInstance.file(e);
+                            });
+                        }
+
+                    }
+                }
+                
+                {$getFileCallback}
+                
+            }).elfinder('instance');
+            
+            elFinder.ui.statusbar.append( '<div class="akfinder-upload-limit">{$upload_limit}</div>' );
+        });
+SCRIPT;
+
+        $doc->addScriptDeclaration($script);
+        
+        echo '<div class="row-fluid">
+                <div id="elfinder" class="span12 ak-finder"></div>
+            </div>' ;
+    }
+    
+    /**
+     * Set Script for Finder Display
+     */
+    public static function _displayScript($com_option, $option = array())
+    {
+        $doc        = JFactory::getDocument() ;
+        $lang       = JFactory::getLanguage();
+        $lang_code  = $lang->getTag();
+        $lang_code  = str_replace('-', '_', $lang_code) ;    
         
         // Include elFinder and JS
         // ================================================================================
@@ -47,7 +150,7 @@ class AKHelperElfinder
             JHtml::_('bootstrap.framework', true);
         
         }else{
-            $doc->addStyleSheet('components/com_remoteimage/includes/bootstrap/css/bootstrap.min.css');
+            $doc->addStyleSheet(JURI::base().'/components/'.$com_option.'/includes/bootstrap/css/bootstrap.min.css');
             
             // jQuery
             AKHelper::_('include.addJS', 'jquery/jquery.js', 'ww') ;
@@ -65,77 +168,20 @@ class AKHelperElfinder
         $doc->addscript( $assets_url.'/js/elfinder/js/elfinder.min.js' );
         JHtml::script( $assets_url.'/js/elfinder/js/i18n/elfinder.'.$lang_code.'.js' );
         AKHelper::_('include.core');
-        
-        
-        // Get Request
-        $option     = $option ? $option : JRequest::getVar('option') ;
-        $finder_id  = JRequest::getVar('finder_id') ;
-		$modal      = ( JRequest::getVar('tmpl') == 'component' ) ? true : false ;
-        $root       = JRequest::getVar('root', '/') ;
-        $start_path = JRequest::getVar('start_path', '/') ;
-        $site_root  = JURI::root(true).'/' ;
-        
-        
-        // Set Script
-        $getFileCallback = !$modal ? '' : "
-            ,
-            getFileCallback : function(file){
-                if (window.parent) window.parent.AKFinderSelect( '{$finder_id}',AKFinderSelected, window.elFinder, '{$site_root}');
-            }"; 
-        
-        
-        $script = <<<SCRIPT
-		var AKFinderSelected ;
-		
-		// Init elFinder
-        jQuery(document).ready(function($) {
-            elFinder = $('#elfinder').elfinder({
-                url : 'index.php?option={$option}&task=elFinderConnector&root={$root}&start_path={$start_path}' ,
-                width : '100%' ,
-                lang : '{$lang_code}',
-                handlers : {
-                    select : function(event, elfinderInstance) {
-                        var selected = event.data.selected;
-
-                        if (selected.length) {
-                            AKFinderSelected = [];
-                            jQuery.each(selected, function(i, e){
-                                    AKFinderSelected[i] = elfinderInstance.file(e);
-                            });
-                        }
-
-                    }
-                }
-                
-                {$getFileCallback}
-                
-            }).elfinder('instance');
-        }); 
-SCRIPT;
-
-        $doc->addScriptDeclaration($script);
-        
-        echo '<div class="row-fluid">
-                <div id="elfinder" class="span12 rm-finder"></div>
-            </div>' ;
     }
     
     /**
      * connector
      */
-    public static function connector($option = null, $drivers = array('LocalFileSystem'))
+    public static function connector($com_option = null, $option = array())
     {
-        error_reporting(0); // Set E_ALL for debuging
+        error_reporting( JArrayHelper::getValue($option, 'error_reporting', 0) ); // Set E_ALL for debuging
 		
 		$elfinder_path = AKPATH_ASSETS.'/js/elfinder/php/' ;
 		
 		include_once $elfinder_path.'elFinderConnector.class.php';
 		include_once $elfinder_path.'elFinder.class.php';
 		include_once $elfinder_path.'elFinderVolumeDriver.class.php';
-        
-        foreach( $drivers as $driver ):
-            include_once $elfinder_path.'elFinderVolume'.$driver.'.class.php';
-        endforeach;
 
 		
 		/**
@@ -155,7 +201,7 @@ SCRIPT;
 		
         
         // Get Some Request
-		$option     = $option ? $option : JRequest::getVar('option') ;
+		$com_option = $com_option ? $com_option : JRequest::getVar('option') ;
 		$root       = JRequest::getVar('root', '/') ;
         $start_path = JRequest::getVar('start_path', '/') ;
         
@@ -169,6 +215,7 @@ SCRIPT;
 					'URL'           => JPath::clean(JURI::root(true).'/'.$root.'/'.$start_path, '/'), // URL to files (REQUIRED)
                     'tmbPath'       => JPath::clean(JPATH_CACHE.'/AKFinderThumb'),
                     'tmbURL'        => JURI::root() . 'cache/AKFinderThumb',
+                    //'tmbSize'       => 128,
                     'tmp'			=> JPath::clean(JPATH_CACHE.'/AKFinderTemp'),
 					'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
                     //'uploadDeny'    =>  array('text/x-php')
@@ -177,7 +224,13 @@ SCRIPT;
 				)
 			)
 		);
+        
+        $opts = array_merge( $opts, $option );
 		
+        foreach( $opts['roots'] as $driver ):
+            include_once $elfinder_path.'elFinderVolume'.$driver['driver'].'.class.php';
+        endforeach;
+        
 		// run elFinder
 		$connector = new elFinderConnector(new elFinder($opts));
 		$connector->run();

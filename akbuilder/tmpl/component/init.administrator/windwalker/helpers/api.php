@@ -40,9 +40,9 @@ class AKHelperApi
         $option['option']       = $compoenent_option;
         
         // Include Request SDK
-        include_once AKPATH_COMPONENT.'/api/request/item.php' ;
-        include_once AKPATH_COMPONENT.'/api/request/list.php' ;
-        include_once AKPATH_TABLES.'/api.php' ;
+        include_once AKPATH_COMPONENT.'/api/models/request/item.php' ;
+        include_once AKPATH_COMPONENT.'/api/models/request/list.php' ;
+        include_once AKPATH_COMPONENT.'/api/tables/request.php' ;
         
         include_once AKPATH_COMPONENT.'/api/sdk.php' ;
         
@@ -63,11 +63,11 @@ class AKHelperApi
      */
     public static function initServer()
     {
-        include_once AKPATH_COMPONENT.'/api/response/item.php' ;
-        include_once AKPATH_COMPONENT.'/api/response/list.php' ;
+        include_once AKPATH_COMPONENT.'/api/models/response/item.php' ;
+        include_once AKPATH_COMPONENT.'/api/models/response/list.php' ;
         
-        include_once AKPATH_COMPONENT.'/api/user/item.php' ;
-        //include_once AKPATH_COMPONENT.'/api/user/list.php' ;
+        include_once AKPATH_COMPONENT.'/api/models/response/user.php' ;
+        include_once AKPATH_COMPONENT.'/api/models/response/users.php' ;
     }
     
     /**
@@ -85,7 +85,7 @@ class AKHelperApi
             
             $component = $option['component'] ;
             
-            self::$sdk_instance[$id] = $service = AKApiSDK::getInstance($option);
+            self::$sdk_instance[$id] = $service = AKRequestSDK::getInstance($option);
             
             return $service;
         }
