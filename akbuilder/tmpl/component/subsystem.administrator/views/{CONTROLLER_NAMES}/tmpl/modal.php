@@ -88,7 +88,7 @@ if( JVERSION >= 3 ) {
 			$canEdit	= $user->authorise('core.edit',			'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id);
 			$canCheckin	= $user->authorise('core.manage',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) || $item->a_checked_out == $userId || $item->a_checked_out == 0;;
 			$canChange	= $user->authorise('core.edit.state',	'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $canCheckin;
-			$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $item->created_user_id == $userId;
+			$canEditOwn = $user->authorise('core.edit.own',		'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.'.$item->a_id) && $item->created_by == $userId;
 			
 			if($nested && $item->a_id == 1){
 				$item->a_title = JText::_('JGLOBAL_ROOT') ;

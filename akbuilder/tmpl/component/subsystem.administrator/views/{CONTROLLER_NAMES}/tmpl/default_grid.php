@@ -16,11 +16,13 @@ $userId	= $user->get('id');
 
 $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
+$orderCol 	= $this->state->get('list.orderCol', 'a.ordering') ;
 $canOrder	= $user->authorise('core.edit.state', 'com_{COMPONENT_NAME}');
-$saveOrder	= $listOrder == 'a.ordering';
+$saveOrder	= $listOrder == $orderCol || ($listOrder == 'a.lft' && $listDirn == 'asc');
+$trashed	= $this->state->get('filter.published') == -2 ? true : false;
 
 jimport('libraries.joomla.html.jgrid');
-{COMPONENT_NAME}Loader('ww://html/grid');
+include_once AKPATH_HTML.'/grid.php' ;
 
 
 
@@ -29,6 +31,19 @@ jimport('libraries.joomla.html.jgrid');
 $table 	= array() ;
 $th 	= array() ;
 $tr 	= array() ;
+
+
+
+// For Joomla!3.0
+// ================================================================================
+if( JVERSION >= 3 ) {
+	if ($saveOrder)
+	{
+		$method = 'saveOrderAjax' ;
+		$saveOrderingUrl = 'index.php?option=com_{COMPONENT_NAME}&task={CONTROLLER_NAMES}.'.$method.'&tmpl=component';
+		JHtml::_('sortablelist.sortable', 'itemList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false, false);
+	}
+}
 
 
 
@@ -102,7 +117,7 @@ foreach( $this->items as $k => $item ):
 		// Checkbox TD Content
 		// -----------------------------------------
 		
-		$content = JHtml::_('grid.id', $i, $item->a_id); ;
+		$content = JHtml::_('grid.id', $k, $item->a_id); ;
 		
 		
 		// Put in $td
@@ -176,7 +191,7 @@ foreach( $this->items as $k => $item ):
 		$content = '<div class="pull-left">' ;
 		
 		if ($item->get('a_checked_out'))
-			$content .= JHtml::_('jgrid.checkedout', $i, $item->get('a_checked_out'), $item->get('a_checked_out_time'), '{CONTROLLER_NAMES}.', $canCheckin);
+			$content .= JHtml::_('jgrid.checkedout', $k, $item->get('a_checked_out'), $item->get('a_checked_out_time'), '{CONTROLLER_NAMES}.', $canCheckin);
 		
 		if ($canEdit || $canEditOwn) 
 			$content .= JHtml::link(JRoute::_('index.php?option=com_{COMPONENT_NAME}&task={CONTROLLER_NAME}.edit&id='.$item->a_id), $item->get('a_title')) ;
@@ -188,22 +203,22 @@ foreach( $this->items as $k => $item ):
 			JHtml::_('dropdown.edit', $item->id, '{CONTROLLER_NAMES}.');
 			JHtml::_('dropdown.divider');
 			if ($item->a_published) :
-				JHtml::_('dropdown.unpublish', 'cb' . $i, '{CONTROLLER_NAMES}.');
+				JHtml::_('dropdown.unpublish', 'cb' . $k, '{CONTROLLER_NAMES}.');
 			else :
-				JHtml::_('dropdown.publish', 'cb' . $i, '{CONTROLLER_NAMES}.');
+				JHtml::_('dropdown.publish', 'cb' . $k, '{CONTROLLER_NAMES}.');
 			endif;
 			
 			JHtml::_('dropdown.divider');
 			
 			if ($item->a_checked_out) :
-				JHtml::_('dropdown.checkin', 'cb' . $i, '{CONTROLLER_NAMES}.');
+				JHtml::_('dropdown.checkin', 'cb' . $k, '{CONTROLLER_NAMES}.');
 			endif;
 			
 			
 			if ($trashed) :
-				JHtml::_('dropdown.untrash', 'cb' . $i, '{CONTROLLER_NAMES}.');
+				JHtml::_('dropdown.untrash', 'cb' . $k, '{CONTROLLER_NAMES}.');
 			else :
-				JHtml::_('dropdown.trash', 'cb' . $i, '{CONTROLLER_NAMES}.');
+				JHtml::_('dropdown.trash', 'cb' . $k, '{CONTROLLER_NAMES}.');
 			endif;
 			
 			$content .= '<div class="pull-left">'.JHtml::_('dropdown.render').'</div>' ;
@@ -238,7 +253,7 @@ foreach( $this->items as $k => $item ):
 		// Published TD Content
 		// -----------------------------------------
 		
-		$content = JHtml::_('jgrid.published', $item->a_published, $i, '{CONTROLLER_NAMES}.', $canChange, 'cb', $item->a_publish_up, $item->a_publish_down);
+		$content = JHtml::_('jgrid.published', $item->a_published, $k, '{CONTROLLER_NAMES}.', $canChange, 'cb', $item->a_publish_up, $item->a_publish_down);
 		
 		
 		// Put in $td
@@ -262,10 +277,11 @@ endforeach;
 
 
 // Set th in Table
-$table['thead']['tr'][0]['th'] 	= $th ;
-$table['tbody']['tr'] 			= $tr ;
+$table['thead']['tr'][0]['th'] 	    = $th ;
+$table['thead']['tr'][0]['option']  = array();
+$table['tbody']['tr'] 			    = $tr ;
 
-$table_option = array( 'class' => 'table table-striped adminlist', 'id' => 'articleList' ) ;
+$table_option = array( 'class' => 'table table-striped adminlist', 'id' => 'itemList' ) ;
 
 
 // Render Grid

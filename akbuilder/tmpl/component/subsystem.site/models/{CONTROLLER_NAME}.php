@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Joomla.Site
  * @subpackage  com_{COMPONENT_NAME}
  *
  * @copyright   Copyright (C) 2012 Asikart. All rights reserved.
@@ -14,7 +14,10 @@ defined('_JEXEC') or die;
 include_once AKPATH_COMPONENT.'/modeladmin.php' ;
 
 /**
- * {COMPONENT_NAME_UCFIRST} model.
+ * {COMPONENT_NAME_UCFIRST} modeladmin to edit item.
+ *
+ * @package     Joomla.Site
+ * @subpackage  com_{COMPONENT_NAME} 
  */
 class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmin
 {
@@ -24,14 +27,47 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 */
 	protected 	$text_prefix = 'COM_{COMPONENT_NAME_UC}';
 	
-	public 		$component = '{COMPONENT_NAME}' ;
-	public 		$item_name = '{CONTROLLER_NAME}' ;
-	public 		$list_name = '{CONTROLLER_NAMES}' ;
+    /**
+     * The Component name.
+     *
+     * @var    string 
+     */
+	protected    $component = '{COMPONENT_NAME}' ;
+    
+    /**
+     * The URL view item variable.
+     *
+     * @var    string 
+     */
+	protected    $item_name = '{CONTROLLER_NAME}' ;
+    
+    /**
+     * The URL view list variable.
+     *
+     * @var    string 
+     */
+	protected    $list_name = '{CONTROLLER_NAMES}' ;
 	
-	public      $request_item = '';
-    public      $request_list = '';
+    /**
+     * The URL view list to request remote data (only use in API system).
+     *
+     * @var    string 
+     */
+	public    $request_item = '';
+    
+    /**
+     * The URL view item to request remote data (only use in API system).
+     *
+     * @var    string 
+     */
+    public    $request_list = '';
 	
-	public 		$default_method = 'getItem';
+    /**
+     * The default method to call. (only use in API system).
+     *
+     * @var    string 
+     */
+	public    $default_method = 'getItem';
 	
 	/**
 	 * Returns a reference to the a Table object, always creating it.
@@ -47,8 +83,6 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 		return parent::getTable( $type , $prefix , $config );
 	}
 	
-	
-
 	/**
 	 * Method to get the record form.
 	 *
@@ -64,21 +98,34 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 		return $form ;
 	}
 	
-	
-	/*
-	 * function getFields
-	 * @param 
-	 */
-	
+	/**
+     * Get fields group. This Function is deprecated, use getFieldsGroup instead.
+     *
+     * @return      array   Fields groups.
+     * @deprecated  4.0
+     */
 	public function getFields()
 	{
+		// Deprecation warning.
+        JLog::add( __CLASS__.'::'.__FUNCTION__.'() is deprecated.', JLog::WARNING, 'deprecated');
+		
 		$fields = parent::getFields();
 		
 		return $fields ;
 	}
 	
+	/**
+     * Get fields group.
+     *
+     * @return    array   Fields groups.
+     */
+    public function getFieldsGroup()
+	{
+		$fields = parent::getFieldsGroup();
+		
+		return $fields ;
+	}
 	
-
 	/**
 	 * Method to get the data that should be injected in the form.
 	 *
@@ -94,9 +141,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 		
 		return $data ;
 	}
-
-	
-	
+    
 	/**
 	 * Method to get a single record.
 	 *
@@ -117,7 +162,6 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 		return false;
 	}
 	
-	
 	/**
 	 * Method to auto-populate the model state.
 	 *
@@ -131,8 +175,6 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 		
 		parent::populateState();
 	}
-	
-	
 	
 	/**
      * Method to allow derived classes to preprocess the form.
@@ -152,8 +194,6 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 		return parent::preprocessForm($form, $data, $group);
 	}
 	
-	
-	
 	/**
 	 * A protected method to get a set of ordering conditions.
 	 *
@@ -167,8 +207,6 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 		return parent::getReorderConditions($table) ;
 	}
 	
-	
-
 	/**
 	 * Prepare and sanitise the table prior to saving.
 	 *
@@ -176,28 +214,30 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
 	 */
 	protected function prepareTable(&$table)
 	{
-		return parent::prepareTable($table);
+		parent::prepareTable($table);
 	}
 	
-	
-	
-	/*
-	 * function setOrderPosition
-	 * @param $table
-	 */
-	
+	/**
+     * Method to set new item ordering as first or last.
+     * 
+     * @param   JTable  $table      Item table to save.
+     * @param   string  $position   "first" to set first or other are set to last.
+     *
+     * @return  type    
+     */
 	public function setOrderPosition($table, $position = null)
 	{
 		// "first" or "last"
 		parent::setOrderPosition($table, 'last') ;
 	}
 	
-	
-	/*
-	 * function postSaveHook
-	 * @param $data
-	 */
-	
+	/**
+     * Function that do something after save.
+     *
+     * @param   object  $data	The data object.
+     *
+     * @return  boolean	Save success or not. 
+     */
 	public function postSaveHook($data = null)
 	{
 		return true ;

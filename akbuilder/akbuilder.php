@@ -86,10 +86,18 @@ class AKBuilder
 			
 			JFile::delete($v);
 		}
-		
+        
 		foreach( $tmpl as $v ){
 			JFile::write( $v['target'] , $v['content'] ) ;
 			$this->convertfiles[] = $v['target'] ;
+		}
+        
+        // Delete Folders
+        $folders = JFolder::folders($this->tmpl_path, $this->item_name, true, true);
+        $folders = array_merge($folders, JFolder::folders($this->tmpl_path, $this->list_name, true, true));
+        
+        foreach( $folders as $v ){
+			JFolder::delete($v);
 		}
 	}
 	

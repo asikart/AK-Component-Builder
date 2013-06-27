@@ -13,6 +13,12 @@ defined('_JEXEC') or die;
 
 include_once AKPATH_COMPONENT.'/controller.php' ;
 
+/**
+ * Main Controller of {COMPONENT_NAME_UCFIRST}.
+ *
+ * @package     Joomla.Administrator
+ * @subpackage  com_{COMPONENT_NAME} 
+ */
 class {COMPONENT_NAME_UCFIRST}Controller extends AKController
 {
 	/**
@@ -35,7 +41,8 @@ class {COMPONENT_NAME_UCFIRST}Controller extends AKController
 		parent::display();
         
         // Debug
-        if(AKDEBUG):
+        $doc = JFactory::getDocument();
+        if((AKDEBUG || JDEBUG) && $doc->getType() == 'html'):
             echo '<hr style="clear:both;" />';
             echo AKHelper::_('system.renderProfiler', 'WindWalker') ;   
         endif;

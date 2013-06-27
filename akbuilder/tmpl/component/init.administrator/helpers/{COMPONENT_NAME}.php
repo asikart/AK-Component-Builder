@@ -16,6 +16,9 @@ include_once dirname(__FILE__).'/../includes/core.php' ;
 
 /**
  * {COMPONENT_NAME_UCFIRST} helper.
+ *
+ * @package     Joomla.Administrator
+ * @subpackage  com_{COMPONENT_NAME} 
  */
 class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 {
@@ -71,13 +74,13 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 		
 	}
 	
-	
-	
-	/*
-	 * function addSubmenu
-	 * @param $menu
-	 */
-	
+	/**
+     * Add Submenu entry.
+     * 
+     * @param   string  $title  Menu title.
+     * @param   string  $url    Link url.
+     * @param   string  $active A boolean to detect active?
+     */
 	public static function addSubmenuEntry($title, $url = '#', $active = false)
 	{
 		if( JVERSION >= 3 ) {
@@ -86,8 +89,6 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 			JSubMenuHelper::addEntry( $title, $url, $active );
 		}
 	}
-	
-	
 	
 	/**
 	 * Gets a list of the actions that can be performed.
@@ -119,12 +120,9 @@ class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 		return $result;
 	}
 	
-	
 	/*
-	 * function getVersion
-	 * @param 
+	 * Get Joomla! version.
 	 */
-	
 	public static function getVersion()
 	{
 		return JVERSION ;

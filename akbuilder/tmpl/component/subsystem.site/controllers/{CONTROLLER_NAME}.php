@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Joomla.Site
  * @subpackage  com_{COMPONENT_NAME}
  *
  * @copyright   Copyright (C) 2012 Asikart. All rights reserved.
@@ -15,15 +15,33 @@ defined('_JEXEC') or die;
 include_once AKPATH_COMPONENT.'/controllerform.php' ;
 
 /**
- * {CONTROLLER_NAME_UCFIRST} controller class.
+ * {CONTROLLER_NAME_UCFIRST} controllerform class to edit item.
+ *
+ * @package     Joomla.Site
+ * @subpackage  com_{COMPONENT_NAME} 
  */
 class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKControllerForm
 {
-	
-	public $view_list = '{CONTROLLER_NAMES}' ;
-	public $view_item = '{CONTROLLER_NAME}' ;
-	public $component = '{COMPONENT_NAME}';
-
+	/**
+     * The URL view list variable.
+     *
+     * @var    string 
+     */
+	protected $view_list = '{CONTROLLER_NAMES}' ;
+    
+    /**
+     * The URL view item variable.
+     *
+     * @var    string 
+     */
+	protected $view_item = '{CONTROLLER_NAME}' ;
+    
+    /**
+     * The Component name.
+     *
+     * @var    string 
+     */
+	protected $component = '{COMPONENT_NAME}';
 	
 	/**
      * Constructor.
@@ -46,8 +64,6 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKCont
 		
         parent::__construct();
     }
-
-	
 	
 	/**
      * Function that allows child controller access to model data
@@ -60,11 +76,9 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKCont
      *
      * @since   11.1
      */
-	
 	protected function postSaveHook( &$model, $validData = array())
     {
 		$result = $model->postSaveHook($validData) ;
 		return $result ;
     }
-	
 }

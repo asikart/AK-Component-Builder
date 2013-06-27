@@ -51,7 +51,7 @@ $published = $this->state->get('filter.a_published');
 		
 <?php if( JVERSION >= 3 ): ?>
 	<div class="modal-footer">
-		<button class="btn" type="button" onclick="document.id('batch-category-id').value='';document.id('batch-access').value='';document.id('batch-language-id').value=''" data-dismiss="modal">
+		<button class="btn" type="button" onclick="var inputs = jQuery('#batchModal input, #batchModal select, #batchModal tetarea');inputs.attr('value', '');inputs.trigger('liszt:updated');" data-dismiss="modal">
 			<?php echo JText::_('JCANCEL'); ?>
 		</button>
 		<button class="btn btn-primary" type="submit" onclick="Joomla.submitbutton('{CONTROLLER_NAME}.batch');">
@@ -64,7 +64,7 @@ $published = $this->state->get('filter.a_published');
 		<button class="btn"  type="submit" onclick="Joomla.submitbutton('{CONTROLLER_NAME}.batch');">
 			<?php echo JText::_('JGLOBAL_BATCH_PROCESS'); ?>
 		</button>
-		<button class="btn"  type="button" onclick="document.id('batch-category-id').value='';document.id('batch-access').value='';document.id('batch-language-id').value=''">
+		<button class="btn"  type="button" onclick="var inputs = $$('.batch input, .batch select, .batch tetarea');inputs.set('value', '');">
 			<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>
 		</button>
 	</div>

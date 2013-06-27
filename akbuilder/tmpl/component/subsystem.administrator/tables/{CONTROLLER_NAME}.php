@@ -14,12 +14,15 @@ defined('_JEXEC') or die;
 jimport('joomla.database.tablenested');
 
 /**
- * {CONTROLLER_NAME} Table class
+ * {CONTROLLER_NAME_UCFIRST} Table class
+ *
+ * @package     Joomla.Administrator
+ * @subpackage  com_{COMPONENT_NAME} 
  */
 class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME_UCFIRST} extends JTable
 {
 	/**
-	 * For API Request get SDK id
+	 * For API Request get SDK id.
 	 *
 	 * @var string 
 	 */

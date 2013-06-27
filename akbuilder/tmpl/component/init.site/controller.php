@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Joomla.Site
  * @subpackage  com_{COMPONENT_NAME}
  *
  * @copyright   Copyright (C) 2012 Asikart. All rights reserved.
@@ -11,6 +11,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
+/**
+ * Main Controller of {COMPONENT_NAME_UCFIRST}.
+ *
+ * @package     Joomla.Site
+ * @subpackage  com_{COMPONENT_NAME} 
+ */
 class {COMPONENT_NAME_UCFIRST}Controller extends JControllerLegacy
 {
 	/**
@@ -34,5 +40,4 @@ class {COMPONENT_NAME_UCFIRST}Controller extends JControllerLegacy
 
 		return $this;
 	}
-	
 }

@@ -16,15 +16,33 @@ include_once AKPATH_COMPONENT.'/controllerform.php' ;
 
 /**
  * {CONTROLLER_NAME_UCFIRST} controller class.
+ *
+ * @package     Joomla.Administrator
+ * @subpackage  com_{COMPONENT_NAME} 
  */
 class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKControllerForm
 {
-	
-	public $view_list = '{CONTROLLER_NAMES}' ;
-	public $view_item = '{CONTROLLER_NAME}' ;
-	public $component = '{COMPONENT_NAME}';
-
-	
+	/**
+     * The URL view list variable.
+     *
+     * @var    string 
+     */
+	protected $view_list = '{CONTROLLER_NAMES}' ;
+    
+    /**
+     * The URL view item variable.
+     *
+     * @var    string 
+     */
+	protected $view_item = '{CONTROLLER_NAME}' ;
+    
+    /**
+     * The Component name.
+     *
+     * @var    string 
+     */
+	protected $component = '{COMPONENT_NAME}';
+    
 	/**
      * Constructor.
      *
@@ -45,9 +63,7 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKCont
 		
         parent::__construct();
     }
-
-	
-	
+    
 	/**
      * Function that allows child controller access to model data
      * after the data has been saved.

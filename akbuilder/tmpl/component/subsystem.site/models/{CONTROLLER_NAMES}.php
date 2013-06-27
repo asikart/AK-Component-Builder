@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Joomla.Site
  * @subpackage  com_{COMPONENT_NAME}
  *
  * @copyright   Copyright (C) 2012 Asikart. All rights reserved.
@@ -15,6 +15,9 @@ include_once AKPATH_COMPONENT.'/modellist.php' ;
 
 /**
  * Methods supporting a list of {COMPONENT_NAME_UCFIRST} records.
+ *
+ * @package     Joomla.Site
+ * @subpackage  com_{COMPONENT_NAME} 
  */
 class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelList
 {
@@ -24,14 +27,47 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	 */
 	protected 	$text_prefix = 'COM_{COMPONENT_NAME_UC}';
 	
-	public 		$component = '{COMPONENT_NAME}' ;
-	public 		$item_name = '{CONTROLLER_NAME}' ;
-	public 		$list_name = '{CONTROLLER_NAMES}' ;
+    /**
+     * The Component name.
+     *
+     * @var    string 
+     */
+	protected    $component = '{COMPONENT_NAME}' ;
+    
+    /**
+     * The URL view item variable.
+     *
+     * @var    string 
+     */
+	protected    $item_name = '{CONTROLLER_NAME}' ;
+    
+    /**
+     * The URL view list variable.
+     *
+     * @var    string 
+     */
+	protected    $list_name = '{CONTROLLER_NAMES}' ;
 	
-	public      $request_item = '';
-    public      $request_list = '';
+    /**
+     * The URL view list to request remote data (only use in API system).
+     *
+     * @var    string 
+     */
+	public    $request_item = '';
+    
+    /**
+     * The URL view item to request remote data (only use in API system).
+     *
+     * @var    string 
+     */
+    public    $request_list = '';
 	
-	public 		$default_method = 'getItem';
+    /**
+     * The default method to call. (only use in API system).
+     *
+     * @var    string 
+     */
+	public    $default_method = 'getItems';
 	
     /**
      * Constructor.
@@ -73,8 +109,6 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
         parent::__construct($config);
     }
 	
-	
-	
 	/**
 	 * Returns a reference to the a Table object, always creating it.
 	 *
@@ -88,9 +122,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 	{
 		return parent::getTable( $type , $prefix , $config );
 	}
-	
-
-
+    
 	/**
 	 * Method to auto-populate the model state.
 	 *
@@ -225,14 +257,12 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		return parent::getStoreId($id);
 	}
 	
-	
 	/**
 	 * Method to get list page filter form.
 	 *
 	 * @return	object		JForm object.
 	 * @since	2.5
 	 */
-	
 	public function getFilter()
 	{
 		//$filter = parent::getFilter();
@@ -240,8 +270,6 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAMES_UCFIRST} extends AKModelLis
 		//return $filter ;
 	}
 	
-	
-
 	/**
 	 * Build an SQL query to load the list data.
 	 *

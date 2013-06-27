@@ -15,6 +15,9 @@ include_once AKPATH_COMPONENT.'/viewitem.php' ;
 
 /**
  * View to edit
+ *
+ * @package     Joomla.Administrator
+ * @subpackage  com_{COMPONENT_NAME} 
  */
 class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 {
@@ -23,17 +26,42 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 	 * @since	1.6
 	 */
 	protected 	$text_prefix = 'COM_{COMPONENT_NAME_UC}';
-	protected 	$items;
-	protected 	$pagination;
+    
+    /**
+     * Item to edit.
+     *
+     * @var array   
+     */
+	protected 	$item;
+    
+    /**
+     * Model state to get some configuration.
+     *
+     * @var JRegistry 
+     */
 	protected 	$state;
 	
-	public		$option 	= 'com_{COMPONENT_NAME}' ;
-	public		$list_name 	= '{CONTROLLER_NAMES}' ;
-	public		$item_name 	= '{CONTROLLER_NAME}' ;
-	public		$sort_fields ;
+    /**
+     * The Component option name.
+     *
+     * @var    string 
+     */
+	protected    $option 	= 'com_{COMPONENT_NAME}' ;
+    
+    /**
+     * The URL view list variable.
+     *
+     * @var    string 
+     */
+	protected    $list_name 	= '{CONTROLLER_NAMES}' ;
+    
+    /**
+     * The URL view item variable.
+     *
+     * @var    string 
+     */
+	protected    $item_name 	= '{CONTROLLER_NAME}' ;
 	
-	
-
 	/**
 	 * Display the view
 	 */
@@ -56,9 +84,7 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 
 		parent::displayWithPanel($tpl) ;
 	}
-
-	
-	
+    
 	/**
 	 * Add the page title and toolbar.
 	 */
@@ -74,13 +100,9 @@ class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 		parent::addToolbar();
 	}
 	
-	
-	
-	/*
-	 * function handleFields
-	 * @param 
-	 */
-	
+	/**
+     * Show or hide some fields setting.
+     */
 	public function handleFields()
 	{
 		$form = $this->form ;

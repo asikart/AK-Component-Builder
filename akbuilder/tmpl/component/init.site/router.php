@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Joomla.Site
  * @subpackage  com_{COMPONENT_NAME}
  *
  * @copyright   Copyright (C) 2012 Asikart. All rights reserved.

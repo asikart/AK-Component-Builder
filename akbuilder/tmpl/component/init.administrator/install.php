@@ -13,6 +13,9 @@ defined('_JEXEC') or die;
  
 /**
  * Script file of HelloWorld component
+ *
+ * @package     Joomla.Administrator
+ * @subpackage  com_{COMPONENT_NAME} 
  */
 class com_{COMPONENT_NAME_UCFIRST}InstallerScript
 {
