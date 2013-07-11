@@ -19,12 +19,12 @@ $item = $this->link_items ;
 <h3><?php echo JText::_('COM_{COMPONENT_NAME_UC}_MORE_LINKS'); ?></h3>
 <ol>
 <?php
-	foreach ($this->link_items as &$item) :
+    foreach ($this->link_items as &$item) :
 ?>
-	<li>
-		<a href="<?php echo $item->link; ?>">
-			<?php echo $item->a_title; ?></a>
-	</li>
+    <li>
+        <a href="<?php echo $item->link; ?>">
+            <?php echo $item->a_title; ?></a>
+    </li>
 <?php endforeach; ?>
 </ol>
 </div>

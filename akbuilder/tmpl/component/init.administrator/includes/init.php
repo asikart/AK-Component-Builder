@@ -11,9 +11,9 @@
 // no direct access
 defined('_JEXEC') or die;
 
-$doc 	= JFactory::getDocument();
-$app 	= JFactory::getApplication();
-$lang 	= JFactory::getLanguage();
+$doc     = JFactory::getDocument();
+$app     = JFactory::getApplication();
+$lang     = JFactory::getLanguage();
 
 
 
@@ -29,23 +29,26 @@ AKHelper::_('path.setOption', 'com_{COMPONENT_NAME}') ;
 
 // Some useful settings
 if( $app->isSite() ){
-	
-	// Include Admin language as global language.
-	$lang->load('', JPATH_ADMINISTRATOR);
-	$lang->load('com_{COMPONENT_NAME}', JPATH_COMPONENT_ADMINISTRATOR );
-	{COMPONENT_NAME_UCFIRST}Helper::_('lang.loadAll', $lang->getTag());
-	
-	
-	// Include Joomla! admin css
-	{COMPONENT_NAME_UCFIRST}Helper::_('include.sortedStyle', 'includes/css');
-	
-	
-	// set Base to fix toolbar anchor bug
-	$doc->setBase( JFactory::getURI()->toString() );
-	
+    
+    // Include Admin language as global language.
+    $lang->load('', JPATH_ADMINISTRATOR);
+    $lang->load('com_{COMPONENT_NAME}', JPATH_COMPONENT_ADMINISTRATOR );
+    {COMPONENT_NAME_UCFIRST}Helper::_('lang.loadAll', $lang->getTag());
+    
+    
+    // Include Joomla! admin css
+    {COMPONENT_NAME_UCFIRST}Helper::_('include.sortedStyle', 'includes/css');
+    
+    
+    // set Base to fix toolbar anchor bug
+    $doc->setBase( JFactory::getURI()->toString() );
+    
 }else{
-	{COMPONENT_NAME_UCFIRST}Helper::_('lang.loadAll', $lang->getTag());
-	{COMPONENT_NAME_UCFIRST}Helper::_('include.sortedStyle', 'includes/css');
+    {COMPONENT_NAME_UCFIRST}Helper::_('lang.loadAll', $lang->getTag());
+    {COMPONENT_NAME_UCFIRST}Helper::_('include.sortedStyle', 'includes/css');
+    
+    // Include Fields
+    JForm::addFieldPath( AKPATH_FORM.'/fields');
 }
 
 
@@ -59,9 +62,9 @@ define('AKDEV', {COMPONENT_NAME_UCFIRST}Helper::_('system.getConfig', 'system.de
 
 /* API Client init 
 AKHelper::_('api.initClient', null , array(
-	'username' 	=> 'username' ,
-	'password' 	=> 'password' ,
-	'host' 		=> '' ,
-	'component' => 'com_{COMPONENT_NAME}'
+    'username'     => 'username' ,
+    'password'     => 'password' ,
+    'host'         => '' ,
+    'component' => 'com_{COMPONENT_NAME}'
 ) );
 */

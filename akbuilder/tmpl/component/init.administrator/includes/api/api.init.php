@@ -12,8 +12,8 @@
 defined('_JEXEC') or die;
 
 $view = JRequest::getVar('view') ;
-JRequest::setVar('view'		, 'api', 'method', true) ;
-JRequest::setVar('format'	, 'json', 'method', true) ;
+JRequest::setVar('view'     , 'api', 'method', true) ;
+JRequest::setVar('format'   , 'json', 'method', true) ;
 
 // Replace JDocumentHTML to JSON
 JFactory::$document = JDocument::getInstance('json') ;

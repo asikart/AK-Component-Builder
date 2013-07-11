@@ -16,18 +16,18 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 
 if( JVERSION >= 3){
-	JHtml::_('formbehavior.chosen', 'select');
+    JHtml::_('formbehavior.chosen', 'select');
 }
 
 
 
 // Init some API objects
 // ================================================================================
-$app 	= JFactory::getApplication() ;
-$date 	= JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
-$doc 	= JFactory::getDocument();
-$uri 	= JFactory::getURI() ;
-$user	= JFactory::getUser();
+$app     = JFactory::getApplication() ;
+$date    = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
+$doc     = JFactory::getDocument();
+$uri     = JFactory::getURI() ;
+$user    = JFactory::getUser();
 
 
 // Set value
@@ -35,27 +35,31 @@ $fieldset = $this->current_fieldset ;
 
 // set form align
 if(!empty($fieldset->horz) && $fieldset->horz !== 'false'){
-	$form_class = 'form-horizontal' ;
+    $form_class = 'form-horizontal' ;
+    $horz       = true ;
 }else{
-	$form_class = '' ;
+    $form_class = '' ;
+    $horz       = false ;
 }
 
 // Fieldset
 $class = !empty($fieldset->class) ? ' ' . $fieldset->class : '' ;
 ?>
-	
+    
 <fieldset id="fildset-<?php echo $this->current_group . '-' . $fieldset->name; ?>" class="adminform <?php echo $form_class; ?><?php echo $class; ?>">
-	<legend><?php echo $fieldset->label ? JText::_($fieldset->label) : JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDSET_'.$fieldset->name); ?></legend>
-	
-	<?php foreach($this->form->getFieldset($fieldset->name) as $field ): ?>
-		<div class="control-group" id="<?php echo $field->id; ?>-wrap">
-			<?php echo $field->label; ?>
-			<div class="controls">
-				<?php echo $field->input; ?>
-			</div>
-		</div>
-	<?php endforeach; ?>
-	
-	<br /><br />
+    <legend><?php echo $fieldset->label ? JText::_($fieldset->label) : JText::_('COM_{COMPONENT_NAME_UC}_EDIT_FIELDSET_'.$fieldset->name); ?></legend>
+    
+    <?php foreach($this->form->getFieldset($fieldset->name) as $field ): ?>
+        <div class="control-group" id="<?php echo $field->id; ?>-wrap">
+            <div class="<?php echo $horz ? 'control-label' : ''; ?>">
+                <?php echo $field->label; ?>
+            </div>
+            <div class="controls">
+                <?php echo $field->input; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    
+    <br /><br />
 
 </fieldset>

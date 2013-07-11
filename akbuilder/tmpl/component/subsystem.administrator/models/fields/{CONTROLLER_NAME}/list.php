@@ -20,33 +20,33 @@ JFormHelper::loadFieldClass('itemlist');
  */
 class JFormField{CONTROLLER_NAME_UCFIRST}_List extends JFormFieldItemlist
 {
-	/**
-	 * The form field type.
-	 *
-	 * @var		string
-	 */
-	public $type = '{CONTROLLER_NAME_UCFIRST}_List';
-	
-	/**
+    /**
+     * The form field type.
+     *
+     * @var string
+     */
+    public $type = '{CONTROLLER_NAME_UCFIRST}_List';
+    
+    /**
      * List name.
      *
      * @var string 
      */
-	protected $view_list = '{CONTROLLER_NAMES}' ;
-	
+    protected $view_list = '{CONTROLLER_NAMES}' ;
+    
     /**
      * Item name.
      *
      * @var string 
      */
-	protected $view_item = '{CONTROLLER_NAME}' ;
-	
+    protected $view_item = '{CONTROLLER_NAME}' ;
+    
     /**
      * Extension name, eg: com_content.
      *
      * @var string 
      */
-	protected $extension = 'com_{COMPONENT_NAME}' ;
+    protected $extension = 'com_{COMPONENT_NAME}' ;
     
     /**
      * Set the published column name in table.

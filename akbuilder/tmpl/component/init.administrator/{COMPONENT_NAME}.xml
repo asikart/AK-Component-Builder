@@ -1,103 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.1" method="upgrade">
-	<name>com_{COMPONENT_NAME}</name>
-	<creationDate>2012-11-12</creationDate>
-	<copyright>Copyright (C) 2012. All rights reserved.</copyright>
-	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <name>com_{COMPONENT_NAME}</name>
+    <creationDate>2012-11-12</creationDate>
+    <copyright>Copyright (C) 2012. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <author>Asika</author>
-	<authorEmail>asika32764@gmail.com</authorEmail>
-	<authorUrl>http://asikart.com</authorUrl>
-	<version>1.0.0</version>
-	<description>COM_{COMPONENT_NAME_UC}_XML_DESCRIPTION</description>
-	
-	
-	<scriptfile>install.php</scriptfile>
-	
-	<!-- do not re install sql when generator working.
-	<install>
-    	<sql>
-        	<file driver="mysql" charset="utf8">sql/install.sql</file>
-  		</sql>
+    <authorEmail>asika32764@gmail.com</authorEmail>
+    <authorUrl>http://asikart.com</authorUrl>
+    <version>1.0.0</version>
+    <description>COM_{COMPONENT_NAME_UC}_XML_DESCRIPTION</description>
+    
+    
+    <scriptfile>install.php</scriptfile>
+    
+    <!-- do not re install sql when generator working.
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.sql</file>
+          </sql>
     </install>
-	-->
-	
-	<uninstall>
-    	<sql>
-        	<file driver="mysql" charset="utf8">sql/uninstall.sql</file>
-  		</sql>
+    -->
+    
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.sql</file>
+          </sql>
     </uninstall>
-	
-	
+    
+    
 
-	<files folder="../site">
-		<filename>index.html</filename>
-		<filename>{COMPONENT_NAME}.php</filename>
-		<filename>controller.php</filename>
-		<filename>router.php</filename>
-		<folder>views</folder>
-		<folder>sql</folder>
-		<folder>models</folder>
-		<folder>controllers</folder>
-		<folder>images</folder>
-		<folder>includes</folder>
-	</files>
-	
-	
-	
-	<administration>
-		<menu img="components/com_{COMPONENT_NAME}/images/admin-icons/menu-{COMPONENT_NAME}.png">COM_{COMPONENT_NAME_UC}</menu>
-		
-		<!-- Submenu
-			Note that all & must be escaped to &amp; for the file to be valid
-			XML and be parsed by the installer-->
-		<submenu>
-				
-			<menu link="option=com_{COMPONENT_NAME}&amp;view={CONTROLLER_NAMES}" view="{CONTROLLER_NAMES}"
-				img="components/com_{COMPONENT_NAME}/images/admin-icons/menu-{CONTROLLER_NAMES}.png"
-				alt="Weblinks/Links">com_{COMPONENT_NAME}_{CONTROLLER_NAMES}</menu>
-			<menu link="option=com_categories&amp;extension=com_{COMPONENT_NAME}"
-				view="categories" img="class:category" alt="{COMPONENT_NAME_UCFIRST}/Categories">jcategories</menu>
-		</submenu>
-		
-		
-		
-		<files folder="admin">
-			<filename>index.html</filename>
-			<filename>controller.php</filename>
-			<filename>{COMPONENT_NAME}.php</filename>
-			<filename>install.php</filename>
-			<filename>access.xml</filename>
-			<filename>config.xml</filename>
-			<folder>windwalker</folder>
-			<folder>class</folder>
-			<folder>controllers</folder>
-			<folder>helpers</folder>
-			<folder>images</folder>
-			<folder>includes</folder>
-			<folder>language</folder>
-			<folder>models</folder>
-			<folder>sql</folder>
-			<folder>tables</folder>
-			<folder>views</folder>
-		</files>
-	</administration>
-	
-	
-	
-	<modules>
-		<!--<module>mod_{COMPONENT_NAME}</module>-->
-	</modules>
-	
-	
-	<plugins>
-		<!--<plugin>plg_system_{COMPONENT_NAME}</plugin>-->
-	</plugins>
-	
-	<!--
-	<updateservers>
+    <files folder="../site">
+        <filename>index.html</filename>
+        <filename>{COMPONENT_NAME}.php</filename>
+        <filename>controller.php</filename>
+        <filename>router.php</filename>
+        <folder>views</folder>
+        <folder>sql</folder>
+        <folder>models</folder>
+        <folder>controllers</folder>
+        <folder>images</folder>
+        <folder>includes</folder>
+    </files>
+    
+    
+    
+    <administration>
+        <menu img="components/com_{COMPONENT_NAME}/images/admin-icons/menu-{COMPONENT_NAME}.png">COM_{COMPONENT_NAME_UC}</menu>
+        
+        <!-- Submenu
+            Note that all & must be escaped to &amp; for the file to be valid
+            XML and be parsed by the installer-->
+        <submenu>
+                
+            <menu link="option=com_{COMPONENT_NAME}&amp;view={CONTROLLER_NAMES}" view="{CONTROLLER_NAMES}"
+                img="components/com_{COMPONENT_NAME}/images/admin-icons/menu-{CONTROLLER_NAMES}.png"
+                alt="Weblinks/Links">com_{COMPONENT_NAME}_{CONTROLLER_NAMES}</menu>
+            <menu link="option=com_categories&amp;extension=com_{COMPONENT_NAME}"
+                view="categories" img="class:category" alt="{COMPONENT_NAME_UCFIRST}/Categories">jcategories</menu>
+        </submenu>
+        
+        
+        
+        <files folder="admin">
+            <filename>index.html</filename>
+            <filename>controller.php</filename>
+            <filename>{COMPONENT_NAME}.php</filename>
+            <filename>install.php</filename>
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>windwalker</folder>
+            <folder>class</folder>
+            <folder>controllers</folder>
+            <folder>helpers</folder>
+            <folder>images</folder>
+            <folder>includes</folder>
+            <folder>language</folder>
+            <folder>models</folder>
+            <folder>sql</folder>
+            <folder>tables</folder>
+            <folder>views</folder>
+        </files>
+    </administration>
+    
+    
+    
+    <modules>
+        <!--<module>mod_{COMPONENT_NAME}</module>-->
+    </modules>
+    
+    
+    <plugins>
+        <!--<plugin>plg_system_{COMPONENT_NAME}</plugin>-->
+    </plugins>
+    
+    <!--
+    <updateservers>
         <server type="extension" priority="1" name="Asikart {COMPONENT_NAME_UCFIRST} Component">http://update.asikart.com/component/com_{COMPONENT_NAME}.xml</server>
     </updateservers>
-	-->
-	
+    -->
+    
 </extension>
 

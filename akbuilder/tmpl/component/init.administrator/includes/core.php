@@ -11,48 +11,31 @@
 // no direct access
 defined('_JEXEC') or die;
 
-
-// Detect is AKHelper exists
-// ===============================================================
-$es_xml = JPATH_PLUGINS.'/system/asikart_easyset/asikart_easyset.xml' ;
-if( JFile::exists($es_xml) && JFactory::getXML($es_xml)->version < 2.6 ) {
-	$message = 'Please disable Asikart Easyset plugin or upgrade to 2.6 later.' ;
-	if(JRequest::getVar('option') == 'com_cpanel'){
-		JError::raiseWarning(500, $message) ;
-		return false;
-	}else{
-		$app = JFactory::getApplication() ;
-		$app->redirect('index.php', $message);
-	}
-}
-
-
-
 // Include WindWalker from libraries or component self.
 // ===============================================================
 if( !defined('AKPATH_ROOT') ) {
-	$inner_ww_path 	= JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAME}/windwalker" ;
-	$lib_ww_path	= JPATH_LIBRARIES . '/windwalker' ;
-	
-	if(file_exists($lib_ww_path.'/init.php')) {
-		// From libraries
-		$ww_path = $lib_ww_path ;
-	}else{
-		// From Component folder
-		$ww_path = $inner_ww_path ;
-	}
-	
-	
-	
-	// Init WindWalker
-	// ===============================================================
-	if(!file_exists($ww_path.'/init.php')) {
-		$message = 'Please install WindWalker Framework libraries.' ;
-		throw new Exception($message, 500) ;
-	}
-	include_once $ww_path.'/init.php' ;
+    $inner_ww_path     = JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAME}/windwalker" ;
+    $lib_ww_path    = JPATH_LIBRARIES . '/windwalker' ;
+    
+    if(file_exists($lib_ww_path.'/init.php')) {
+        // From libraries
+        $ww_path = $lib_ww_path ;
+    }else{
+        // From Component folder
+        $ww_path = $inner_ww_path ;
+    }
+    
+    
+    
+    // Init WindWalker
+    // ===============================================================
+    if(!file_exists($ww_path.'/init.php')) {
+        $message = 'Please install WindWalker Framework libraries.' ;
+        throw new Exception($message, 500) ;
+    }
+    include_once $ww_path.'/init.php' ;
 }else{
-	include_once AKPATH_ROOT.'/init.php' ;
+    include_once AKPATH_ROOT.'/init.php' ;
 }
 
 

@@ -16,8 +16,8 @@ defined('_JEXEC') or die;
  */
 abstract class ApiError extends JError
 {
-	
-	/**
+    
+    /**
      * Legacy error handling marker
      *
      * @var    boolean  True to enable legacy error handling using JError, false to use exception handling.  This flag
@@ -42,15 +42,15 @@ abstract class ApiError extends JError
     );
  
     protected static $stack = array();
-	
-	public static $debug = array() ;
-	
-	public static function raiseError($code, $msg, $info = null)
+    
+    public static $debug = array() ;
+    
+    public static function raiseError($code, $msg, $info = null)
     {
         // Deprecation warning.
         JLog::add('JError::raiseError() is deprecated.', JLog::WARNING, 'deprecated');
-		
-		// set error message
+        
+        // set error message
         $error = new JObject();
         $error->errorNum = $code ;
         $error->errorMsg = $msg ;
@@ -59,96 +59,96 @@ abstract class ApiError extends JError
         // set root
         $response = new JObject();
         $response->set( 'ApiError', $error) ;
-		
-		// set debug
-		if(JDEBUG){
-			$debug = new JObject();
-			$debug->backtrace = self::renderBacktrace();
-			$response->set('debug', $debug);
-		}
-		
-		
-		$doc = JFactory::getDocument();
-		$doc->setBuffer( json_encode($response) );
-		JResponse::setBody($doc->render());
-		
-		echo JResponse::toString();
+        
+        // set debug
+        if(JDEBUG){
+            $debug = new JObject();
+            $debug->backtrace = self::renderBacktrace();
+            $response->set('debug', $debug);
+        }
+        
+        
+        $doc = JFactory::getDocument();
+        $doc->setBuffer( json_encode($response) );
+        JResponse::setBody($doc->render());
+        
+        echo JResponse::toString();
         jexit();
     }
-	
-	
-	public static function raiseWarning($code, $msg, $info = null)
-	{
-		// set error message
+    
+    
+    public static function raiseWarning($code, $msg, $info = null)
+    {
+        // set error message
         $error = new JObject();
         $error->errorNum = $code ;
         $error->errorMsg = $msg ;
         $error->info = $info ;
-		
-		// set debug
-		if(JDEBUG){
-			$debug = new JObject();
-			$debug->Warning = $error ;
-			//$debug->backtrace = self::renderBacktrace();
-			self::$debug[] = $debug;
-		}
-	}
-	
-	
-	public static function raiseNotice($code, $msg, $info = null)
-	{
-		// set error message
+        
+        // set debug
+        if(JDEBUG){
+            $debug = new JObject();
+            $debug->Warning = $error ;
+            //$debug->backtrace = self::renderBacktrace();
+            self::$debug[] = $debug;
+        }
+    }
+    
+    
+    public static function raiseNotice($code, $msg, $info = null)
+    {
+        // set error message
         $error = new JObject();
         $error->errorNum = $code ;
         $error->errorMsg = $msg ;
         $error->info = $info ;
-		
-		// set debug
-		if(JDEBUG){
-			$debug = new JObject();
-			$debug->Notice = $error ;
-			//$debug->backtrace = self::renderBacktrace();
-			self::$debug[] = $debug;
-		}
-	}
-	
-	
-	/*
-	 * function raise
-	 * @param arg
-	 */
-	
-	public static function raise($level, $code, $msg, $info = null, $backtrace = false)
-	{
-		if( !empty(self::$levels[$level]) ){
+        
+        // set debug
+        if(JDEBUG){
+            $debug = new JObject();
+            $debug->Notice = $error ;
+            //$debug->backtrace = self::renderBacktrace();
+            self::$debug[] = $debug;
+        }
+    }
+    
+    
+    /*
+     * function raise
+     * @param arg
+     */
+    
+    public static function raise($level, $code, $msg, $info = null, $backtrace = false)
+    {
+        if( !empty(self::$levels[$level]) ){
             $level = self::$levels[$level] ;
         }else{
             $level = self::$levels[E_NOTICE] ;
         }
-		
-		return call_user_func_array( array('ApiError', 'raise'.$level), array($level, $code, $msg, $info) ) ;
-	}
-	
-	public static function errorHandler($errno, $errstr, $errfile, $errline)
-	{
-		if( JDEBUG ){
-			$info = "file: {$errfile} on line {$errline}." ;
-		}
-		
-		self::raise($errno, $errstr, $info, $errline);
-		//self::raiseError( $errno , $errstr , $info );
-	}
-	
-	public static function exceptionHandler($exception)
-	{
-		if( JDEBUG ){
-			$info = "file: {$exception->getFile()} on line {$exception->getLine()}." ;
-		}
-		
-		self::raiseError( $exception->getCode() , $exception->getMessage() , $info );
-	}
-	
-	public static function attachHandler()
+        
+        return call_user_func_array( array('ApiError', 'raise'.$level), array($level, $code, $msg, $info) ) ;
+    }
+    
+    public static function errorHandler($errno, $errstr, $errfile, $errline)
+    {
+        if( JDEBUG ){
+            $info = "file: {$errfile} on line {$errline}." ;
+        }
+        
+        self::raise($errno, $errstr, $info, $errline);
+        //self::raiseError( $errno , $errstr , $info );
+    }
+    
+    public static function exceptionHandler($exception)
+    {
+        if( JDEBUG ){
+            $info = "file: {$exception->getFile()} on line {$exception->getLine()}." ;
+        }
+        
+        self::raiseError( $exception->getCode() , $exception->getMessage() , $info );
+    }
+    
+    public static function attachHandler()
     {
         // Deprecation warning.
         JLog::add('JError::getErrorHandling() is deprecated.', JLog::WARNING, 'deprecated');
@@ -159,35 +159,35 @@ abstract class ApiError extends JError
     
     public static function renderBacktrace($error=null)
     {
-    	$backtrace = null ;
-    	$r = array();
-    	$j = 1 ;
-    	
-    	if( is_object($error) ){
-			$backtrace = $error->getTrace();
-		}
-		
-		if( !$backtrace ){
-			$backtrace = debug_backtrace();
-		}
-		
-		for ($i = count($backtrace)-1; $i >= 0 ; $i--)
+        $backtrace = null ;
+        $r = array();
+        $j = 1 ;
+        
+        if( is_object($error) ){
+            $backtrace = $error->getTrace();
+        }
+        
+        if( !$backtrace ){
+            $backtrace = debug_backtrace();
+        }
+        
+        for ($i = count($backtrace)-1; $i >= 0 ; $i--)
         {
             if (isset($backtrace[$i]['class'])) {
                     $r[$j] = $backtrace[$i]['class'].$backtrace[$i]['type'].$backtrace[$i]['function']."()" ;
             }
             else {
                     $r[$j] = $backtrace[$i]['function']."() ".
-						"in {$backtrace[$i]['file']} on line {$backtrace[$i]['line']}";
+                        "in {$backtrace[$i]['file']} on line {$backtrace[$i]['line']}";
             }
             
-			if( isset($backtrace[$i]['file']) ){
-				$r['j'] = " in {$backtrace[$i]['file']} on line {$backtrace[$i]['line']}";
-			}
-			
+            if( isset($backtrace[$i]['file']) ){
+                $r['j'] = " in {$backtrace[$i]['file']} on line {$backtrace[$i]['line']}";
+            }
+            
             $j++;
         }
         
         return $r ;
-	}
+    }
 }

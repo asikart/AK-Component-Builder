@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 
 // Access check.
 if (!JFactory::getUser()->authorise('core.manage', 'com_{COMPONENT_NAME}')) {
-	//return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+    //return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
 // include helper
@@ -22,6 +22,6 @@ include_once JPATH_COMPONENT_ADMINISTRATOR.'/includes/init.php' ;
 // Include dependancies
 jimport('joomla.application.component.controller');
 
-$controller	= JControllerLegacy::getInstance('{COMPONENT_NAME_UCFIRST}');
+$controller = JControllerLegacy::getInstance('{COMPONENT_NAME_UCFIRST}');
 $controller->execute( JFactory::getApplication()->input->get('task') );
 $controller->redirect();

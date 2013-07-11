@@ -20,18 +20,33 @@ JFormHelper::loadFieldClass('Modal');
  */
 class JFormField{CONTROLLER_NAME_UCFIRST}_Modal extends JFormFieldModal
 {
-	/**
-	 * The form field type.
-	 *
-	 * @var		string
-	 * @since	1.6
-	 */
-	protected $type = '{CONTROLLER_NAME_UCFIRST}_Modal';
-	
-	protected $view_list = '{CONTROLLER_NAMES}' ;
-	
-	protected $view_item = '{CONTROLLER_NAME}' ;
-	
-	protected $extension = 'com_{COMPONENT_NAME}' ;
-	
+    /**
+     * The form field type.
+     *
+     * @var string
+     * @since    1.6
+     */
+    protected $type = '{CONTROLLER_NAME_UCFIRST}_Modal';
+    
+    /**
+     * List name.
+     *
+     * @var string 
+     */
+    protected $view_list = '{CONTROLLER_NAMES}' ;
+    
+    /**
+     * Item name.
+     *
+     * @var string 
+     */
+    protected $view_item = '{CONTROLLER_NAME}' ;
+    
+    /**
+     * Extension name, eg: com_content.
+     *
+     * @var string 
+     */
+    protected $extension = 'com_{COMPONENT_NAME}' ;
+    
 }

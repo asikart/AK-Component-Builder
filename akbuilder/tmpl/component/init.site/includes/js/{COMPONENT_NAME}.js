@@ -10,5 +10,5 @@
 
 
 var {COMPONENT_NAME_UCFIRST} = {
-	
+    
 }

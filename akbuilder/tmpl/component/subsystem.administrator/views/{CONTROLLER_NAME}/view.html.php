@@ -21,104 +21,106 @@ include_once AKPATH_COMPONENT.'/viewitem.php' ;
  */
 class {COMPONENT_NAME_UCFIRST}View{CONTROLLER_NAME_UCFIRST} extends AKViewItem
 {
-	/**
-	 * @var		string	The prefix to use with controller messages.
-	 * @since	1.6
-	 */
-	protected 	$text_prefix = 'COM_{COMPONENT_NAME_UC}';
+    /**
+     * The prefix to use with controller messages.
+     *
+     * @var     string
+     * @since    1.6
+     */
+    protected     $text_prefix = 'COM_{COMPONENT_NAME_UC}';
     
     /**
      * Item to edit.
      *
      * @var array   
      */
-	protected 	$item;
+    protected     $item;
     
     /**
      * Model state to get some configuration.
      *
      * @var JRegistry 
      */
-	protected 	$state;
-	
+    protected     $state;
+    
     /**
      * The Component option name.
      *
      * @var    string 
      */
-	protected    $option 	= 'com_{COMPONENT_NAME}' ;
+    protected    $option     = 'com_{COMPONENT_NAME}' ;
     
     /**
      * The URL view list variable.
      *
      * @var    string 
      */
-	protected    $list_name 	= '{CONTROLLER_NAMES}' ;
+    protected    $list_name     = '{CONTROLLER_NAMES}' ;
     
     /**
      * The URL view item variable.
      *
      * @var    string 
      */
-	protected    $item_name 	= '{CONTROLLER_NAME}' ;
-	
-	/**
-	 * Display the view
-	 */
-	public function display($tpl = null)
-	{
-		$app = JFactory::getApplication() ;
-		
-		$this->state	= $this->get('State');
-		$this->item		= $this->get('Item');
-		$this->form		= $this->get('Form');
-		$this->fields_group = $this->get('FieldsGroup');
-		$this->fields	= $this->get('FieldsName');
-		$this->canDo	= AKHelper::getActions($this->option);
-
-		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
-			JError::raiseError(500, implode("\n", $errors));
-			return false;
-		}
-
-		parent::displayWithPanel($tpl) ;
-	}
+    protected    $item_name     = '{CONTROLLER_NAME}' ;
     
-	/**
-	 * Add the page title and toolbar.
-	 */
-	protected function addToolbar()
-	{
-		// Set title.
-		$title = AKDEV
-				? ucfirst($this->getName()) . ' ' . JText::_($this->text_prefix.'_TITLE_ITEM_EDIT')
-				: JText::_($this->text_prefix . '_' . strtoupper($this->getName()) . '_TITLE_ITEM_EDIT')
-				;
-		AKToolBarHelper::title( $title, 'article-add.png');
-		
-		parent::addToolbar();
-	}
-	
-	/**
+    /**
+     * Display the view
+     */
+    public function display($tpl = null)
+    {
+        $app = JFactory::getApplication() ;
+        
+        $this->state        = $this->get('State');
+        $this->item         = $this->get('Item');
+        $this->form         = $this->get('Form');
+        $this->fields_group = $this->get('FieldsGroup');
+        $this->fields       = $this->get('FieldsName');
+        $this->canDo        = AKHelper::getActions($this->option);
+
+        // Check for errors.
+        if (count($errors = $this->get('Errors'))) {
+            JError::raiseError(500, implode("\n", $errors));
+            return false;
+        }
+
+        parent::displayWithPanel($tpl) ;
+    }
+    
+    /**
+     * Add the page title and toolbar.
+     */
+    protected function addToolbar()
+    {
+        // Set title.
+        $title = AKDEV
+                ? ucfirst($this->getName()) . ' ' . JText::_($this->text_prefix.'_TITLE_ITEM_EDIT')
+                : JText::_($this->text_prefix . '_' . strtoupper($this->getName()) . '_TITLE_ITEM_EDIT')
+                ;
+        AKToolBarHelper::title( $title, 'article-add.png');
+        
+        parent::addToolbar();
+    }
+    
+    /**
      * Show or hide some fields setting.
      */
-	public function handleFields()
-	{
-		$form = $this->form ;
-		
-		parent::handleFields();
-		
-		// for Joomla! 3.0
-		if(JVERSION >= 3) {
-			
-			// $form->removeField('name', 'fields');
-			
-		}else{
-			
-			// $form->removeField('name', 'fields');
-			
-		}
-		
-	}
+    public function handleFields()
+    {
+        $form = $this->form ;
+        
+        parent::handleFields();
+        
+        // for Joomla! 3.0
+        if(JVERSION >= 3) {
+            
+            // $form->removeField('name', 'fields');
+            
+        }else{
+            
+            // $form->removeField('name', 'fields');
+            
+        }
+        
+    }
 }

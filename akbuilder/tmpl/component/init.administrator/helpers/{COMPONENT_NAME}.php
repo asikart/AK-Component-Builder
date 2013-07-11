@@ -22,110 +22,110 @@ include_once dirname(__FILE__).'/../includes/core.php' ;
  */
 class {COMPONENT_NAME_UCFIRST}Helper extends AKProxy
 {
-	/**
-	 * Configure the Linkbar.
-	 */
-	public static function addSubmenu($vName = '')
-	{		
-		jimport('joomla.filesystem.folder');
-		jimport('joomla.filesystem.file');
-		$app 	= JFactory::getApplication() ;
-		
-		$menus = array() ;
-		
-		// Add Category Menu Item
-		if($app->isAdmin()) {
-			$menus['category'] = array(
-				'title' 	=> JText::_('JCATEGORY'),
-				'url' 		=> 'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
-				'active' 	=> ( $vName == 'categories' )
-			);
-		}
-		
-		
-		// Add View List Menu Items
-		$folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
-		
-		foreach( $folders as $folder ){
-			
-			// Only show ViewList
-			if( substr($folder, -2) == 'es' || substr($folder, -1) == 's'){
-				
-				$menus[$folder] = array(
-					'title' 	=> AKHelper::_('system.getConfig', 'system.development_mode', false, 'com_{COMPONENT_NAME}')
-									? ucfirst($folder) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST')
-									: JText::_('COM_{COMPONENT_NAME_UC}_' . strtoupper($folder) . '_TITLE' ),
-					'url' 		=> 'index.php?option=com_{COMPONENT_NAME}&view='.$folder,
-					'active' 	=> ( $vName == $folder )
-				);
-				
-			}
-		}
-		
-		
-		// Trigger for plugin
-		$app->triggerEvent( 'onAddSubmenu' , array( 'com_{COMPONENT_NAME}.panel' , &$menus)) ;
-		
-		
-		// AddSubmenu
-		foreach( $menus as $menu ):
-			self::addSubmenuEntry( $menu['title'], $menu['url'], $menu['active'] );
-		endforeach;
-		
-	}
-	
-	/**
+    /**
+     * Configure the Linkbar.
+     */
+    public static function addSubmenu($vName = '')
+    {        
+        jimport('joomla.filesystem.folder');
+        jimport('joomla.filesystem.file');
+        $app     = JFactory::getApplication() ;
+        
+        $menus = array() ;
+        
+        // Add Category Menu Item
+        if($app->isAdmin()) {
+            $menus['category'] = array(
+                'title'    => JText::_('JCATEGORY'),
+                'url'      => 'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
+                'active'   => ( $vName == 'categories' )
+            );
+        }
+        
+        
+        // Add View List Menu Items
+        $folders = JFolder::folders(JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/views');
+        
+        foreach( $folders as $folder ){
+            
+            // Only show ViewList
+            if( substr($folder, -2) == 'es' || substr($folder, -1) == 's'){
+                
+                $menus[$folder] = array(
+                    'title'    => AKHelper::_('system.getConfig', 'system.development_mode', false, 'com_{COMPONENT_NAME}')
+                                    ? ucfirst($folder) . ' ' . JText::_('COM_{COMPONENT_NAME_UC}_TITLE_LIST')
+                                    : JText::_('COM_{COMPONENT_NAME_UC}_' . strtoupper($folder) . '_TITLE' ),
+                    'url'      => 'index.php?option=com_{COMPONENT_NAME}&view='.$folder,
+                    'active'   => ( $vName == $folder )
+                );
+                
+            }
+        }
+        
+        
+        // Trigger for plugin
+        $app->triggerEvent( 'onAddSubmenu' , array( 'com_{COMPONENT_NAME}.panel' , &$menus)) ;
+        
+        
+        // AddSubmenu
+        foreach( $menus as $menu ):
+            self::addSubmenuEntry( $menu['title'], $menu['url'], $menu['active'] );
+        endforeach;
+        
+    }
+    
+    /**
      * Add Submenu entry.
      * 
      * @param   string  $title  Menu title.
      * @param   string  $url    Link url.
      * @param   string  $active A boolean to detect active?
      */
-	public static function addSubmenuEntry($title, $url = '#', $active = false)
-	{
-		if( JVERSION >= 3 ) {
-			JHtmlSidebar::addEntry( $title, $url, $active );
-		}else{
-			JSubMenuHelper::addEntry( $title, $url, $active );
-		}
-	}
-	
-	/**
-	 * Gets a list of the actions that can be performed.
-	 *
-	 * @return	JObject
-	 * @since	1.6
-	 */
-	public static function getActions($option = null)
-	{
-		$user	= JFactory::getUser();
-		$result	= new JObject;
+    public static function addSubmenuEntry($title, $url = '#', $active = false)
+    {
+        if( JVERSION >= 3 ) {
+            JHtmlSidebar::addEntry( $title, $url, $active );
+        }else{
+            JSubMenuHelper::addEntry( $title, $url, $active );
+        }
+    }
+    
+    /**
+     * Gets a list of the actions that can be performed.
+     *
+     * @return    JObject
+     * @since    1.6
+     */
+    public static function getActions($option = null)
+    {
+        $user   = JFactory::getUser();
+        $result = new JObject;
 
-		$assetName = 'com_{COMPONENT_NAME}';
+        $assetName = 'com_{COMPONENT_NAME}';
 
-		$actions = array(
-			'core.admin', 
-			'core.manage', 
-			'core.create', 
-			'core.edit', 
-			'core.edit.own', 
-			'core.edit.state', 
-			'core.delete'
-		);
+        $actions = array(
+            'core.admin', 
+            'core.manage', 
+            'core.create', 
+            'core.edit', 
+            'core.edit.own', 
+            'core.edit.state', 
+            'core.delete'
+        );
 
-		foreach ($actions as $action) {
-			$result->set($action,	$user->authorise($action, $assetName));
-		}
+        foreach ($actions as $action) {
+            $result->set($action,    $user->authorise($action, $assetName));
+        }
 
-		return $result;
-	}
-	
-	/*
-	 * Get Joomla! version.
-	 */
-	public static function getVersion()
-	{
-		return JVERSION ;
-	}
-	
+        return $result;
+    }
+    
+    /*
+     * Get Joomla! version.
+     */
+    public static function getVersion()
+    {
+        return JVERSION ;
+    }
+    
 }

@@ -22,28 +22,28 @@ include_once AKPATH_COMPONENT.'/controllerform.php' ;
  */
 class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKControllerForm
 {
-	/**
+    /**
      * The URL view list variable.
      *
      * @var    string 
      */
-	protected $view_list = '{CONTROLLER_NAMES}' ;
+    protected $view_list = '{CONTROLLER_NAMES}' ;
     
     /**
      * The URL view item variable.
      *
      * @var    string 
      */
-	protected $view_item = '{CONTROLLER_NAME}' ;
+    protected $view_item = '{CONTROLLER_NAME}' ;
     
     /**
      * The Component name.
      *
      * @var    string 
      */
-	protected $component = '{COMPONENT_NAME}';
-	
-	/**
+    protected $component = '{COMPONENT_NAME}';
+    
+    /**
      * Constructor.
      *
      * @param   array  $config  An optional associative array of configuration settings.
@@ -51,21 +51,21 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKCont
      * @see     JController
      * @since   11.1
      */
-	
+    
     function __construct() {
-		
-		$this->allow_url_params = array(
-			'return'
-		);
-		
-		$this->redirect_tasks = array(
-			'save', 'cancel', 'publish', 'unpublish', 'delete'
-		);
-		
+        
+        $this->allow_url_params = array(
+            'return'
+        );
+        
+        $this->redirect_tasks = array(
+            'save', 'cancel', 'publish', 'unpublish', 'delete'
+        );
+        
         parent::__construct();
     }
-	
-	/**
+    
+    /**
      * Function that allows child controller access to model data
      * after the data has been saved.
      *
@@ -76,9 +76,9 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKCont
      *
      * @since   11.1
      */
-	protected function postSaveHook( &$model, $validData = array())
+    protected function postSaveHook( &$model, $validData = array())
     {
-		$result = $model->postSaveHook($validData) ;
-		return $result ;
+        $result = $model->postSaveHook($validData) ;
+        return $result ;
     }
 }

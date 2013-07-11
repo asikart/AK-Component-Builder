@@ -27,23 +27,23 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends AKCon
      *
      * @var    string 
      */
-	protected $view_list = '{CONTROLLER_NAMES}' ;
+    protected $view_list = '{CONTROLLER_NAMES}' ;
     
     /**
      * The URL view item variable.
      *
      * @var    string 
      */
-	protected $view_item = '{CONTROLLER_NAME}' ;
+    protected $view_item = '{CONTROLLER_NAME}' ;
     
     /**
      * The Component name.
      *
      * @var    string 
      */
-	protected $component = '{COMPONENT_NAME}';
-	
-	/**
+    protected $component = '{COMPONENT_NAME}';
+    
+    /**
      * Constructor.
      *
      * @param   array  $config  An optional associative array of configuration settings.
@@ -52,11 +52,11 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAMES_UCFIRST} extends AKCon
      * @since   11.1
      */
     function __construct() {
-		
-		$this->redirect_tasks = array(
-			'save', 'cancel', 'publish', 'unpublish', 'delete'
-		);
-		
+        
+        $this->redirect_tasks = array(
+            'save', 'cancel', 'publish', 'unpublish', 'delete'
+        );
+        
         parent::__construct();
     }
 }

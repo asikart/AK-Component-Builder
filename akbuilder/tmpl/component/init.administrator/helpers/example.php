@@ -13,17 +13,17 @@ defined('_JEXEC') or die;
 
 
 class {COMPONENT_NAME_UCFIRST}HelperExample {
-	
-	/*
-	 * function getText
-	 * @param $text
-	 */
-	
-	public static function getText($text = 'This is example function.')
-	{
-		return $text ;
-	}
-	
+    
+    /*
+     * function getText
+     * @param $text
+     */
+    
+    public static function getText($text = 'This is example function.')
+    {
+        return $text ;
+    }
+    
 }
 
 

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="com_{COMPONENT_NAME}_api_title" option="com_{COMPONENT_NAME}_api_option">
-		<help
-			key = "COM_{COMPONENT_NAME_UC}_API_MENU_MANAGER_HELP"
-		/>
-		<message>
-			<![CDATA[COM_{COMPONENT_NAME_UC}_API_MENU_MANAGER_DESC]]>
-		</message>
-	</layout>
+    <layout title="com_{COMPONENT_NAME}_api_title" option="com_{COMPONENT_NAME}_api_option">
+        <help
+            key = "COM_{COMPONENT_NAME_UC}_API_MENU_MANAGER_HELP"
+        />
+        <message>
+            <![CDATA[COM_{COMPONENT_NAME_UC}_API_MENU_MANAGER_DESC]]>
+        </message>
+    </layout>
 
-	<!-- Add fields to the request variables for the layout. -->
-	<fields name="request">
-		<fieldset name="request"
-			addfieldpath="/administrator/components/com_{COMPONENT_NAME}/models/fields">
+    <!-- Add fields to the request variables for the layout. -->
+    <fields name="request">
+        <fieldset name="request"
+            addfieldpath="/administrator/components/com_{COMPONENT_NAME}/models/fields">
 
-			<field name="format" type="text"
-				label="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}"
-				required="true"
-				description="CCOM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
-				default="json"
-			/>
-		</fieldset>
-	</fields>
+            <field name="format" type="text"
+                label="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}"
+                required="true"
+                description="CCOM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
+                default="json"
+            />
+        </fieldset>
+    </fields>
 </metadata>
