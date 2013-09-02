@@ -11,6 +11,13 @@
 // no direct access
 defined('_JEXEC') or die;
 
+// Include some system files
+jimport('joomla.filesystem.file');
+jimport('joomla.filesystem.folder');
+
+$app = JFactory::getApplication() ;
+
+
 // Include WindWalker from libraries or component self.
 // ===============================================================
 if( !defined('AKPATH_ROOT') ) {
@@ -42,8 +49,9 @@ if( !defined('AKPATH_ROOT') ) {
 
 // Define
 // ========================================================================
-define('{COMPONENT_NAME_UC}_SITE' , JPATH_ROOT . "/components/" );
-define('{COMPONENT_NAME_UC}_ADMIN', JPATH_ADMINISTRATOR . "/components/");
+define('{COMPONENT_NAME_UC}_SITE' , JPATH_ROOT . "/components/com_{COMPONENT_NAME}" );
+define('{COMPONENT_NAME_UC}_ADMIN', JPATH_ADMINISTRATOR . "/components/com_{COMPONENT_NAME}");
+define('{COMPONENT_NAME_UC}_SELF', $app->isAdmin() ? {COMPONENT_NAME_UC}_ADMIN : {COMPONENT_NAME_UC}_SITE);
 
 
 // Get Helper

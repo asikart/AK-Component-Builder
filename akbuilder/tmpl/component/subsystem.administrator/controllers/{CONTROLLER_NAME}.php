@@ -80,5 +80,4 @@ class {COMPONENT_NAME_UCFIRST}Controller{CONTROLLER_NAME_UCFIRST} extends AKCont
         $result = $model->postSaveHook($validData) ;
         return $result ;
     }
-    
 }

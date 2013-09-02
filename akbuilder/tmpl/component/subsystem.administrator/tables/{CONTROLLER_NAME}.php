@@ -39,80 +39,23 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME_UCFIRST} extends JTable
     }
     
     /**
-     * Method to compute the default name of the asset.
-     * The default name is in the form table_name.id
-     * where id is the value of the primary key of the table.
+     * Method to load a row from the database by primary key and bind the fields
+     * to the JTable instance properties.
      *
-     * @return  string 
+     * @param   mixed    $keys   An optional primary key value to load the row by, or an array of fields to match.  If not
+     *                            set the instance property value is used.
+     * @param   boolean  $reset  True to reset the default values before loading the new row.
      *
+     * @return  boolean  True if successful. False if row not found.
+     *
+     * @link    http://docs.joomla.org/JTable/load
      * @since   11.1
+     * @throws  RuntimeException
+     * @throws  UnexpectedValueException
      */
-    protected function _getAssetName()
+    public function load($keys = null, $reset = true)
     {
-        $k = $this->_tbl_key;
-        return 'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.' . (int) $this->$k;
-    }
- 
-    /**
-     * Method to return the title to use for the asset table.
-     *
-     * @return  string 
-     *
-     * @since   11.1
-     */
-    protected function _getAssetTitle()
-    {
-        if( property_exists($this , 'title') && $this->title)
-            return $this->title ;
-        else
-            return $this->_getAssetName() ;
-    }
-    
-    /**
-     * Overloaded bind function to pre-process the params.
-     *
-     * @param    array          Named array
-     * @return   null|string    null is operation was satisfactory, otherwise returns an error
-     * @see      JTable:bind
-     * @since    1.5
-     */
-    public function bind($array, $ignore = '')
-    {
-        // for Fields group
-        // Convert jform[fields_group][field] to jform[field] or JTable cannot bind data.
-        // ==========================================================================================
-        $data     = array() ;
-        $array     = AKHelper::_('array.pivotFromTwoDimension', $array);
-        
-        
-        
-        // Set field['param_xxx'] to params
-        // ==========================================================================================
-        if(empty($array['params'])){
-            $array['params'] = AKHelper::_('array.pivotFromPrefix', 'param_', $array, JArrayHelper::getValue($array, 'params', array())) ;
-        }
-        
-        
-        
-        // set params to JRegistry
-        // ==========================================================================================
-        if (isset($array['params']) && is_array($array['params'])) {
-            $registry = new JRegistry();
-            $registry->loadArray($array['params']);
-            $array['params'] = (string)$registry;
-        }
-        
-        
-        
-         // Bind the rules.
-         // ==========================================================================================
-        if (isset($array['rules']) && is_array($array['rules']))
-        {
-            $rules = new JAccessRules($array['rules']);
-            $this->setRules($rules);
-        }
-        
-        return parent::bind($array, $ignore);
+        return parent::load($keys, $reset);
     }
     
     /**
@@ -189,6 +132,83 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME_UCFIRST} extends JTable
         return parent::delete($pk, $children);
     }
     
+    /**
+     * Method to compute the default name of the asset.
+     * The default name is in the form table_name.id
+     * where id is the value of the primary key of the table.
+     *
+     * @return  string 
+     *
+     * @since   11.1
+     */
+    protected function _getAssetName()
+    {
+        $k = $this->_tbl_key;
+        return 'com_{COMPONENT_NAME}.{CONTROLLER_NAME}.' . (int) $this->$k;
+    }
+ 
+    /**
+     * Method to return the title to use for the asset table.
+     *
+     * @return  string 
+     *
+     * @since   11.1
+     */
+    protected function _getAssetTitle()
+    {
+        if( property_exists($this , 'title') && $this->title)
+            return $this->title ;
+        else
+            return $this->_getAssetName() ;
+    }
+    
+    /**
+     * Overloaded bind function to pre-process the params.
+     *
+     * @param    array          Named array
+     * @return   null|string    null is operation was satisfactory, otherwise returns an error
+     * @see      JTable:bind
+     * @since    1.5
+     */
+    public function bind($array, $ignore = '')
+    {
+        // for Fields group
+        // Convert jform[fields_group][field] to jform[field] or JTable cannot bind data.
+        // ==========================================================================================
+        $data     = array() ;
+        $array     = AKHelper::_('array.pivotFromTwoDimension', $array);
+        
+        
+        
+        // Set field['param_xxx'] to params
+        // ==========================================================================================
+        if(empty($array['params'])){
+            $array['params'] = AKHelper::_('array.pivotFromPrefix', 'param_', $array, JArrayHelper::getValue($array, 'params', array())) ;
+        }
+        
+        
+        
+        // set params to JRegistry
+        // ==========================================================================================
+        if (isset($array['params']) && is_array($array['params'])) {
+            $registry = new JRegistry();
+            $registry->loadArray($array['params']);
+            $array['params'] = (string)$registry;
+        }
+        
+        
+        
+         // Bind the rules.
+         // ==========================================================================================
+        if (isset($array['rules']) && is_array($array['rules']))
+        {
+            $rules = new JAccessRules($array['rules']);
+            $this->setRules($rules);
+        }
+        
+        return parent::bind($array, $ignore);
+    }
+    
     /*
      * Setting Nested table, and rebuild.
      */
@@ -223,7 +243,7 @@ class {COMPONENT_NAME_UCFIRST}Table{CONTROLLER_NAME_UCFIRST} extends JTable
                     ;
                 
                 $db->setQuery($q);
-                $db->query();
+                $db->execute();
             }
         }
         

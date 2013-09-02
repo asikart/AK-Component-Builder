@@ -32,7 +32,7 @@ if( JVERSION >= 3){
 
 // Init some API objects
 // ================================================================================
-$date     = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
+$date    = JFactory::getDate( 'now' , JFactory::getConfig()->get('offset') ) ;
 $doc     = JFactory::getDocument() ;
 $uri     = JFactory::getURI() ;
 $user    = JFactory::getUser() ;

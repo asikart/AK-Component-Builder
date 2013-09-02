@@ -165,7 +165,7 @@ class AKViewApi extends JViewLegacy
             ->where(" created <  '{$date}'")
             ;
         $db->setQuery($q);
-        $db->query();
+        $db->execute();
         
         
         // insert new

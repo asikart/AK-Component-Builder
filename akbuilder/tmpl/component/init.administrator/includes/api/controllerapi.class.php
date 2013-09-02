@@ -109,7 +109,7 @@ class AKControllerApi extends JControllerLegacy
             ->where(" created <  '{$date}'")
             ;
         $db->setQuery($q);
-        $db->query();
+        $db->execute();
         
         
         // insert new

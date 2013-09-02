@@ -65,7 +65,7 @@ if( JVERSION >= 3 ) {
 <script type="text/javascript">
     
     <?php if( $app->isSite() ): ?>
-    {COMPONENT_NAME_UCFIRST}.fixToolbar(40, 300) ;
+    WindWalker.fixToolbar(40, 300) ;
     <?php endif; ?>
     
     Joomla.orderTable = function() {

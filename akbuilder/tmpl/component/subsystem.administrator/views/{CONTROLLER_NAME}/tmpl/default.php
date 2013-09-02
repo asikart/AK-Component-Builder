@@ -10,3 +10,5 @@
 
 // no direct access
 defined('_JEXEC') or die;
+
+include dirname(__FILE__).'/edit.php';

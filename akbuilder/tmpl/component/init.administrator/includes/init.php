@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 
 $doc     = JFactory::getDocument();
 $app     = JFactory::getApplication();
-$lang     = JFactory::getLanguage();
+$lang    = JFactory::getLanguage();
 
 
 
@@ -34,11 +34,9 @@ if( $app->isSite() ){
     $lang->load('', JPATH_ADMINISTRATOR);
     $lang->load('com_{COMPONENT_NAME}', JPATH_COMPONENT_ADMINISTRATOR );
     {COMPONENT_NAME_UCFIRST}Helper::_('lang.loadAll', $lang->getTag());
-    
-    
+
     // Include Joomla! admin css
     {COMPONENT_NAME_UCFIRST}Helper::_('include.sortedStyle', 'includes/css');
-    
     
     // set Base to fix toolbar anchor bug
     $doc->setBase( JFactory::getURI()->toString() );
@@ -46,11 +44,10 @@ if( $app->isSite() ){
 }else{
     {COMPONENT_NAME_UCFIRST}Helper::_('lang.loadAll', $lang->getTag());
     {COMPONENT_NAME_UCFIRST}Helper::_('include.sortedStyle', 'includes/css');
-    
-    // Include Fields
-    JForm::addFieldPath( AKPATH_FORM.'/fields');
 }
 
+// Include Fields
+JForm::addFieldPath( AKPATH_FORM.'/fields');
 
 // Detect version
 {COMPONENT_NAME_UCFIRST}Helper::_('plugin.attachPlugins');
