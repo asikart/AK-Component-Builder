@@ -1,8 +1,25 @@
 
-===== AKBuilder Help =====
 
-Asikart Extension Builder 2.5 of 9 September 2012, by Asika.
+# Asikart Extension Builder
+
+A Rapid Application Framework & code generator(scaffolding) fot Joomla!2.5, 3.x. develpoed by Asika.
+
 Send bug reports using https://github.com/asikart/AK-Component-Builder/issues;
+
+
+# Getting Started
+
+1. Download packages and copy `builder.php` and `akbuilder` dir to Joomla `cli` dir.
+
+2. keying this command:
+
+``` bash
+$ php cli/builder.php -e com_flower -n "sakura.sakuras" -c administrator
+```
+
+will create a component named `com_flower` and two controller named `sakura`, `sakuras` in admin.
+
+# Guide
 
 Usage:  php builder.php <commands> [-e <extension name>] [-c <client>]
         [-n <controller name>] [-g <plugin group>] [--help]
