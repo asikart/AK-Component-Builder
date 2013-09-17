@@ -1,7 +1,6 @@
-
 # Asikart Extension Builder
 
-A Rapid Application Framework & code generator(scaffolding) fot Joomla!2.5, 3.x. develpoed by Asika.
+A Rapid Application Framework & code generator(scaffolding) for Joomla!2.5, 3.x. develpoed by Asika.
 
 Send bug reports using https://github.com/asikart/AK-Component-Builder/issues;
 
@@ -58,20 +57,20 @@ Usage:  php builder.php <commands> [-e <extension name>] [-c <client>]
 
     $ php builder.php project init -e com_bird -n wing -c administrator (or admin)
         
-=> Init a component project, then add wing and wings controllers.
+Init a component project, then add wing and wings controllers.
     
     $ php builder.php add subsystem -e com_bird -n "fly.flies" -c administrator
 
-=> Add fly and flies controllers to com_bird.
+Add fly and flies controllers to com_bird.
     
     $ php builder.php project init -e mod_fish -c site
 
-=> Init a module project in site client.
+Init a module project in site client.
     
     $ php builder.php project init -e plg_cat -g system
 
-=> Init a plugin project in group system.
+Init a plugin project in group system.
         
     $ php builder.php convert template -e com_flower -n sakura [-c site] [-g system]
 
-=> Convert a extising component named com_flower to be new scaffold.
+Convert a extising component named com_flower to be new scaffold.
