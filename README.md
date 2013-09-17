@@ -33,12 +33,12 @@ Usage:
                         site and administrator once.
 
 `add subsystem`         When project already init. You can use this command
-                        add two more controllers in item and list.
+                        add two more controllers with item and list.
                         (Only for component.)
 
 `convert template`      If you want to convert a existing extension to be
                         new scaffold, please copy all files
-                        to folder: "tmpl/[extension]/init.[client]", then use
+                        to folder: `tmpl/[extension]/init.[client]`, then use
                         this command to convert files.
         
 ## Params description:
@@ -58,22 +58,31 @@ Usage:
 
 ## Examples:
 
-    $ php builder.php project init -e com_bird -n wing -c administrator (or admin)
-        
+``` bash
+$ php builder.php project init -e com_bird -n wing -c administrator (or admin)
+``` 
+
 Init a component project, then add wing and wings controllers.
-    
+
+``` bash
     $ php builder.php add subsystem -e com_bird -n "fly.flies" -c administrator
+``` 
 
 Add fly and flies controllers to com_bird.
-    
+
+``` bash    
     $ php builder.php project init -e mod_fish -c site
+``` 
 
 Init a module project in site client.
-    
+
+``` bash    
     $ php builder.php project init -e plg_cat -g system
+``` 
 
 Init a plugin project in group system.
-        
-    $ php builder.php convert template -e com_flower -n sakura [-c site] [-g system]
 
+``` bash        
+    $ php builder.php convert template -e com_flower -n sakura [-c site] [-g system]
+``` 
 Convert a extising component named com_flower to be new scaffold.
