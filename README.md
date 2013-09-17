@@ -19,9 +19,12 @@ will create a component named `com_flower` and two controller named `sakura`, `s
 
 # Guide
 
-Usage:  php builder.php <commands> [-e <extension name>] [-c <client>]
-        [-n <controller name>] [-g <plugin group>] [--help]
+Usage:  
 
+```
+        php builder.php <commands> [-e <extension name>] [-c <client>]
+        [-n <controller name>] [-g <plugin group>] [--help]
+```
 
 ## Support commands:
 
