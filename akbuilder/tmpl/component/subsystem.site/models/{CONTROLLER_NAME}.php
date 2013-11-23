@@ -90,7 +90,7 @@ class {COMPONENT_NAME_UCFIRST}Model{CONTROLLER_NAME_UCFIRST} extends AKModelAdmi
      *
      * @since    1.6
      */
-    protected function prepareTable(&$table)
+    protected function prepareTable($table)
     {
         parent::prepareTable($table);
     }
