@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Site
- * @subpackage  com_{COMPONENT_NAME}
+ * @subpackage  com_flower
  * @author      Simon ASika <asika32764@gmail.com>
  * @copyright   Copyright (C) 2013 Asikart. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
  *
  * @return    array
  */
-function {COMPONENT_NAME_UCFIRST}BuildRoute(&$query)
+function FlowerBuildRoute(&$query)
 {
 	$segments = array();
 
@@ -48,7 +48,7 @@ function {COMPONENT_NAME_UCFIRST}BuildRoute(&$query)
 	}
 
 
-	$com_menu = $menu->getItems( array('component'), array('com_{COMPONENT_NAME}') );
+	$com_menu = $menu->getItems( array('component'), array('com_flower') );
 
 	// query item menu
 	// ================================================================================================
@@ -56,7 +56,7 @@ function {COMPONENT_NAME_UCFIRST}BuildRoute(&$query)
 	foreach( $com_menu as $menuitem ):
 		if(!isset($menuitem->query['id']) || !isset($query['id']) ) continue ;
 
-		if( $menuitem->query['view'] == '{CONTROLLER_NAME}' && $menuitem->query['id'] == $query['id'] ) {
+		if( $menuitem->query['view'] == 'sakura' && $menuitem->query['id'] == $query['id'] ) {
 			$item_menu = $menuitem ;
 			//$segments = explode( '/', $item_menu->route);
 
@@ -76,7 +76,7 @@ function {COMPONENT_NAME_UCFIRST}BuildRoute(&$query)
 	foreach( $com_menu as $menuitem ):
 		if(!isset($menuitem->query['id']) || !isset($query['catid']) ) continue ;
 
-		if( $menuitem->query['view'] == '{CONTROLLER_NAMES}' && $menuitem->query['id'] == $query['catid'] ) {
+		if( $menuitem->query['view'] == 'sakuras' && $menuitem->query['id'] == $query['catid'] ) {
 			$item_menu = $menuitem ;
 			//$segments = explode( '/', $item_menu->route);
 
@@ -102,7 +102,7 @@ function {COMPONENT_NAME_UCFIRST}BuildRoute(&$query)
 	foreach( $com_menu as $menuitem ):
 		if(!isset($menuitem->query['id']) || !isset($query['id']) ) continue ;
 
-		if( $menuitem->query['view'] == '{CONTROLLER_NAMES}' && $menuitem->query['id'] == $query['id'] ) {
+		if( $menuitem->query['view'] == 'sakuras' && $menuitem->query['id'] == $query['id'] ) {
 			$cat_menu = $menuitem ;
 
 			unset($query['view']);
@@ -143,7 +143,7 @@ function {COMPONENT_NAME_UCFIRST}BuildRoute(&$query)
  *                    index.php?/banners/task/id/Itemid
  *                    index.php?/banners/id/Itemid
  */
-function {COMPONENT_NAME_UCFIRST}ParseRoute($segments)
+function FlowerParseRoute($segments)
 {
 	$vars = array();
 
@@ -163,7 +163,7 @@ function {COMPONENT_NAME_UCFIRST}ParseRoute($segments)
 	if($segments[0] == 'api') {
 		array_shift($segments);
 
-		include_once JPATH_ADMINISTRATOR.'/components/com_{COMPONENT_NAME}/includes/api/api.init.php' ;
+		include_once JPATH_ADMINISTRATOR.'/components/com_flower/includes/api/api.init.php' ;
 
 		$params = array(
 			'class',
@@ -185,7 +185,7 @@ function {COMPONENT_NAME_UCFIRST}ParseRoute($segments)
 		$id = $last_seg[0];
 		if(is_numeric($id)){
 			$segments[] = $id ;
-			$vars['view'] = '{CONTROLLER_NAME}' ;
+			$vars['view'] = 'sakura' ;
 
 		}
 	}else{

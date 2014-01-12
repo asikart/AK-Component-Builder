@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_{COMPONENT_NAME}
+ * @subpackage  com_flower
  *
  * @copyright   Copyright (C) 2012 Asikart. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -15,9 +15,9 @@ defined('_JEXEC') or die;
  * Script file of HelloWorld component
  *
  * @package     Joomla.Administrator
- * @subpackage  com_{COMPONENT_NAME} 
+ * @subpackage  com_flower 
  */
-class com_{COMPONENT_NAME_UCFIRST}InstallerScript
+class com_FlowerInstallerScript
 {
     /**
      * method to install the component

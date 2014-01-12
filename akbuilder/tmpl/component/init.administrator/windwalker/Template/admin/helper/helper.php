@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class {COMPONENT_NAME_UCFIRST}Helper
+ * Class FlowerHelper
  *
  * @since 1.0
  */
-abstract class {COMPONENT_NAME_UCFIRST}Helper
+abstract class FlowerHelper
 {
 	/**
 	 * Configure the Linkbar.
@@ -26,20 +26,20 @@ abstract class {COMPONENT_NAME_UCFIRST}Helper
 		{
 			JHtmlSidebar::addEntry(
 				JText::_('JCATEGORY'),
-				'index.php?option=com_categories&extension=com_{COMPONENT_NAME}',
+				'index.php?option=com_categories&extension=com_flower',
 				($vName == 'categories')
 			);
 		}
 
-		foreach (new \DirectoryIterator(JPATH_ADMINISTRATOR . '/components/com_{COMPONENT_NAME}/view') as $folder)
+		foreach (new \DirectoryIterator(JPATH_ADMINISTRATOR . '/components/com_flower/view') as $folder)
 		{
 			if ($folder->isDir() && $inflector->isPlural($view = $folder->getBasename()))
 			{
-				$name = \JText::_('COM_{COMPONENT_NAME_UC}_VIEW_' . strtoupper($view));
+				$name = \JText::_('COM_FLOWER_VIEW_' . strtoupper($view));
 
 				JHtmlSidebar::addEntry(
 					JText::sprintf('LIB_WINDWALKER_TITLE_ITEM_EDIT', $name),
-					'index.php?option=com_{COMPONENT_NAME}&view=' . $view,
+					'index.php?option=com_flower&view=' . $view,
 					($vName == $view)
 				);
 			}
@@ -55,7 +55,7 @@ abstract class {COMPONENT_NAME_UCFIRST}Helper
 	 *
 	 * @since   1.0
 	 */
-	public static function getActions($option = 'com_{COMPONENT_NAME}')
+	public static function getActions($option = 'com_flower')
 	{
 		$user   = JFactory::getUser();
 		$result = new \JObject;

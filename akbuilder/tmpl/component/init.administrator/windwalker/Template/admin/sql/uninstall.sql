@@ -1,1 +1,1 @@
-DROP TABLE  `#__{COMPONENT_NAME}_{CONTROLLER_NAMES}`
+DROP TABLE  `#__flower_sakuras`

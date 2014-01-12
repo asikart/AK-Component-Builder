@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COM='{COMPONENT_NAME}'
+COM='flower'
 
 echo "Copy Admin"
 

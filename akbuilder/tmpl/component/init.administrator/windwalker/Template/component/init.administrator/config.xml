@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
     <fieldset name="component"
-        label="COM_{COMPONENT_NAME_UC}_COMPONENT_LABEL"
-        description="COM_{COMPONENT_NAME_UC}_COMPONENT_DESC"
-        addfieldpath="administrator/components/com_{COMPONENT_NAME}/model/field"
+        label="COM_FLOWER_COMPONENT_LABEL"
+        description="COM_FLOWER_COMPONENT_DESC"
+        addfieldpath="administrator/components/com_flower/model/field"
     >
 
-        <field name="{CONTROLLER_NAME}_list"
-             type="{CONTROLLER_NAME}_list"
+        <field name="sakura_list"
+             type="sakura_list"
              default="5"
-             extension="com_{COMPONENT_NAME}"
-             view_list="{CONTROLLER_NAMES}"
-             view_item="{CONTROLLER_NAME}"
-             label="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}"
-             description="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
+             extension="com_flower"
+             view_list="sakuras"
+             view_item="sakura"
+             label="COM_FLOWER_SELECT_SAKURA"
+             description="COM_FLOWER_SELECT_SAKURA_DESC"
              quickadd="true"
         >
             <option>JOPTION_DO_NOT_USE</option>
          </field>
 
-        <field name="{CONTROLLER_NAME}_modal"
-             type="{CONTROLLER_NAME}_modal"
+        <field name="sakura_modal"
+             type="sakura_modal"
              default="7"
-             extension="com_{COMPONENT_NAME}"
-             view_list="{CONTROLLER_NAMES}"
-             view_item="{CONTROLLER_NAME}"
-             label="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}"
-             description="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
+             extension="com_flower"
+             view_list="sakuras"
+             view_item="sakura"
+             label="COM_FLOWER_SELECT_SAKURA"
+             description="COM_FLOWER_SELECT_SAKURA_DESC"
              quickadd="true"
         />
 
         <field name="finder"
             type="finder"
             default=""
-            handler="com_{COMPONENT_NAME}"
+            handler="com_flower"
             root="images"
             start_path=""
             label="Finder"
-            description="COM_{COMPONENT_NAME_UC}_SELECT_{CONTROLLER_NAME_UC}_DESC"
+            description="COM_FLOWER_SELECT_SAKURA_DESC"
             preview="true"
             onlyimage="true"
         />
@@ -62,8 +62,8 @@
         </field>
 
         <field name="link_titles_in_list" type="list"
-            description="COM_{COMPONENT_NAME_UC}_LINKED_TITLES_IN_LIST_DESC"
-            label="COM_{COMPONENT_NAME_UC}_LINKED_TITLES_IN_LIST"
+            description="COM_FLOWER_LINKED_TITLES_IN_LIST_DESC"
+            label="COM_FLOWER_LINKED_TITLES_IN_LIST"
             default="1"
         >
             <option value="0">JNO</option>
@@ -180,20 +180,20 @@
             default="a.created"
         >
 
-            <option value="a.created ">COM_{COMPONENT_NAME_UC}_CREATED</option>
-            <option value="a.publish_up">COM_{COMPONENT_NAME_UC}_PUBLISH_UP</option>
-            <option value="a.publish_down">COM_{COMPONENT_NAME_UC}_PUBLISHED_DOWN</option>
-            <option value="a.modified">COM_{COMPONENT_NAME_UC}_MODIFIED</option>
+            <option value="a.created ">COM_FLOWER_CREATED</option>
+            <option value="a.publish_up">COM_FLOWER_PUBLISH_UP</option>
+            <option value="a.publish_down">COM_FLOWER_PUBLISHED_DOWN</option>
+            <option value="a.modified">COM_FLOWER_MODIFIED</option>
             <option value="a.title">JGLOBAL_TITLE</option>
             <option value="a.ordering">JGLOBAL_ORDERING</option>
         </field>
 
         <field name="order_dir" type="list"
-            label="COM_{COMPONENT_NAME_UC}_ORDER_DIR"
+            label="COM_FLOWER_ORDER_DIR"
             default="DESC"
         >
-            <option value="ASC">COM_{COMPONENT_NAME_UC}_ORDER_DIR_ASC</option>
-            <option value="DESC">COM_{COMPONENT_NAME_UC}_ORDER_DIR_DESC</option>
+            <option value="ASC">COM_FLOWER_ORDER_DIR_ASC</option>
+            <option value="DESC">COM_FLOWER_ORDER_DIR_DESC</option>
         </field>
 
         <field name="show_pagination" type="list"
@@ -231,7 +231,7 @@
 			class="inputbox"
 			validate="rules"
 			filter="rules"
-			component="com_{COMPONENT_NAME}"
+			component="com_flower"
 			section="component" />
 	</fieldset>
 

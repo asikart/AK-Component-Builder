@@ -1,29 +1,29 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_{COMPONENT_NAME}
+ * @subpackage  com_flower
  * @copyright   Copyright (C) 2014 Asikart. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-use {COMPONENT_NAME_UCFIRST}\Component\{COMPONENT_NAME_UCFIRST}Component as {COMPONENT_NAME_UCFIRST}ComponentBase;
+use Flower\Component\FlowerComponent as FlowerComponentBase;
 
 // No direct access
 defined('_JEXEC') or die;
 
 /**
- * Class {COMPONENT_NAME_UCFIRST}Component
+ * Class FlowerComponent
  *
  * @since 1.0
  */
-final class {COMPONENT_NAME_UCFIRST}Component extends {COMPONENT_NAME_UCFIRST}ComponentBase
+final class FlowerComponent extends FlowerComponentBase
 {
 	/**
 	 * Property defaultController.
 	 *
 	 * @var string
 	 */
-	protected $defaultController = '{CONTROLLER_NAMES}.display';
+	protected $defaultController = 'sakuras.display';
 
 	/**
 	 * init

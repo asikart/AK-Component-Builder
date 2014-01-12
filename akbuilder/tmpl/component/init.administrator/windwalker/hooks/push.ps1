@@ -1,6 +1,6 @@
 #!/bin/bash
 
-$COM='{COMPONENT_NAME}'
+$COM='flower'
 
 $ADMIN="../../../administrator/components/com_$COM"
 

@@ -6,9 +6,9 @@
 # @Date: 2013-12-23
 # @Author: Simon Asika <asika32764@gmail.com>
 
-COM="{COMPONENT_NAME}"
-MOD="{COMPONENT_NAME}"
-PLG="{COMPONENT_NAME}"
+COM="flower"
+MOD="flower"
+PLG="flower"
 GUP="system"
 
 # admin
