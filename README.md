@@ -2,7 +2,9 @@
 
 A Rapid Application Framework & code generator(scaffolding) for Joomla!2.5, 3.x. develpoed by Asika.
 
-Send bug reports using https://github.com/asikart/AK-Component-Builder/issues;
+## Repository Deprecated
+
+Please see: https://github.com/ventoviro/windwalker-joomla-rad
 
 
 # Getting Started
